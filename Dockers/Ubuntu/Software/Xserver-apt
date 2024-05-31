@@ -1,0 +1,12 @@
+# Install Xserver ---------------------------------------------
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
+    apt install -y xserver-xorg-core-hwe-18.04 xauth          \
+                   xserver-xorg-video-dummy curl net-tools    \   
+                   xfonts-base xfonts-75dpi xfonts-100dpi     \
+                   xfonts-scalable dbus-user-session          \
+                   dbus-x11 xinit neofetch                                  
+COPY Config/x11server/xorg.conf /usr/share/X11/xorg.conf.d/
+COPY Config/x11server/create-pulse-clientconf.sh              \
+     /etc/profile.d/
+COPY Config/x11server/70-ubuntu.conf                          \
+     /etc/lightdm/lightdm.conf.d/

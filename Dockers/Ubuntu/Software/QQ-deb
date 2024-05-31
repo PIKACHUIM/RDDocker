@@ -1,0 +1,3 @@
+# QQ ----------------------------------------------------------                 
+COPY AppImg/linuxqq_3.1.1_amd64.deb /
+RUN dpkg -i linuxqq_3.1.1_amd64.deb &&  rm linuxqq_3.1.1_amd64.deb   

@@ -1,0 +1,50 @@
+# Install VNC --------------------------------------------------
+# X11VNC -------------------------------------------------------
+#RUN mkdir ~/.vnc && chmod 700 ~/.vnc && touch ~/.vnc/passwd   \
+#&&  touch  /root/.Xauthority                                  \
+#&&  apt install -y x11vnc                                     \
+#&&  mkdir -p /home/user/.vnc/ && touch /home/user/.vnc/passwd \
+#&&  chown -R user /home/user/                                 \
+#&&  x11vnc -storepasswd PIKAPIKA /home/user/.vnc/passwd       \
+#&&  echo 'session=xinit /bin/cutefish-session'                \
+#    > /home/user/.vnc/config                                  \
+#&&  echo 'geometry=1920x1080' >> /home/user/.vnc/config       \
+#&&  echo 'alwaysshared' >> /home/user/.vnc/config             \
+#&&  echo '#!/bin/sh' > /home/user/.vnc/xstartup               \
+#&&  echo 'export DISPLAY=:0' >> /home/user/.vnc/xstartup      \
+#&&  echo 'exec xinit /bin/cutefish-session &' >>              \
+#    /home/user/.vnc/xstartup                                  \
+#&&  touch  /home/user/.Xauthority                             \              
+#&&  chown user /home/user/.Xauthority
+
+# TigerVNC ----------------------------------------------------
+RUN apt-get update && apt install -y tightvncserver           \
+&& mkdir -p ~/.vnc                                            \
+&& echo 'session=xinit /bin/cutefish-session' > ~/.vnc/config \
+&& echo 'geometry=1920x1080' >> ~/.vnc/config                 \
+&& echo 'alwaysshared' >> ~/.vnc/config                       \
+&& echo '#!/bin/sh' > ~/.vnc/xstartup                         \
+&& echo 'export DISPLAY=:0' >> ~/.vnc/xstartup                \
+&& echo 'exec xinit /bin/cutefish-session &'                  \
+    >> ~/.vnc/xstartup
+RUN touch  /root/.Xauthority && mkdir -p  /home/user/         \
+&&  touch  /home/user/.Xauthority                             \              
+&&  chown user /home/user/.Xauthority                         
+RUN echo -e "ROOTROOT\nROOTROOT\nn\n" | vncpasswd -f          \
+    >> ~/.vnc/passwd
+
+
+# User VNC ---------------------------------------------------\
+# TigerVNC ---------------------------------------------------\
+&&  echo 'echo Starting VNCS --------------------' >> /run.sh \
+#&&  echo 'export DISPLAY=:1' >> /run.sh                       \
+#&&  echo 'USER=root vncserver -kill :1' >> /run.sh            \
+#&&  echo 'rm -rf /tmp/.X11-unix/X0' >> /run.sh                \
+#&&  echo 'USER=root vncserver :1' >> /run.sh                  \
+# X11VNC -----------------------------------------------------\
+#&&  TEXT1="x11vnc -display :0 -auth guess -once -loop "      \
+#&&  TEXT2=" -noxdamage -repeat -rfbauth ~/.vnc/passwd "      \
+#&&  TEXT3=" -rfbport 5900 -shared &"                         \
+#&&  echo "${TEXT1}${TEXT2}${TEXT3}" >> /run.sh               \
+
+#EXPOSE 5901/udp

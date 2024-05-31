@@ -1,0 +1,60 @@
+FROM pikachuim/archos:build-server
+# -------------------------------------------------------------------------
+RUN pacman -Syy --noconfirm
+RUN pacman -S --noconfirm cutefish
+RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk
+# NoMachine ---------------------------------------------------------------
+RUN sudo pacman -S base-devel --noconfirm                                 \
+&&  git clone https://aur.archlinux.org/nomachine.git                     \
+&&  chown -R user nomachine                                               \
+&&  sudo pacman -S openssh nawk rpm-tools dkms --noconfirm                \
+&&  sudo pacman -S proxychains --noconfirm                                \
+&&  cat /etc/proxychains.conf                                             \
+&&  cd nomachine && ls -l                                                 \
+&&  echo -e "[ProxyList]\nsocks5 10.1.1.1 1090" > /etc/proxychains.conf   \
+&&  su user -c 'echo -e "PIKAPIKA" | proxychains makepkg'                 \
+&&  pacman -U nomachine-*-x86_64.pkg.tar.zst --noconfirm  
+# VNC ---------------------------------------------------------------------
+RUN pacman -S tigervnc --noconfirm                                        \
+&&  echo -e "PIKAPIKA\nPIKAPIKA" | vncpasswd                              \
+&&  echo 'session=cutefish-xsession' >> ~/.vnc/config                     \
+&&  echo 'geometry=1920x1080' >> ~/.vnc/config                            \
+&&  echo 'alwaysshared' >> ~/.vnc/config                                  \
+&&  touch /root/.Xauthority                                               \
+&&  chmod 700 ~/.vnc                                                      \
+&&  ls -l /usr/share/xsessions/                                           \
+&&  touch /root/.Xauthority
+# More Software -----------------------------------------------------------
+RUN su user -c "echo -e "PIKAPIKA" | yaourt aur/google-chrome --noconfirm"
+#RUN pacman -S --noconfirm firefox kwrite vlc transmission-qt gimp gwenview\
+#&&  git clone https://aur.archlinux.org/yay.git && chown -R user ./yay    \
+#&&  pacman -S --noconfirm go && cd yay                                    \  
+#&&  su user -c 'echo -e "PIKAPIKA" | proxychains makepkg --noconfirm'      
+COPY binfile/linuxqq_2.0.0.pkg.tar /
+RUN pacman -U /linuxqq_2.0.0.pkg.tar --noconfirm                          \
+&&  rm linuxqq_2.0.0.pkg.tar        
+#RUN yay -S visual-studio-code-bin
+
+# Install OpenVGL----------------------------------------------------------
+#RUN pacman -S --noconfirm 	virtualgl
+#RUN echo 'XAUTHORITY=$HOME/.Xauthority.docker' >                          \
+#         /etc/profile.d/Xauthority-fix.sh                                 \
+#&&  ENV_1='export LD_PRELOAD=/usr/lib/libdlfaker.so:'                     \
+#&&  ENV_2='/usr/lib/libvglfaker.so:$LD_PRELOAD'                           \
+#&&  echo '${ENV_1}${ENV_2}' > /etc/profile.d/virtualgl.sh                 \
+#&&  sed -i 's/use-ssh-agent/no-use-ssh-agent/'                            \
+#        /etc/X11/Xsession.options
+        
+# Run ---------------------------------------------------------------------
+RUN echo '#!/bin/bash' > /run.sh                                          \
+&&  echo 'export $(dbus-launch)' >> /run.sh                               \
+#&&  echo 'vncserver :0' >> /run.sh                                       \
+&&  echo '/etc/NX/nxserver --startup' >> /run.sh                          \
+&&  echo '/etc/NX/nxserver --restart' >> /run.sh                          \
+&&  echo '/usr/sbin/sshd -D' >> /run.sh                                   \
+&&  echo 'xinit /bin/cutefish-session' >> /run.sh                         \
+&&  chmod +x /run.sh                  
+# Port Mapping ------------------------------------------------------------
+EXPOSE 4000/tcp
+EXPOSE 5900/tcp
+CMD ["/run.sh"]

@@ -1,0 +1,42 @@
+# Images ------------------------------------------------------------------------------------------
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=archlinux
+FROM archlinux:${OS_VERSION}
+# ARGS --------------------------------------------------------------------------------------------
+ARG OS_MESSAGE=""
+ARG OS_VERSION=latest
+# Message -----------------------------------------------------------------------------------------
+MAINTAINER Pikachu Ren <pikachuim@qq.com>
+LABEL System=${OS_SYSTEMS}
+LABEL Version=${OS_VERSION}
+LABEL Description=${OS_MESSAGE}
+# Basic Software-----------------------------------------------------------------------------------
+COPY Config/pacman/cn.conf /etc/
+RUN cat /etc/pacman.d/mirrorlist
+RUN cat /etc/cn.conf >> /etc/pacman.conf
+RUN ls
+RUN pacman -Syy 
+RUN pacman -S --noconfirm sudo
+RUN pacman -S --noconfirm wget
+RUN wget https://archlinux.uk.mirror.allworldit.com/archlinux/core/os/x86_64/openssl-1.1-1.1.1.u-1-x86_64.pkg.tar.zst
+RUN pacman -U --overwrite '/usr/lib/*' openssl-1.1-1.1.1.s-2-x86_64.pkg.tar.zst
+RUN pacman -S yay --noconfirm
+RUN pacman -S yaourt --noconfirm
+RUN pacman -S base-devel --noconfirm 
+RUN pacman -S git --noconfirm
+RUN groupadd -r -g 200 user
+RUN useradd -m -u 200 -r -g user user 
+RUN echo user:user | chpasswd
+RUN echo root:root | chpasswd
+RUN yaourt -S dpkg --noconfirm
+# SSH ---------------------------------------------------------------------------------------------
+RUN sudo pacman -S openssh --noconfirm
+RUN echo "PermitRootLogin without-password" >> /etc/ssh/sshd_config   \
+&&  echo "ListenAddress 0.0.0.0" >> /etc/ssh/sshd_config
+COPY Config/OpenSSH/sshd /etc/pam.d/
+RUN ssh-keygen -A
+RUN echo '#!/bin/bash' > /run.sh
+RUN echo '/usr/sbin/sshd -D' >> /run.sh
+# Port Mapping -------------------------------------------------------------------------------------
+EXPOSE 22/tcp
+CMD ["/run.sh"]

@@ -1,0 +1,13 @@
+[Unit]
+Description=Pikachu Docker Run Script
+
+[Service]
+Type=forking
+WorkingDirectory=/
+ExecStart=/bin/bash /run.sh &
+SuccessExitStatus=0
+Restart=no
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

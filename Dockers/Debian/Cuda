@@ -1,0 +1,5 @@
+RUN sudo add-apt-repository ppa:graphics-drivers/ppa
+RUN sudo apt update
+#RUN sudo ubuntu-drivers autoinstall
+RUN sudo apt install nvidia-cuda-toolkit gcc-6
+RUN nvcc --version

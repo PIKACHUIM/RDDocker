@@ -1,0 +1,43 @@
+# syntax=docker/dockerfile:1.3-labs
+# Images ------------------------------------------------------
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=ubuntu
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+# Install -----------------------------------------------------
+RUN apt-get install -y software-properties-common             \
+&&  add-apt-repository ppa:kubuntu-ppa/backports              \
+&&  apt-get update && DEBIAN_FRONTEND=noninteractive          \
+    apt install -y kubuntu-desktop git cmake                               
+                
+# Install Softwares -------------------------------------------
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+RUN --security=insecure DEBIAN_FRONTEND=noninteractive apt install -y \
+    software-properties-common fcitx apt-transport-https wget 
+    
+RUN --security=insecure DEBIAN_FRONTEND=noninteractive apt install -y \
+    kwrite transmission-qt gimp gwenview fonts-liberation libu2f-udev
+    
+RUN --security=insecure DEBIAN_FRONTEND=noninteractive apt install -y \
+    vlc 
+    
+
+# Chrome and VSCode -------------------------------------------
+RUN wget -q https://packages.microsoft.com/keys/microsoft.asc \
+    -O- | sudo apt-key add -                                  \
+&&  TEXT1="deb [arch=amd64] https://packages.microsoft.com/"  \
+&&  TEXT2="repos/vscode stable main"                          \
+&&  add-apt-repository "${TEXT1}${TEXT2}"                     \
+&&  LINK1="https://dl.google.com/linux/direct/"               \
+&&  LINK2="google-chrome-stable_current_amd64.deb"            \
+&&  wget "${LINK1}${LINK2}"                                   
+RUN dpkg -i google-chrome-stable_current_amd64.deb            \
+&&  rm google-chrome-stable_current_amd64.deb                 \
+&&  apt install -y code                                       
+# QQ ----------------------------------------------------------                 
+COPY AppImg/linuxqq_3.1.1_amd64.deb /
+RUN dpkg -i linuxqq_3.1.1_amd64.deb &&  rm linuxqq_3.1.1_amd64.deb 
+
+# DESKTOP ------------------------------------------------------------
+RUN echo 'echo Start Desktop ---------------------------' >> /run.sh \
+&&  echo 'nohup xinit /bin/lightdm &' >> /run.sh                            
+

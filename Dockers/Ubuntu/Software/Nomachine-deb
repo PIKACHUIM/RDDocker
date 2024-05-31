@@ -1,0 +1,7 @@
+# Install Nomachine -------------------------------------------
+COPY AppImg/nomachine_amd64.deb /
+RUN dpkg -i /nomachine_amd64.deb && rm /nomachine_amd64.deb   \
+&&  sed -i '$a PhysicalDesktopAuthorization 0'                \
+    /usr/NX/etc/node.cfg                                      \
+&&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
+    /usr/NX/etc/node.cfg

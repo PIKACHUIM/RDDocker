@@ -1,0 +1,16 @@
+# Install OpenVGL----------------------------------------------
+#COPY AppImg/virtualgl_3.1_amd64.deb /virtualgl_amd64.deb
+#RUN apt update && DEBIAN_FRONTEND=noninteractive              \
+#    apt install -y libvdpau1 mesa-vdpau-drivers               \
+#                   libglu1-mesa libxv1 libxtst6
+#RUN DEBIAN_FRONTEND=noninteractive apt install libegl1-mesa     || echo "Ignored libegl1-mesa"
+#RUN DEBIAN_FRONTEND=noninteractive apt install libegl1-mesa-dev || echo "Ignored libegl1-mesa"
+#RUN (dpkg -i virtualgl_amd64.deb || echo "Ignore VirtualGL")  \
+#&&  rm virtualgl_amd64.deb                                  
+#RUN echo 'XAUTHORITY=$HOME/.Xauthority.docker' >              \
+#         /etc/profile.d/Xauthority-fix.sh                     \
+#&&  ENV_1='export LD_PRELOAD=/usr/lib/libdlfaker.so:'         \
+#&&  ENV_2='/usr/lib/libvglfaker.so:$LD_PRELOAD'               \
+#&&  echo '${ENV_1}${ENV_2}' > /etc/profile.d/virtualgl.sh     \
+#&&  sed -i 's/use-ssh-agent/no-use-ssh-agent/'                \
+#        /etc/X11/Xsession.options

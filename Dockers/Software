@@ -1,0 +1,24 @@
+# Chrome and VSCode -------------------------------------------
+#RUN wget -q https://packages.microsoft.com/keys/microsoft.asc \
+#    -O- | sudo apt-key add -                                  \
+#&&  TEXT1="deb [arch=amd64] https://packages.microsoft.com/"  \
+#&&  TEXT2="repos/vscode stable main"                          \
+#&&  add-apt-repository "${TEXT1}${TEXT2}"                     \
+#&&  LINK1="https://dl.google.com/linux/direct/"               \
+#&&  LINK2="google-chrome-stable_current_amd64.deb"            \
+#&&  wget "${LINK1}${LINK2}"                                   
+#RUN dpkg -i google-chrome-stable_current_amd64.deb            \
+#&&  rm google-chrome-stable_current_amd64.deb                 \
+#&&  apt install -y code     
+                                  
+# QQ ----------------------------------------------------------                 
+#RUN wget -O ntqq.deb https://dldir1.qq.com/qqfile/qq/QQNT/442cbbb1/linuxqq_3.2.9-24402_amd64.deb
+#RUN dpkg -i ntqq.deb &&  rm ntqq.deb
+
+# Install Softwares -------------------------------------------
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+RUN DEBIAN_FRONTEND=noninteractive                            \
+apt install -y software-properties-common wget lightdm        \                
+                   apt-transport-https fcitx5-chinese-addons  \
+                   kwrite vlc transmission-qt  fcitx5         \
+                   gimp gwenview fonts-liberation libu2f-udev

@@ -5,55 +5,35 @@ ARG OS_SYSTEMS=debian
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # ARGS --------------------------------------------------------
-ARG OS_MESSAGE="Lingmo Docker Image with SSH+NXD+Chrome+QQ+VNC"
+ARG OS_MESSAGE="LingmoOS Docker Image with NoMachine & OpenSSH"
 ARG OS_VERSION=12
-#ARG DE='deb https://packages.lingmo.org/lingmo/dists/ hydrogen main pkg common' 
-ARG DE='deb [trusted=yes] https://packages-lingmo.simplelinux.cn.eu.org/lingmo-archive/rolling/polaris polaris main contrib non-free' 
+#ENV UR="https://packages.lingmo.org/desktop"                 
+#ENV DE="deb [trusted=yes] ${UR} hydrogen main"               
+#ENV KF="${UR}/${PT}/key/lingmo-key.gpg.key"
+
+ENV UR="https://packages-lingmo.simplelinux.cn.eu.org"        
+ENV PT="lingmo-archive/rolling/polaris"  
+ENV DE="deb ${UR}/${PT} polaris main contrib non-free"        
+ENV KF="${UR}/${PT}/public-file.key"
+RUN echo "URL: ${UR} \nDEB: ${DE} \nKEY: ${KF}" 
 
 # Install Desktop ---------------------------------------------
 RUN echo ${DE} >> /etc/apt/sources.list                        || echo 'Ignored'
 RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
-# RUN DEBIAN_FRONTEND=noninteractive apt -y --fix-broken       || echo 'Ignored'
+RUN cat           /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
 RUN DEBIAN_FRONTEND=noninteractive apt -y install wget gnupg2  || echo 'Ignored'
-#RUN wget https://packages.lingmo.org/lingmo/key/lingmo-key.gpg.key -O lingmo.gpg
-RUN wget https://packages-lingmo.simplelinux.cn.eu.org/lingmo-archive/rolling/polaris/public-file.key -O lingmo.gpg
-RUN apt-key add ./lingmo.gpg  && apt update
-RUN DEBIAN_FRONTEND=noninteractive apt -y install systemd     \
-lingmo-workspace-base
-
-# Install Softwares -------------------------------------------
-RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
-RUN DEBIAN_FRONTEND=noninteractive                            \
-apt install -y software-properties-common wget lightdm        \                
-                   apt-transport-https fcitx5-chinese-addons  \
-                   kwrite vlc transmission-qt  fcitx5         \
-                   gimp gwenview fonts-liberation libu2f-udev
-# Chrome and VSCode -------------------------------------------
-RUN wget -q https://packages.microsoft.com/keys/microsoft.asc \
-    -O- | sudo apt-key add -                                  \
-&&  TEXT1="deb [arch=amd64] https://packages.microsoft.com/"  \
-&&  TEXT2="repos/vscode stable main"                          \
-&&  add-apt-repository "${TEXT1}${TEXT2}"                     \
-&&  LINK1="https://dl.google.com/linux/direct/"               \
-&&  LINK2="google-chrome-stable_current_amd64.deb"            \
-&&  wget "${LINK1}${LINK2}"                                   
-RUN dpkg -i google-chrome-stable_current_amd64.deb            \
-&&  rm google-chrome-stable_current_amd64.deb                 \
-&&  apt install -y code     
-                                  
-# QQ ----------------------------------------------------------                 
-RUN wget -O ntqq.deb https://dldir1.qq.com/qqfile/qq/QQNT/442cbbb1/linuxqq_3.2.9-24402_amd64.deb
-RUN dpkg -i ntqq.deb &&  rm ntqq.deb
-RUN DEBIAN_FRONTEND=noninteractive apt -y install lingmoui
+RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg       || echo 'Ignored'
+RUN mkdir -m 0755 -p /etc/apt/keyrings/                        || echo 'Ignored'
+RUN mv ./lingmo.gpg /etc/apt/keyrings/                         || echo 'Ignored'
+RUN apt update&&DEBIAN_FRONTEND=noninteractive apt -y install \
+    systemd lingmo-workspace-base lingmoui
 
 
+# DESKTOP ----------------------------------------------------- 
+RUN echo 'echo Start Desktop --------------------'   >> /run.sh
+RUN echo 'service sddm stop&&systemctl disable sddm' >> /run.sh
+RUN echo 'nohup su -c startx user &'                 >> /run.sh   
 
-# DESKTOP ------------------------------------------------------------
-#&&  echo 'systemctl stop sddm' >> /run.sh 
-#&&  echo 'nohup xinit /bin/lingmo-session & ' >> /run.sh                   
-RUN echo 'echo Start Desktop ---------------------------' >> /run.sh
-RUN echo 'nohup LC_ALL=zh_CN.UTF-8 startx &' >> /run.sh   
-
-# Port Mapping -------------------------------------------------------
+# Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp
 CMD ["/sbin/init"]

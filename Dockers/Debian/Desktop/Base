@@ -40,6 +40,7 @@ RUN groupadd -r -g 2000 user &&  useradd -u 2000 -m -r -g user user  \
 # Init ---------------------------------------------------------------------------------------------
 COPY Config/StartUP/run.service /etc/systemd/system/
 COPY Config/StartUP/run.sh /run.sh
+RUN systemctl enable run
 
 # Port Mapping -------------------------------------------------------------------------------------
 EXPOSE 22/tcp

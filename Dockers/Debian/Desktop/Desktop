@@ -4,7 +4,7 @@ ARG OS_VERSION=latest
 ARG OS_SYSTEMS=debian
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-server
 # ARGS --------------------------------------------------------------------------------------------
-ARG OS_MESSAGE="Pikachu Docker X11GUI"
+ARG OS_MESSAGE="Linux Docker with X11 & Nomachine & OpenVGL"
 ARG OS_VERSION=latest
 
 # Message -----------------------------------------------------------------------------------------
@@ -30,26 +30,34 @@ COPY Config/x11server/create-pulse-clientconf.sh /etc/profile.d/
 #     >> /etc/pulse/default.pa
 
 # Install OpenVGL----------------------------------------------
-COPY AppImg/virtualgl_amd64.deb /
-RUN apt update && DEBIAN_FRONTEND=noninteractive              \
-    apt install -y libvdpau1 mesa-vdpau-drivers libegl1-mesa  \
-                   libglu1-mesa libxv1 libxtst6
-RUN dpkg -i virtualgl_amd64.deb && rm virtualgl_amd64.deb                                    
-RUN echo 'XAUTHORITY=$HOME/.Xauthority.docker' >              \
-         /etc/profile.d/Xauthority-fix.sh                     \
-&&  ENV_1='export LD_PRELOAD=/usr/lib/libdlfaker.so:'         \
-&&  ENV_2='/usr/lib/libvglfaker.so:$LD_PRELOAD'               \
-&&  echo '${ENV_1}${ENV_2}' > /etc/profile.d/virtualgl.sh     \
-&&  sed -i 's/use-ssh-agent/no-use-ssh-agent/'                \
-        /etc/X11/Xsession.options
+#COPY AppImg/virtualgl_3.1_amd64.deb /virtualgl_amd64.deb
+#RUN apt update && DEBIAN_FRONTEND=noninteractive              \
+#    apt install -y libvdpau1 mesa-vdpau-drivers               \
+#                   libglu1-mesa libxv1 libxtst6
+#RUN DEBIAN_FRONTEND=noninteractive apt install libegl1-mesa     || echo "Ignored libegl1-mesa"
+#RUN DEBIAN_FRONTEND=noninteractive apt install libegl1-mesa-dev || echo "Ignored libegl1-mesa"
+#RUN (dpkg -i virtualgl_amd64.deb || echo "Ignore VirtualGL")  \
+#&&  rm virtualgl_amd64.deb                                  
+#RUN echo 'XAUTHORITY=$HOME/.Xauthority.docker' >              \
+#         /etc/profile.d/Xauthority-fix.sh                     \
+#&&  ENV_1='export LD_PRELOAD=/usr/lib/libdlfaker.so:'         \
+#&&  ENV_2='/usr/lib/libvglfaker.so:$LD_PRELOAD'               \
+#&&  echo '${ENV_1}${ENV_2}' > /etc/profile.d/virtualgl.sh     \
+#&&  sed -i 's/use-ssh-agent/no-use-ssh-agent/'                \
+#        /etc/X11/Xsession.options
         
 # Install Nomachine -------------------------------------------
-COPY AppImg/nomachine_amd64.deb /
-RUN dpkg -i /nomachine_amd64.deb && rm /nomachine_amd64.deb   \
+COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb 
+RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
+&&  rm /nomachine_amd64.deb                                   \
 &&  sed -i '$a PhysicalDesktopAuthorization 0'                \
     /usr/NX/etc/node.cfg                                      \
 &&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
-    /usr/NX/etc/node.cfg
+    /usr/NX/etc/node.cfg          
+
+RUN echo 'ConnectPolicy autocreate=1,autoconnect=1,automigrate=1,desktop=1,dialog=1,xsessions=1,udp=1' >> /usr/NX/etc/server.cfg
+RUN echo 'VirtualDesktopAccess all' >> /usr/NX/etc/server.cfg
+RUN echo 'PhysicalDesktopMode 2' >> /usr/NX/etc/server.cfg
 
 # Start UP -----------------------------------------------------------
 RUN echo '#!/bin/bash' > /run.sh                                     \

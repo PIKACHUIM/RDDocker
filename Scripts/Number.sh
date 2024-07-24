@@ -79,7 +79,7 @@ echo -e "   SSHD Porting: $PM_SSHS";
 echo -e "   NXD Services: $PM_NXSR";
 echo -e "   Docker  Name: $D_NAMES";
 echo -e "   System  Name: $OS_TYPE";
-echo -e "   System  Vers: $VERSION";
+echo -e "   System  Vers: $VERNAME";
 echo -e "   Desktop Type: $GUI_ENV";
 echo -e "   ========================================================================";
 echo -n "   Confirm to create the container? (y/n): "

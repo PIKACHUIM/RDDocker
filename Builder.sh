@@ -2,17 +2,20 @@
 source Scripts/Titles.sh
 source Scripts/Create/Select-Systems.sh
 source Scripts/Create/Select-Desktop.sh
-# Choose -------------------------------------------------
-#echo -n "   Would you like to test after build?(Y): "
-#read TEST_FLAG
+
 source Scripts/Titles.sh
 echo -e "   ============================Builder Info================================"
 echo -e "   Systems: $OS_TYPE";
 echo -e "   Version: $VERSION";
 echo -e "   Desktop: $GUI_ENV";
 echo -e "   ========================================================================";
-echo -n "   Confirm to create the container? (y/n): "
+# Confirm ----------------------------------------------------
+echo -n "   Are you sure to create this container? (y/n): "
 read CONFIRM
+# Choosed ----------------------------------------------------
+#echo -n "   Would you like to test after building? (y/n): "
+#read QCCFLAG
+
 if [ ! $CONFIRM ] || [ $CONFIRM == 'n' ] ; then
   echo "   Warn: Not Confirmed, Exit"
   exit 0
@@ -24,28 +27,31 @@ fi
 # Build ---------------------------------------------------
 source Scripts/Titles.sh
 echo -e "sudo docker buildx build \
-  --allow security.insecure \
-  -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
-  -t pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV} \
-  --build-arg OS_VERSION=${VERSION} \
-  ./Dockers"
-sudo docker buildx create --use \
-  --name insecure-builder \
-  --buildkitd-flags '--allow-insecure-entitlement security.insecure'
-sudo docker buildx build  --progress=plain \
-  --allow security.insecure \
-  -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
-  -t pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV} \
-  --build-arg OS_VERSION=${VERSION} \
-  --load\
-  ./Dockers > /tmp/buildx-log.txt
-sudo docker push pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV}
+     --allow security.insecure \
+     -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
+     -t pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV} \
+     --build-arg OS_VERSION=${VERNAME} \
+	 --build-arg OS_SYSTEMS=${OS_TYPE} \
+     ./Dockers"
+sudo proxychains4 docker buildx create --use \
+     --name insecure-builder \
+     --buildkitd-flags '--allow-insecure-entitlement security.insecure'
+sudo proxychains4 docker buildx build  --progress=plain \
+     --allow security.insecure \
+     -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
+     -t pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV} \
+     --build-arg OS_VERSION=${VERNAME} \
+	 --build-arg OS_SYSTEMS=${OS_TYPE} \
+     --load\
+     ./Dockers > /tmp/buildx-log.txt
+sudo proxychains4 docker push \
+     pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV}
 echo "     ======================= Enter to back to menu ========================"
 read KEY
 
 # exit 0
 # Test ----------------------------------------------------
-# if [ $TEST_FLAG == 'Y' ]; then
+# if [ $QCCFLAG == 'Y' ]; then
 #   source Scripts/Titles.sh
 #   sudo docker stop ${OS_TYPE}_${GUI_ENV}
 #   sudo docker rm   ${OS_TYPE}_${GUI_ENV}

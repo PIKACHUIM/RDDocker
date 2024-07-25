@@ -12,10 +12,10 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 |  #   | Desktop Env |                         Introduction                         | Ubuntu | Debian | Arch | Fedora |
 | :--: | :---------: | :----------------------------------------------------------: | :----: | :----: | :--: | :----: |
-|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |  √   |   ?    |
-|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √    |  ?   |   ?    |
-|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   ?    |  ?   |   ?    |
-|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   ?    |  ?   |   ?    |
+|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |  ?   |   ?    |
+|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √*   |  ?   |   ?    |
+|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   √    |  ?   |   ?    |
+|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   √    |  ?   |   ?    |
 |  0   |     X11     | X11桌面基础环境(构建专用)<br>X11 Desktop Basic Environment<br/>(For build other DE image only) |   √    |   √    |  ?   |   ?    |
 
 ？：表示还未支持，但后续可能支持 Not yet supported, but may be supported in the future
@@ -32,9 +32,9 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 | System Version / 系统版本 | Server | Lingmo | GNOME | Xfce4 | X11  |
 | :-----------------------: | :----: | :----: | :---: | :---: | :--: |
-|            13             |   √    |   √    |   ×   |   ×   |  √   |
-|            12             |   √    |   ×    |   ×   |   ×   |  √   |
-|            11             |   √    |   ×    |   ×   |   ×   |  √   |
+|            13             |   √    |   √    |   √   |   √   |  √   |
+|            12             |   √    |   ×    |   √   |   √   |  √   |
+|            11             |   √    |   ×    |   √   |   √   |  √   |
 
 *其他系统补充中* Other systems are being supplemented
 
@@ -82,12 +82,6 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
 - 输入数字选择容器操作系统(Enter numbers to select container operating system)
 
   ```
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      ============================Available System============================
      [1]Ubuntu [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /√ OpenBox /√ xfce]
      [2]Debian [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /× OpenBox /× xfce]
@@ -96,17 +90,10 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
   
      Choose Platforms Type Number(1): 
   ```
-
+  
 - 输入数字选择操作系统版本(Enter the number to select the operating system version)
 
   ```
-  
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      ============================Available Version===========================
         [1] 24.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2029 ]  
         [2] 22.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2027 ]  
@@ -115,17 +102,10 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
   
      Choice System Version Number(1): 
   ```
-
+  
 - 输入数字选择桌面环境系统（Enter numbers to select desktop environment system）
 
   ```
-  
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      ============================Available Desktop===========================
         [1] Servers NoGraphic  [ √ SSH / × GUI APPs / × NoMachine / × VNC ]  
         [2] Desktop Lingmo DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  
@@ -137,19 +117,12 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
      Choose GUI Environments Type(1): 
   
   ```
-
+  
 - 选择是否使用宿主机的显卡（Choose whether to use the graphics card of the host computer）
 
 - 注意：必须是英伟达独立显卡才可以使用(Attention: It must be an NVIDIA discrete graphics card)
 
   ```
-  
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      =============================Graphics Cards=============================
         [A] All Graphics Cards [Using All Graphics of Current Local Syatem]  
         [N] Disabled All Cards [Don't Use Graphics of Current Local Syatem]  
@@ -157,7 +130,7 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
      Choose Graphics Cards Enable(N): 
   
   ```
-
+  
 - 输入唯一的两位数ID(比如`01`) (Enter a unique two digit ID to distinguish like `01`)
 
 - 映射端口，格式为`主机端口:容器端口`，不需要或者完成映射，直接输入`q`即可退出
@@ -165,29 +138,16 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
 - Map ports in the format of `host port: container port`, enter `q` to exit port map.
 
   ```
-  
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      ===========================Config Port Mapping==========================
      Enter Docker ID(Length=2 Like 01): 01
      ===========================Configure Port Map===========================
      Note: !!!Enter 'q' to Finish Port Mapping Input!!!
      Enter Port Mapping(host_port:oci_port): q
   ```
-
+  
 - 确认信息，输入`y`确认创建 (Confirm information, enter `y` to confirm creation)
 
   ```
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
      ===========================Container Info===============================
      Port Mapping: 
            10101-10121:10101-10121 
@@ -202,17 +162,10 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
      ========================================================================
      Confirm to create the container? (y/n): 
   ```
-
+  
 - 创建完成后会输出容器访问信息：
 
   ```
-  
-     ┌──────────────────────────────────────────────────────────────────────┐
-     │          Pikachu Docker Image Build and Container Setup Tool         │
-     │                     Last Updated MAR 31 / 2023                       │
-     │            Copyright © 2023 Pikachu, All Rights Reserved             │
-     └──────────────────────────────────────────────────────────────────────┘
-  
   ──────────────────────────────────────────────────────────────────────
   Congratulations! Your Docker Container has been Created Successfully! 
   ----------------------------------------------------------------------
@@ -254,7 +207,7 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
   ──────────────────────────────────────────────────────────────────────
   ======================= Enter to back to menu ========================
   ```
-
+  
   
 
 ### Connect 使用容器

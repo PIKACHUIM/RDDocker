@@ -1,10 +1,38 @@
-# syntax=docker/dockerfile:1.3-labs
 # Images ------------------------------------------------------
-FROM pikachuim/ubuntu:22.04-x11gui
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=trixie
+ARG OS_SYSTEMS=debian
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+
 # Install -----------------------------------------------------
-RUN --security=insecure apt-get update && apt-get install -y  \
-    software-properties-common xfce4 git cmake wget curl gnupg2                               
-               
+# RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+RUN apt update  &&  apt -y install software-properties-common
+RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
+RUN DEBIAN_FRONTEND=noninteractive apt install -y  pulseaudio
+RUN DEBIAN_FRONTEND=noninteractive apt install -y  sane-utils
+#RUN add-apt-repository ppa:mozillateam/ppa && sudo apt update       
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y  gnupg2 \
+    software-properties-common xfce4 git cmake wget curl sudo \
+    xfce4-terminal xfce4-goodies adwaita-qt xfwm4             \
+    moka-icon-theme papirus-icon-theme qt5ct                           
+RUN systemctl disable lightdm && service lightdm stop || echo 1 
+RUN echo "LANG=en_US.UTF-8"   >  /etc/default/locale          \
+&&  echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale          
+
+RUN rm -rf /root/.config/xfce4/panel/launcher-17/
+RUN rm -rf /root/.config/xfce4/panel/launcher-19/
+COPY Config/Xfce4L/launcher-17/ /root/.config/xfce4/panel/
+COPY Config/Xfce4L/launcher-19/ /root/.config/xfce4/panel/
+
 # SSH & DESKTOP -----------------------------------------------
-RUN echo 'echo Start Desktop -------------------'  >> /run.sh \
-&&  echo 'nohup xinit /bin/xfce4-session  &'       >> /run.sh                             
+RUN echo 'echo Start Desktop -------------------'  >> /run.sh
+RUN echo 'service lightdm stop'                    >> /run.sh
+RUN echo 'killall xfce4-session'                   >> /run.sh
+RUN echo 'xinit /bin/xfce4-session'                >> /run.sh      
+#
+#RUN DEBIAN_FRONTEND=noninteractive apt install -y firefox-esr\
+#    libreoffice-gtk3 libreoffice-calc libreoffice-writer snap
+      
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

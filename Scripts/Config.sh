@@ -1,6 +1,11 @@
 #!/bin/bash
-DOMAIN_T="v4-cd1.pika.wiki"
-HOSTNAME="11.pika.wiki"
-IPV4HOST="v4.pika.wiki"
-IPV6HOST="v6.pika.wiki"
+# Host Parameter (Replace!)
+DOMAIN_T="YOUR_LANS_DOMAIN"
+HOSTNAME="MASTER_HOST_NAME"
+
+# Public Domains (Optional)
+IPV4HOST="YOUR_IPV4_DOMAIN"
+IPV6HOST="YOUR_IPV6_DOMAIN"
+
+# OCIs Home Path (Optional)
 DATAPATH="/home/ocis"

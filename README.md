@@ -1,20 +1,24 @@
-## Remote Desktop Docker
+## RDPDocker: Docker Support Remote Desktop Protocols
 
-## 支持远程桌面的Docker镜像
+## 支持多种远程桌面协议连接带有桌面环境的Docker镜像
+
+RDPDocker是一个带有X11个和桌面环境的Docker镜像构建和容器创建工具，支持创建Ubuntu、Debian、Arch Linux、Fedora（未来可能添加）系统，支持Lingmo、GNOME、Xfce4、X11（无桌面）、SSH（无图形化）等环境。同时，允许用户通过NoMachine、RDP（尚未支持）、VNC（尚未支持）、SSH等方式远程访问容器。本工具以非虚拟化和极低开销的情况下，实现了多用户共享一台主机的办法，同时创建极快，随用随开，并且只占用内存、磁盘极少的空间，只需要主机安装Docker即可。
+
+RDPDocker is a Docker image building and container creation tool with X11 and desktop environments, supporting the creation of Ubuntu, Debian, Arch Linux, Fedora (possibly added in the future) systems, Lingmo, GNOME, Xfce4, X11 (no desktop), SSH (no graphics) and other environments. Meanwhile, users are allowed to remotely access the container through methods such as NoMachine, RDP (not yet supported), VNC (not yet supported), SSH, etc. This tool enables multiple users to share a host without virtualization and at extremely low cost. It is also very fast to create, can be used and opened at any time, and only occupies minimal memory and disk space. Docker only needs to be installed on the host.
 
 ## Images / 镜像概览
 
 ### Intros / 镜像介绍
 
-|  #   | Desktop Env |                         Introduction                         | Ubuntu | Debian | Arch Linux | Fedora |
-| :--: | :---------: | :----------------------------------------------------------: | :----: | :----: | :--------: | :----: |
-|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |     √      |   ?    |
-|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √    |     ?      |   ?    |
-|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   ?    |     ?      |   ?    |
-|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   ?    |     ?      |   ?    |
-|  0   |     X11     | X11桌面基础环境(构建专用)<br>X11 Desktop Basic Environment<br/>(For build other DE image only) |   √    |   √    |     ?      |   ?    |
+|  #   | Desktop Env |                         Introduction                         | Ubuntu | Debian | Arch | Fedora |
+| :--: | :---------: | :----------------------------------------------------------: | :----: | :----: | :--: | :----: |
+|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |  √   |   ?    |
+|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √    |  ?   |   ?    |
+|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   ?    |  ?   |   ?    |
+|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   ?    |  ?   |   ?    |
+|  0   |     X11     | X11桌面基础环境(构建专用)<br>X11 Desktop Basic Environment<br/>(For build other DE image only) |   √    |   √    |  ?   |   ?    |
 
-
+？：表示还未支持，但后续可能支持 Not yet supported, but may be supported in the future
 
 ### Ubuntu 支持情况
 
@@ -212,7 +216,7 @@ cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
   ──────────────────────────────────────────────────────────────────────
   Congratulations! Your Docker Container has been Created Successfully! 
   ----------------------------------------------------------------------
-                   Container S1V3-OCI-01-CD1                     
+                   Container *******************                    
                    OSSystem: ubuntu 24.04            
   ----------------------------------------------------------------------
                    NXServer: *******************   

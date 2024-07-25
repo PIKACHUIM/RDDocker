@@ -1,0 +1,10 @@
+# syntax=docker/dockerfile:1.3-labs
+# Images ------------------------------------------------------
+FROM pikachuim/ubuntu:22.04-x11gui
+# Install -----------------------------------------------------
+RUN --security=insecure apt-get update && apt-get install -y  \
+    software-properties-common xfce4 git cmake wget curl gnupg2                               
+               
+# SSH & DESKTOP -----------------------------------------------
+RUN echo 'echo Start Desktop -------------------'  >> /run.sh \
+&&  echo 'nohup xinit /bin/xfce4-session  &'       >> /run.sh                             

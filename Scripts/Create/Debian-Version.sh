@@ -2,7 +2,7 @@
 
 source Scripts/Titles.sh
 echo "   ============================Available Version==========================="
-echo "      [1] Debian 13 Trixie     [ √ Now Recommend / Support Until 2028 ]    "
+echo "      [1] Debian 13 Trixie     [ √ Now Recommend / Support Until 2030 ]    "
 echo "      [2] Debian 12 bookworm   [ √ Now Recommend / Support Until 2028 ]    "
 echo "      [3] Debian 11 Bullseye   [ × Not Recommend / Support Until 2025 ]    "
 echo "   ========================================================================"

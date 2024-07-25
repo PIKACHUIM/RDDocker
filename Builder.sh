@@ -26,13 +26,6 @@ fi
 
 # Build ---------------------------------------------------
 source Scripts/Titles.sh
-echo -e "sudo docker buildx build \
-     --allow security.insecure \
-     -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
-     -t pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV} \
-     --build-arg OS_VERSION=${VERNAME} \
-	 --build-arg OS_SYSTEMS=${OS_TYPE} \
-     ./Dockers"
 sudo proxychains4 docker buildx create --use \
      --name insecure-builder \
      --buildkitd-flags '--allow-insecure-entitlement security.insecure'
@@ -40,13 +33,14 @@ sudo proxychains4 docker buildx create --use \
 sudo proxychains4 docker buildx build  \
      --progress=plain \
      --allow security.insecure \
-     -f Dockers/${OS_UPPE}/Desktop/${DC_FILE} \
+     -f Dockers/${OS_UPPE}/Desktops/${DC_FILE} \
      -t pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV} \
      --build-arg OS_VERSION=${VERNAME} \
 	 --build-arg OS_SYSTEMS=${OS_TYPE} \
      --load\
      ./Dockers \
-&& sudo proxychains4 docker push \
+&& \
+sudo proxychains4 docker push \
      pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV}
 echo "     ======================= Enter to back to menu ========================"
 read KEY

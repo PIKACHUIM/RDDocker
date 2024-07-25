@@ -9,16 +9,19 @@ echo
 echo -n "   Choice System Version Number(1): "
 read VERSION
 if [ ! $VERSION ]; then
+  VERSION=1
+fi
+if [ $VERSION == 1 ]; then
   echo Note: VERSION='24.04'
-  VERSION='24.04'
-elif [ $VERSION == 1 ]; then
-  echo Note: VERSION='24.04'
+  VERNAME='24.04'
   VERSION='24.04'
 elif [ $VERSION == 2 ]; then
   echo Note: VERSION='22.04'
+  VERNAME='22.04'
   VERSION='22.04'
 elif [ $VERSION == 3 ]; then 
   echo Note: VERSION='20.04'
+  VERNAME='20.04'
   VERSION='20.04'
 fi
 

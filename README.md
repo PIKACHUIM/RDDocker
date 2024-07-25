@@ -1,13 +1,318 @@
-# X11Docker
-## Usage
-### Clone
+## Remote Desktop Docker
+
+## 支持远程桌面的Docker镜像
+
+## Images / 镜像概览
+
+### Intros / 镜像介绍
+
+|  #   | Desktop Env |                         Introduction                         | Ubuntu | Debian | Arch Linux | Fedora |
+| :--: | :---------: | :----------------------------------------------------------: | :----: | :----: | :--------: | :----: |
+|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |     √      |   ?    |
+|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √    |     ?      |   ?    |
+|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   ?    |     ?      |   ?    |
+|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   ?    |     ?      |   ?    |
+|  0   |     X11     | X11桌面基础环境(构建专用)<br>X11 Desktop Basic Environment<br/>(For build other DE image only) |   √    |   √    |     ?      |   ?    |
+
+
+
+### Ubuntu 支持情况
+
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce4 | X11  |
+| :-----------------------: | :----: | :----: | :---: | :---: | :--: |
+|           24.04           |   √    |   ×    |   √   |   √   |  √   |
+|           22.04           |   √    |   ×    |   √   |   √   |  √   |
+|           20.04           |   √    |   ×    |   √   |   √   |  √   |
+
+### Debian 支持情况
+
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce4 | X11  |
+| :-----------------------: | :----: | :----: | :---: | :---: | :--: |
+|            13             |   √    |   √    |   ×   |   ×   |  √   |
+|            12             |   √    |   ×    |   ×   |   ×   |  √   |
+|            11             |   √    |   ×    |   ×   |   ×   |  √   |
+
+*其他系统补充中* Other systems are being supplemented
+
+## Usages 使用方法
+
+### Clone Git 克隆镜像
+
 ```
 git clone https://e.coding.net/PIKACHUIM/open/X11Docker.git
-cd X11Docker
-chmod +x ./X11Docker.sh
-./X11Docker.sh
+cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
 ```
-### Run
-- Input `n` to create a users container
-- Input `3` `1` `8` to create Lingmo OS
-- Input id and `q` to exit port mapping
+### Run OCIs 运行容器
+
+- 您将看到这个界面(You will see this interface)：
+
+- 输入`n`然后回车进入创建菜单(Enter `n` and press enter to enter the create menu)
+
+  ```
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ==================================Menu==================================
+     --------------------------- Container Manage ---------------------------
+            [n] [Created] Create a new docker container from an image
+            [l] [Display] Display all docker containers in the system
+            [s] [Started] Start your docker container already created
+            [t] [Pausing] Pause your docker container already running
+     -NOTE- [r] [Restart] Restart your docker container which ctarted
+     *WARN* [K] [Killall] Stop your docker container which is running
+     *WARN* [D] [Deleted] Select and delete your docker container now
+     ----------------------------- Image Manage -----------------------------
+     -NOTE- [b] [ Build ] Build your docker image from the DockerFile
+     *WARN* [C] [ Clean ] Clean all unuse images and untag image file
+     *WARN* [P] [ Prune ] Prune system(all unuse images & containers)
+     ------------------------------------------------------------------------
+            [q] [ Exit~ ] Do nothing, just exit this script! Byebye~~
+     ========================================================================
+  
+     Choose Operation Type Number(*): 
+  ```
+
+- 输入数字选择容器操作系统(Enter numbers to select container operating system)
+
+  ```
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ============================Available System============================
+     [1]Ubuntu [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /√ OpenBox /√ xfce]
+     [2]Debian [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /× OpenBox /× xfce]
+     [3]ArchOS [√ Server /√ CuteOS /× KDE /× GNOME /× DDE /× OpenBox /× xfce]
+     ========================================================================
+  
+     Choose Platforms Type Number(1): 
+  ```
+
+- 输入数字选择操作系统版本(Enter the number to select the operating system version)
+
+  ```
+  
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ============================Available Version===========================
+        [1] 24.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2029 ]  
+        [2] 22.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2027 ]  
+        [3] 20.04 Focal Fossa      [ × Not Recommend / Support Until 2025 ]  
+     ========================================================================
+  
+     Choice System Version Number(1): 
+  ```
+
+- 输入数字选择桌面环境系统（Enter numbers to select desktop environment system）
+
+  ```
+  
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ============================Available Desktop===========================
+        [1] Servers NoGraphic  [ √ SSH / × GUI APPs / × NoMachine / × VNC ]  
+        [2] Desktop Lingmo DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  
+        [3] Desktop Gnome GUI  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  
+        [4] Desktop Xfce4 GUI  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  
+        [0] X11 GUI Basic ENV  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  
+     ========================================================================
+  
+     Choose GUI Environments Type(1): 
+  
+  ```
+
+- 选择是否使用宿主机的显卡（Choose whether to use the graphics card of the host computer）
+
+- 注意：必须是英伟达独立显卡才可以使用(Attention: It must be an NVIDIA discrete graphics card)
+
+  ```
+  
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     =============================Graphics Cards=============================
+        [A] All Graphics Cards [Using All Graphics of Current Local Syatem]  
+        [N] Disabled All Cards [Don't Use Graphics of Current Local Syatem]  
+     ========================================================================
+     Choose Graphics Cards Enable(N): 
+  
+  ```
+
+- 输入唯一的两位数ID(比如`01`) (Enter a unique two digit ID to distinguish like `01`)
+
+- 映射端口，格式为`主机端口:容器端口`，不需要或者完成映射，直接输入`q`即可退出
+
+- Map ports in the format of `host port: container port`, enter `q` to exit port map.
+
+  ```
+  
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ===========================Config Port Mapping==========================
+     Enter Docker ID(Length=2 Like 01): 01
+     ===========================Configure Port Map===========================
+     Note: !!!Enter 'q' to Finish Port Mapping Input!!!
+     Enter Port Mapping(host_port:oci_port): q
+  ```
+
+- 确认信息，输入`y`确认创建 (Confirm information, enter `y` to confirm creation)
+
+  ```
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+     ===========================Container Info===============================
+     Port Mapping: 
+           10101-10121:10101-10121 
+           10123-10139:10123-10139 
+           10142-10199:10142-10199
+     SSHD Porting: 10122
+     NXD Services: 10140
+     Docker  Name: **************
+     System  Name: ubuntu
+     System  Vers: 24.04
+     Desktop Type: server
+     ========================================================================
+     Confirm to create the container? (y/n): 
+  ```
+
+- 创建完成后会输出容器访问信息：
+
+  ```
+  
+     ┌──────────────────────────────────────────────────────────────────────┐
+     │          Pikachu Docker Image Build and Container Setup Tool         │
+     │                     Last Updated MAR 31 / 2023                       │
+     │            Copyright © 2023 Pikachu, All Rights Reserved             │
+     └──────────────────────────────────────────────────────────────────────┘
+  
+  ──────────────────────────────────────────────────────────────────────
+  Congratulations! Your Docker Container has been Created Successfully! 
+  ----------------------------------------------------------------------
+                   Container S1V3-OCI-01-CD1                     
+                   OSSystem: ubuntu 24.04            
+  ----------------------------------------------------------------------
+                   NXServer: *******************   
+                   IPV4Host: *******************  
+                   IPV6Host: *******************    
+                   HostName: *******************    
+  ----------------------------------------------------------------------
+                   Username: root                         
+                   Password: *******************                     
+                   Username: user                         
+                   Password: *******************                     
+  ----------------------------------------------------------------------
+                                                                        
+  Port Mapping Details:
+         
+           10101-10121:10101-10121 
+           10123-10139:10123-10139 
+           10142-10199:10142-10199
+                                                                        
+  Container Volume Map:                                                 
+      Host: /home/ocis/OCI01 -> OCI: /home/user
+                                                                        
+  ----------------------------------------------------------------------
+                                                                        
+  SSHLogin Private Key:
+  *******************
+                                                                        
+  SSHLogin Public Key:
+  *******************
+                                                                        
+  ----------------------------------------------------------------------
+  Note: Saved password in ./Backups/passwd.conf, please delete if need! 
+  For any questions or suggestions, please visit:                       
+                   https://github.com/PIKACHUIM/DockerFiles             
+  ──────────────────────────────────────────────────────────────────────
+  ======================= Enter to back to menu ========================
+  ```
+
+  
+
+### Connect 使用容器
+
+1. 下载[NoMachine](https://www.nomachine.com/)，然后安装 /   Download [NoMachine](https://www.nomachine.com/), Then install
+
+2. 打开NoMachine，选择左上角的`Add`，添加远程桌面
+
+   Open NoMachine, select 'Add' and add remote desktop
+
+   > host：您docker所在主机地址 / Your Docker host address
+   >
+   > port：上面列出的端口，为`1`+`ID`+`40`，例如`ID`为`01`，则端口为`10140`
+   >
+   > The ports listed above.  ` 1 `+` ID `+` 40 `. For example, if ` ID ` is ` 01 `, then the port is `10140 `
+
+3. 然后您可以连接，用户名可以是`root`或者`user`，密码是上面列出`Password: `后面内容
+
+   Then you can connect, the username can be 'root' or 'user', and the password is listed above
+
+### Q&A 错误排查
+
+1. 无法连接远程服务器 / Unable to connect to remote server
+
+   - 检查服务器IP地址、防火墙端口是否打开
+
+     Check if the server IP address and firewall are open
+
+   - 检查Docker是否安装、容器是否超过启动
+
+     Check if Docker is installed and if the container has exceeded startup time
+
+   - 检查NoMachine服务是否正常运行
+
+     Check if the NoMachine service is running properly
+
+     在主机上执行：`docker exec -it 容器名称 bash -c "ps -ef | grep nxserve"`
+
+     Execute on the host: `docker exec -it Name bash -c "ps -ef | grep nxserve"`
+
+     正常情况输出(Normal output)：
+
+     ```
+     nx ...... /usr/NX/bin/nxserver.bin root 1898 --daemon
+     nx ...... /usr/NX/bin/nxserver.bin -c /etc/NX/nxserver --login -H 9
+     ```
+
+   - 如果没有，可以尝试运行(If not, you can try running it)
+
+     ```
+     docker exec -it Name bash -c "/etc/NX/nxserver --startup"
+     ```
+
+2. 没有桌面/黑屏/白屏/卡死 / No desktop/black screen/white screen/stuck
+
+   - 在主机上执行：Execute on the host: 
+
+     ```
+     docker exec -it <Name> bash -c "ps -ef | grep session"
+     ```
+
+   - 将输出内容提交Issue / Submit the output content to Issue
+
+     [New Issue · PIKACHUIM/RDPDocker (github.com)](https://github.com/PIKACHUIM/RDPDocker/issues/new)
+

@@ -1,0 +1,74 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=ubuntu
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-server
+# ARGS --------------------------------------------------------
+ARG OS_MESSAGE="Ubuntu Docker with X11 & NoMachine & VNC & RDP"
+ARG OS_VERSION=latest
+
+# Message -----------------------------------------------------
+MAINTAINER Pikachu Ren <pikachuim@qq.com>
+LABEL System=${OS_SYSTEMS}
+LABEL Version=${OS_VERSION}
+LABEL Description=${OS_MESSAGE}
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+
+# Install Xserver ---------------------------------------------
+# RUN --security=insecure                                     \
+RUN \
+    apt-get update && DEBIAN_FRONTEND=noninteractive          \
+    apt install -y xserver-xorg-core-hwe-18.04 xauth          \
+                   xserver-xorg-video-dummy curl net-tools    \   
+                   xfonts-base xfonts-75dpi xfonts-100dpi     \
+                   xfonts-scalable dbus-user-session          \
+                   dbus-x11 xinit neofetch                                  
+COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
+COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
+COPY X11GUI/70-ubuntu.conf /etc/lightdm/lightdm.conf.d/
+RUN echo 'load-module module-native-protocol-unix '           \
+    >> /etc/pulse/default.pa                                  \
+&&  echo 'auth-anonymous=1 socket=/tmp/pulse-socket'          \
+    >> /etc/pulse/default.pa
+RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
+
+# Install Nomachine -------------------------------------------
+COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb 
+RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
+&&  rm /nomachine_amd64.deb                                   \
+&&  sed -i '$a PhysicalDesktopAuthorization 0'                \
+    /usr/NX/etc/node.cfg                                      \
+&&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
+    /usr/NX/etc/node.cfg          
+
+# Configs Nomachine -------------------------------------------
+RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg
+RUN echo 'VirtualDesktopMode 2'      >> /usr/NX/etc/server.cfg
+RUN echo 'PhysicalDesktopAccess all' >> /usr/NX/etc/server.cfg
+RUN echo 'PhysicalDesktopMode 2'     >> /usr/NX/etc/server.cfg
+RUN echo 'CreateDisplay 1'           >> /usr/NX/etc/server.cfg
+RUN echo 'DisplayGeometry 1920x1080' >> /usr/NX/etc/server.cfg
+RUN echo 'StartHTTPDaemon Automatic' >> /usr/NX/etc/server.cfg
+RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
+RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
+
+
+
+# Install XRDP -----------------------------------------------
+# RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install xrdp
+
+# Install x11vnc ---------------------------------------------
+
+# Start UP ---------------------------------------------------
+RUN echo '#!/bin/bash'                             > /run.sh \
+&&  echo 'echo Starting Basic Server -----------' >> /run.sh \
+&&  echo 'nohup /usr/sbin/sshd -D &'              >> /run.sh \
+&&  echo 'export DISPLAY=:0'                      >> /run.sh \
+&&  echo '/etc/init.d/dbus start'                 >> /run.sh \
+&&  echo 'echo Starting NX ---------------------' >> /run.sh \
+&&  echo '/etc/NX/nxserver --startup'             >> /run.sh \
+&&  echo '/etc/NX/nxserver --restart'             >> /run.sh                 
+
+# Port Mapping -----------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

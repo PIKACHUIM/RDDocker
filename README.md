@@ -22,19 +22,19 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 ### Ubuntu 支持情况
 
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | IceWM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :---: | :-----: |
-|           24.04           |   √    |   ×    |   √   |   √    |     ×     |   ×   |    √    |
-|           22.04           |   √    |   ×    |   √   |   √    |     ×     |   ×   |    √    |
-|           20.04           |   √    |   ×    |   √   |   √    |     ×     |   ×   |    √    |
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
+| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
+|           24.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
+|           22.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
+|           20.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 
 ### Debian 支持情况
 
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | IceWM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :---: | :-----: |
-|            13             |   √    |   √    |   √   |   √    |     ×     |   ×   |    √    |
-|            12             |   √    |   ×    |   √   |   √    |     ×     |   ×   |    √    |
-|            11             |   √    |   ×    |   √   |   √    |     ×     |   ×   |    √    |
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
+| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
+|            13             |   √    |   √    |   √   |   √    |     ×     |   ×    |    √    |
+|            12             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
+|            11             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 
 *其他系统补充中* Other systems are being supplemented
 
@@ -43,7 +43,7 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 ### Clone Git 克隆镜像
 
 ```
-git clone https://e.coding.net/PIKACHUIM/open/X11Docker.git
+git clone https://github.com/PIKACHUIM/RDDocker.git
 cd X11Docker && chmod +x ./Manager.sh && bash  ./Manager.sh
 ```
 ### Run OCIs 运行容器

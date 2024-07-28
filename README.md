@@ -28,7 +28,7 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 |           22.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 |           20.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 
-### 
+### Debian 支持情况
 
 | System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
 | :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |

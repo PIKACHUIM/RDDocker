@@ -1,0 +1,41 @@
+# Images ------------------------------------------------------------------------------------------
+ARG OS_VERSION=40
+ARG OS_SYSTEMS=fedora
+FROM ${OS_SYSTEMS}:${OS_VERSION}
+
+# ARGS --------------------------------------------------------------------------------------------
+ARG OS_MESSAGE="Debian Docker Images with OpenSSH Server"
+ARG OS_VERSION=latest
+
+# Message -------------------------------------------------------------
+MAINTAINER Pikachu Ren <pikachuim@qq.com>
+LABEL System=${OS_SYSTEMS}
+LABEL Version=${OS_VERSION}
+LABEL Description=${OS_MESSAGE}
+
+# Install Softwares ---------------------------------------------------
+RUN dnf -y update && dnf install -y openssh-server wget nano git curl \
+&&  mkdir -p /var/run/sshd && mkdir -p /root/.ssh/
+
+# Allow SSH PAM & Password Login --------------------------------------
+RUN echo "#!/bin/bash"                                      > /run.sh \
+&&  echo 'echo Starting Basic Server ------------'         >> /run.sh \
+&&  echo 'nohup /usr/sbin/sshd -D &'                       >> /run.sh \
+&&  echo "PermitRootLogin without-password" >> /etc/ssh/sshd_config   \
+&&  echo "ListenAddress 0.0.0.0" >> /etc/ssh/sshd_config \
+&&  chmod +x /run.sh && rm /etc/pam.d/sshd && mkdir -p /run/sshd
+COPY Config/OpenSSH/sshd /etc/pam.d/
+COPY Config/OpenSSH/authorized_keys /root/.ssh/
+
+# User -----------------------------------------------------------------
+RUN groupadd -r -g 2000 user &&  useradd -u 2000 -m -r -g user user    \
+&&  echo "user ALL=(ALL)      ALL" >> /etc/sudoers
+
+# Init -----------------------------------------------------------------
+COPY Config/StartUP/run.service /etc/systemd/system/
+COPY Config/StartUP/run.sh /run.sh
+RUN systemctl enable run
+
+# Port Mapping ---------------------------------------------------------
+EXPOSE 22/tcp
+CMD ["/sbin/init"]

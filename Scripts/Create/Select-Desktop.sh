@@ -8,10 +8,10 @@ echo "      [3] Desktop Gnome GUI  [ √ SSH / √ GUI APPs / √ NoMachine / �
 echo "      [4] Desktop Xfce4 GUI  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 echo "      [0] X11 GUI Basic ENV  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 #echo "      [5] Desktop Deepin DDE [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-#echo "      [6] Desktop CuteFishDE [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+#echo "      [6] Desktop Icewm Lite [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 #echo "      [7] Desktop KDE Plasma [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-#echo "      [8] Desktop Xfwm4 Lite [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-#echo "      [9] Desktop Icewm Lite [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+#echo "      [8] Desktop ********** [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+#echo "      [9] Desktop CuteFishDE [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 echo "   ========================================================================"
 echo
 echo -n "   Choose GUI Environments Type(1): "
@@ -32,6 +32,9 @@ elif [ $GUI_ENV == 3 ]; then
 elif [ $GUI_ENV == 4 ]; then
   GUI_ENV=xfce4l
   DC_FILE=Xfce4L
+elif [ $GUI_ENV == 9 ]; then
+  GUI_ENV=cuteos
+  DC_FILE=CuteOS
 elif [ $GUI_ENV == 0 ]; then
   GUI_ENV=x11gui
   DC_FILE=X11GUI

@@ -1,0 +1,26 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=archos
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+
+# Install -----------------------------------------------------
+RUN sudo pacman -S xfce4 xfce4-goodies              --noconfirm
+
+#RUN rm -rf /root/.config/xfce4/panel/launcher-17/
+#RUN rm -rf /root/.config/xfce4/panel/launcher-19/
+#COPY Config/Xfce4L/launcher-17/ /root/.config/xfce4/panel/
+#COPY Config/Xfce4L/launcher-19/ /root/.config/xfce4/panel/
+
+# SSH & DESKTOP -----------------------------------------------
+#RUN echo 'killall xfce4-session'                   >> /run.sh
+#RUN echo 'service lightdm stop'                    >> /run.sh
+RUN echo 'echo Start Desktop -------------------'  >> /run.sh
+RUN echo 'nohup startxfce4 &'                      >> /run.sh      
+
+#RUN DEBIAN_FRONTEND=noninteractive apt install -y firefox-esr\
+#    libreoffice-gtk3 libreoffice-calc libreoffice-writer snap
+      
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

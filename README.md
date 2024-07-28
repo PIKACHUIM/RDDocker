@@ -28,7 +28,7 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 |           22.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 |           20.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 
-### Debian 支持情况
+### 
 
 | System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
 | :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
@@ -36,7 +36,19 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 |            12             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 |            11             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
 
-*其他系统补充中* Other systems are being supplemented
+### ArchOS 支持情况
+
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
+| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
+|          Latest           |   √    |   ×*   |   √   |   √    |     ×     |   ×    |    √    |
+
+*：目前支持CuteFish DE，Lingmo DE暂未支持，使用[9]来构建和启动CuteFish DE。Now support CuteFish DE instead of Lingmo DE, Use [9] to create or build docker with CuteFish DE.
+
+### Fedora 支持情况
+
+| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
+| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
+|            40             |   √    |   ×    |   √   |   √    |     ×     |   ×√   |         |
 
 ## Usages 使用方法
 

@@ -1,0 +1,21 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=40
+ARG OS_SYSTEMS=fedora
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+
+# Install -----------------------------------------------------
+RUN dnf update&&dnf group install -y gnome-desktop                       
+    
+# Desktop Configs ---------------------------------------------
+#RUN systemctl disable gdm && service gdm stop || echo "Ignored"
+
+# Desktop Startup----------------------------------------------
+RUN echo 'echo Start Desktop --------------------'   >> /run.sh
+#RUN echo 'service gdm stop &&killall gdm || echo 1' >> /run.sh
+#RUN echo 'pkill -U gdm                            ' >> /run.sh
+#RUN echo 'xinit /bin/gnome-session'                 >> /run.sh            
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

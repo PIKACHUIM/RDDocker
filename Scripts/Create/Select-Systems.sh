@@ -2,11 +2,10 @@
 source Scripts/Titles.sh
 # Choose System --------------------------------------------------------------------
 echo "   ============================Available System============================"
-echo "   [1]Ubuntu [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /√ OpenBox /√ xfce]"
-echo "   [2]Debian [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /× OpenBox /× xfce]"
-echo "   [3]ArchOS [√ Server /√ CuteOS /× KDE /× GNOME /× DDE /× OpenBox /× xfce]"
-#echo "   [4]CentOS [√ Server /× CuteOS /× KDE /× GNOME /× DDE /× OpenBox /× xfce]"
-#echo "   [5]Deepin [√ Server /√ CuteOS /√ KDE /√ GNOME /√ DDE /× OpenBox /× xfce]"
+echo "   [1]Ubuntu [√ Server / × Lingmo / √ GNOME / √ xfce4 / × Deepin / × IceVM]"
+echo "   [2]Debian [√ Server / √ Lingmo / √ GNOME / √ xfce4 / × Deepin / × IceVM]"
+echo "   [3]ArchOS [√ Server / × Lingmo / × GNOME / × xfce4 / × Deepin / × IceVM]"
+echo "   [4]Fedora [√ Server / × Lingmo / × GNOME / × xfce4 / × Deepin / × IceVM]"
 echo "   ========================================================================"
 echo 
 echo -n "   Choose Platforms Type Number(1): "
@@ -29,11 +28,7 @@ elif [ $OS_TYPE == 3 ]; then
   OS_TYPE=archos
   OS_UPPE=ArchOS
 elif [ $OS_TYPE == 4 ]; then
-  source Scripts/Create/CentOS-Version.sh
-  OS_TYPE=centos
-  OS_UPPE=CentOS
-elif [ $OS_TYPE == 5 ]; then
-  source Scripts/Create/Deepin-Version.sh
-  OS_TYPE=deepin
-  OS_UPPE=Deepin
+  source Scripts/Create/Fedora-Version.sh
+  OS_TYPE=fedora
+  OS_UPPE=Fedora
 fi

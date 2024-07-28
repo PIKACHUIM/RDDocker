@@ -1,0 +1,47 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=40
+ARG OS_SYSTEMS=fedora
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-server
+# ARGS --------------------------------------------------------
+ARG OS_MESSAGE="Linux Docker with X11 & Nomachine & OpenVGL"
+ARG OS_VERSION=latest
+
+# Message -----------------------------------------------------
+MAINTAINER Pikachu Ren <pikachuim@qq.com>
+LABEL System=${OS_SYSTEMS}
+LABEL Version=${OS_VERSION}
+LABEL Description=${OS_MESSAGE}
+RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+
+# Install Xserver ---------------------------------------------
+RUN yum update  -y && yum install -y @base-x wget curl git vim                 
+
+# Install Nomachine -------------------------------------------
+COPY AppImg/nomachine_8.13.1_1_x86_64.rpm /nomachine_amd64.rpm 
+RUN (rpm -ivh /nomachine_amd64.rpm ||echo "Ignore Nomachine") \
+&&  rm /nomachine_amd64.rpm                                   \
+&&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
+    /usr/NX/etc/node.cfg          
+
+# Configs Nomachine -------------------------------------------
+RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg
+RUN echo 'VirtualDesktopMode 2'      >> /usr/NX/etc/server.cfg
+RUN echo 'PhysicalDesktopAccess all' >> /usr/NX/etc/server.cfg
+RUN echo 'PhysicalDesktopMode 2'     >> /usr/NX/etc/server.cfg
+RUN echo 'CreateDisplay 1'           >> /usr/NX/etc/server.cfg
+RUN echo 'DisplayGeometry 1920x1080' >> /usr/NX/etc/server.cfg
+RUN echo 'StartHTTPDaemon Automatic' >> /usr/NX/etc/server.cfg
+RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
+RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
+
+# Start UP -----------------------------------------------------
+RUN echo 'export DISPLAY=:0'                        >> /run.sh \
+&&  echo '/etc/init.d/dbus start'                   >> /run.sh \
+&&  echo 'echo Starting NX ----------------------'  >> /run.sh \
+&&  echo '/etc/NX/nxserver --startup'               >> /run.sh \
+&&  echo '/etc/NX/nxserver --restart'               >> /run.sh      
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

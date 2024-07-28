@@ -1,0 +1,39 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=12
+ARG OS_SYSTEMS=debian
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+
+# ARGS --------------------------------------------------------
+ARG OS_MESSAGE="LingmoOS Docker Image with NoMachine & OpenSSH"
+ARG OS_VERSION=12
+#ENV UR="https://packages.lingmo.org/desktop"                 
+#ENV DE="deb [trusted=yes] ${UR} hydrogen main"               
+#ENV KF="${UR}/${PT}/key/lingmo-key.gpg.key"
+
+ENV UR="https://packages-lingmo.simplelinux.cn.eu.org"        
+ENV PT="lingmo-archive/rolling/polaris"  
+ENV DE="deb ${UR}/${PT} polaris main contrib non-free"        
+ENV KF="${UR}/${PT}/public-file.key"
+RUN echo "URL: ${UR} \nDEB: ${DE} \nKEY: ${KF}" 
+
+# Install Desktop ---------------------------------------------
+RUN echo ${DE} >> /etc/apt/sources.list                        || echo 'Ignored'
+RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
+RUN cat           /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
+RUN DEBIAN_FRONTEND=noninteractive apt -y install wget gnupg2  || echo 'Ignored'
+RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg       || echo 'Ignored'
+RUN mkdir -m 0755 -p /etc/apt/keyrings/                        || echo 'Ignored'
+RUN mv ./lingmo.gpg /etc/apt/keyrings/                         || echo 'Ignored'
+RUN apt update&&DEBIAN_FRONTEND=noninteractive apt -y install \
+    systemd lingmo-workspace-base lingmoui
+
+
+# DESKTOP ----------------------------------------------------- 
+RUN echo 'echo Start Desktop --------------------'   >> /run.sh
+RUN echo 'service sddm stop&&systemctl disable sddm' >> /run.sh
+RUN echo 'nohup su -c startx user &'                 >> /run.sh   
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

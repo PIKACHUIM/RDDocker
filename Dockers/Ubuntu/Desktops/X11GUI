@@ -24,7 +24,7 @@ RUN \
                    xfonts-scalable dbus-user-session          \
                    dbus-x11 xinit neofetch                                  
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
-COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
+#COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
 COPY X11GUI/70-ubuntu.conf /etc/lightdm/lightdm.conf.d/
 RUN echo 'load-module module-native-protocol-unix '           \
     >> /etc/pulse/default.pa                                  \
@@ -33,8 +33,10 @@ RUN echo 'load-module module-native-protocol-unix '           \
 RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
 # Install Nomachine -------------------------------------------
-COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb 
-RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
+#COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb
+#RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
+RUN wget https://download.nomachine.com/download/8.14/Linux/nomachine_8.14.2_1_amd64.deb -O nomachine_amd64.deb \
+&&  dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine"   \
 &&  rm /nomachine_amd64.deb                                   \
 &&  sed -i '$a PhysicalDesktopAuthorization 0'                \
     /usr/NX/etc/node.cfg                                      \

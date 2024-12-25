@@ -19,7 +19,8 @@ RUN echo 'echo Start Desktop --------------------'   >> /run.sh
 #RUN echo 'service gdm stop && killall gdm || echo 1' >> /run.sh
 #RUN echo 'pkill -U gdm                             ' >> /run.sh
 #RUN echo 'xinit /bin/gnome-session'                  >> /run.sh            
-RUN rm -rf /etc/profile.d/create-pulse-clientconf.sh
+#RUN rm -rf /etc/profile.d/create-pulse-clientconf.sh
+
 # Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
+EXPOSE 4000/tcp                                                                                                        
 CMD ["/sbin/init"]

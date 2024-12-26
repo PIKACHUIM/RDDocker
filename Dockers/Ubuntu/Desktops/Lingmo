@@ -19,8 +19,8 @@ RUN echo "URL: ${UR} \nDEB: ${DE} \nKEY: ${KF}"
 
 # Install Desktop ---------------------------------------------
 RUN echo ${DE} >> /etc/apt/sources.list                        || echo 'Ignored'
-#RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
-#RUN cat           /etc/apt/sources.list.d/debian.sources       || echo 'Ignored'
+#RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources      || echo 'Ignored'
+#RUN cat           /etc/apt/sources.list.d/debian.sources      || echo 'Ignored'
 RUN DEBIAN_FRONTEND=noninteractive apt -y install wget gnupg2  || echo 'Ignored'
 RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg       || echo 'Ignored'
 RUN mkdir -m 0755 -p /etc/apt/keyrings/                        || echo 'Ignored'

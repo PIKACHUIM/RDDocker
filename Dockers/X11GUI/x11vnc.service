@@ -1,0 +1,11 @@
+[Unit]
+Description=Start x11vnc at startup.
+After=multi-user.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc  -forever -noxdamage -repeat -rfbauth /etc/x11vnc.pass -rfbport 5900 -shared -create -display :0
+ 
+[Install]
+WantedBy=multi-user.target
+

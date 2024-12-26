@@ -7,6 +7,7 @@ read USE_PID
 D_NAMES="S1V3-OCI-${USE_PID}-CD1"
 # ==================================================
 PM_SSHS="1${USE_PID}22";
+PM_RDPS="1${USE_PID}39";
 PM_NXSR="1${USE_PID}40";
 PM_VNCS="1${USE_PID}41";
 PV_DATA="/OCI${USE_PID}"
@@ -52,7 +53,7 @@ done
 
 if [ ! $PORTMAP ]; then
   TMP1MAP="-p 1${USE_PID}01-1${USE_PID}21:1${USE_PID}01-1${USE_PID}21";
-  TMP2MAP="-p 1${USE_PID}23-1${USE_PID}39:1${USE_PID}23-1${USE_PID}39";
+  TMP2MAP="-p 1${USE_PID}23-1${USE_PID}38:1${USE_PID}23-1${USE_PID}38";
   TMP3MAP="-p 1${USE_PID}42-1${USE_PID}99:1${USE_PID}42-1${USE_PID}99";
   PORTMAP="${TMP1MAP} ${TMP2MAP} ${TMP3MAP}";
 fi

@@ -13,18 +13,17 @@ LABEL System=${OS_SYSTEMS}
 LABEL Version=${OS_VERSION}
 LABEL Description=${OS_MESSAGE}
 
-
-
 # Set UP APT Sources ------------------------------------------------------------------------------
 RUN echo "$OS_VERSION"
+ENV UR="mirrors.tuna.tsinghua.edu.cn"
 RUN if [ "$OS_VERSION" = "24.04" ]; then                                                          \
         cp /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak      \
-        && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources  \     
-        && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources \
-    ;else \
-        cp /etc/apt/sources.list /etc/apt/sources.list.bak                        \
-        && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list  \     
-        && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+        && sed -i 's/archive.ubuntu.com/'${UR}'/g' /etc/apt/sources.list.d/ubuntu.sources         \     
+        && sed -i 's/security.ubuntu.com/'${UR}'/g' /etc/apt/sources.list.d/ubuntu.sources        \
+    ;else                                                                                         \
+        cp /etc/apt/sources.list /etc/apt/sources.list.bak                                        \
+        && sed -i 's/archive.ubuntu.com/'${UR}'/g' /etc/apt/sources.list                          \     
+        && sed -i 's/security.ubuntu.com/'${UR}'/g' /etc/apt/sources.list                         \
     ;fi
 
 # Install Softwares -------------------------------------------------------------------------------

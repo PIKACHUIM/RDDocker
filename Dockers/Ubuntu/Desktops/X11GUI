@@ -15,9 +15,7 @@ LABEL Description=${OS_MESSAGE}
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Install Xserver ---------------------------------------------
-# RUN --security=insecure                                     \
-RUN \
-    apt-get update && DEBIAN_FRONTEND=noninteractive          \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
     apt install -y xserver-xorg-core-hwe-18.04 xauth          \
                    xserver-xorg-video-dummy curl net-tools    \   
                    xfonts-base xfonts-75dpi xfonts-100dpi     \
@@ -33,11 +31,9 @@ RUN echo 'load-module module-native-protocol-unix '           \
 RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
 # Install Nomachine -------------------------------------------
-#COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb
-#RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
-RUN wget https://download.nomachine.com/download/8.14/Linux/nomachine_8.14.2_1_amd64.deb -O nomachine_amd64.deb \
-&&  dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine"   \
-&&  rm /nomachine_amd64.deb                                   \
+ENV NX="download/8.14/Linux/nomachine_8.14.2_1_amd64.deb"
+RUN wget https://download.nomachine.com/${NX} -O nx.deb       \
+&&  dpkg -i /nx.deb || echo "Ignore Nomachine" &&  rm /nx.deb \
 &&  sed -i '$a PhysicalDesktopAuthorization 0'                \
     /usr/NX/etc/node.cfg                                      \
 &&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
@@ -54,12 +50,12 @@ RUN echo 'StartHTTPDaemon Automatic' >> /usr/NX/etc/server.cfg
 RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
 RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
 
-
-
 # Install XRDP -----------------------------------------------
-# RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install xrdp
+RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install xrdp
 
 # Install x11vnc ---------------------------------------------
+RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install x11vnc
+echo 'user' | sudo x11vnc -storepasswd -file /etc/x11vnc.pass
 
 # Start UP ---------------------------------------------------
 RUN echo '#!/bin/bash'                             > /run.sh \
@@ -69,7 +65,7 @@ RUN echo '#!/bin/bash'                             > /run.sh \
 &&  echo '/etc/init.d/dbus start'                 >> /run.sh \
 &&  echo 'echo Starting NX ---------------------' >> /run.sh \
 &&  echo '/etc/NX/nxserver --startup'             >> /run.sh \
-&&  echo '/etc/NX/nxserver --restart'             >> /run.sh                 
+&&  echo '/etc/NX/nxserver --restart'             >> /run.sh             
 
 # Port Mapping -----------------------------------------------
 EXPOSE 4000/tcp

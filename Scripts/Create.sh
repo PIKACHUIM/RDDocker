@@ -21,6 +21,7 @@ $GPU_LIST \
 -p $PM_SSHS:22 \
 -p $PM_NXSR:4000 \
 -p $PM_VNCS:5900 \
+-p $PM_RDPS:3389 \
 -v "${DATAPATH}${PV_DATA}/root:/root" \
 -v "${DATAPATH}${PV_DATA}/user:/home/user" \
 pikachuim/$OS_TYPE:$VERNAME-$GUI_ENV
@@ -51,6 +52,7 @@ HOM_DIR=$(echo ~)
 # Set Passwd ---------------------------------------------------------------------
 sudo docker exec $D_NAMES /bin/bash -c "echo root:${D_PASSW} | chpasswd"
 sudo docker exec $D_NAMES /bin/bash -c "echo user:${D_PASSW} | chpasswd"
+sudo docker exec $D_NAMES /bin/bash -c "x11vnc -storepasswd ${D_PASSW} /etc/x11vnc.pass"
 sudo docker exec $D_NAMES /bin/bash -c "mkdir -p ~/.ssh/"
 sudo docker exec $D_NAMES /bin/bash -c "mkdir -p /home/user/.ssh/"
 sudo docker exec $D_NAMES /bin/bash -c "chown -R user /home/user/"
@@ -59,6 +61,7 @@ sudo docker exec $D_NAMES /bin/bash -c "echo ${SSH_PUB} >> ~/.ssh/authorized_key
 sudo docker exec $D_NAMES /bin/bash -c "echo ${SSH_PUB} >> /home/user/.ssh/authorized_keys"
 sudo docker exec $D_NAMES /bin/bash -c "chmod 600 ~/.ssh/authorized_keys"
 sudo docker exec $D_NAMES /bin/bash -c "chmod 600 /home/user/.ssh/authorized_keys"
+#sudo docker stop $D_NAMES && sudo docker start $D_NAMES
 echo "   ==========================Enter Key to Continue========================="
 read KEY
 
@@ -73,7 +76,10 @@ echo "----------------------------------------------------------------------" | 
 echo "                 Container $D_NAMES                     "               | tee $TEXT_PATH
 echo "                 OSSystem: $OS_TYPE $VERSION            "               | tee $TEXT_PATH
 echo "----------------------------------------------------------------------" | tee $TEXT_PATH
-echo "                 NXServer: $DOMAIN_T:$PM_NXSR    "                      | tee $TEXT_PATH
+echo "                 NXD Addr: $DOMAIN_T:$PM_NXSR    "                      | tee $TEXT_PATH
+echo "                 SSH Addr: $DOMAIN_T:$PM_SSHS    "                      | tee $TEXT_PATH
+echo "                 VNC Addr: $DOMAIN_T:$PM_VNCS    "                      | tee $TEXT_PATH
+echo "                 RDP Addr: $DOMAIN_T:$PM_RDPS    "                      | tee $TEXT_PATH
 echo "                 IPV4Host: $D_NAMES.$IPV4HOST    "                      | tee $TEXT_PATH
 echo "                 IPV6Host: $D_NAMES.$IPV6HOST    "                      | tee $TEXT_PATH
 echo "                 HostName: $D_NAMES.$HOSTNAME    "                      | tee $TEXT_PATH

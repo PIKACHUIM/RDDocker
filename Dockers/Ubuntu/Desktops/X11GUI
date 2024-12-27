@@ -20,7 +20,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
                    xserver-xorg-video-dummy curl net-tools    \   
                    xfonts-base xfonts-75dpi xfonts-100dpi     \
                    xfonts-scalable dbus-user-session          \
-                   dbus-x11 xinit neofetch                                  
+                   dbus-x11 xinit neofetch xvfb                 
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
 #COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
 COPY X11GUI/70-ubuntu.conf /etc/lightdm/lightdm.conf.d/
@@ -51,11 +51,10 @@ RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
 RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
 
 # Install XRDP -----------------------------------------------
-RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install xrdp
+RUN DEBIAN_FRONTEND=noninteractive apt -y install xrdp
 
 # Install x11vnc ---------------------------------------------
-RUN DEBIAN_FRONTEND=noninteractive sudo apt -y install x11vnc
-echo 'user' | sudo x11vnc -storepasswd -file /etc/x11vnc.pass
+RUN DEBIAN_FRONTEND=noninteractive apt -y install x11vnc
 
 # Start UP ---------------------------------------------------
 RUN echo '#!/bin/bash'                             > /run.sh \

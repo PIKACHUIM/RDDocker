@@ -7,32 +7,38 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 # ARGS --------------------------------------------------------
 ARG OS_MESSAGE="LingmoOS Docker Image with NoMachine & OpenSSH"
 ARG OS_VERSION=12
-#ENV UR="https://packages.lingmo.org/desktop"                 
-#ENV DE="deb [trusted=yes] ${UR} hydrogen main"               
-#ENV KF="${UR}/${PT}/key/lingmo-key.gpg.key"
-
-ENV UR="https://packages-lingmo.simplelinux.cn.eu.org"        
-ENV PT="lingmo-archive/rolling/polaris"  
-ENV DE="deb ${UR}/${PT} polaris main contrib non-free"        
-ENV KF="${UR}/${PT}/public-file.key"
-RUN echo "URL: ${UR} \nDEB: ${DE} \nKEY: ${KF}" 
 
 # Install Desktop ---------------------------------------------
-RUN echo ${DE} >> /etc/apt/sources.list                        || echo 'Ignored'
-#RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources      || echo 'Ignored'
-#RUN cat           /etc/apt/sources.list.d/debian.sources      || echo 'Ignored'
-RUN DEBIAN_FRONTEND=noninteractive apt -y install wget gnupg2  || echo 'Ignored'
-RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg       || echo 'Ignored'
-RUN mkdir -m 0755 -p /etc/apt/keyrings/                        || echo 'Ignored'
-RUN mv ./lingmo.gpg /etc/apt/keyrings/                         || echo 'Ignored'
-RUN apt update&&DEBIAN_FRONTEND=noninteractive apt -y install \
-    systemd lingmo-workspace-base lingmoui
+RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
+ENV UR="deb https://download.opensuse.org/repositories/home:"
+ENV DE="${UR}/elysia:/LingmoOS/xUbuntu_24.04/ ./"
+ENV KR="https://build.opensuse.org/projects/home:"
+ENV KF="${KR}elysia:LingmoOS/signing_keys/download?kind=gpg"
+RUN echo ${DE} >> /etc/apt/sources.list                  ||echo 1
+#RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources ||echo 2
+#RUN cat           /etc/apt/sources.list.d/debian.sources ||echo 2
+RUN apt -y install wget gnupg2 nano vim openssl curl git ||echo 3
+RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg ||echo 4
+RUN apt update &&DEBIAN_FRONTEND=noninteractive apt install -y \
+    lingmo-workspace-base
+RUN apt -y install psmisc
+COPY X11GUI/de-lingmo.sh /lingmo.sh
+RUN chmod 755 /lingmo.sh
 
+# X11VNC Root Set ---------------------------------------------
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+RUN apt -y install xvfb && chmod +x /x11vnc.sh
 
 # DESKTOP ----------------------------------------------------- 
-RUN echo 'echo Start Desktop --------------------'   >> /run.sh
-RUN echo 'service sddm stop&&systemctl disable sddm' >> /run.sh
-RUN echo 'nohup su -c startx user &'                 >> /run.sh   
+RUN echo 'echo Start Desktop ----------------------' >> /run.sh 
+RUN echo 'systemctl disable sddm.service           ' >> /run.sh
+RUN echo 'service sddm stop                        ' >> /run.sh
+RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
+RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
+#RUN echo 'DISPLAY=:9 nohup lingmo-session &       ' >> /run.sh
+RUN echo 'DISPLAY=:9 nohup /lingmo.sh &            ' >> /run.sh
+#RUN echo 'bash /x11vnc.sh && sleep 3              ' >> /run.sh
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp

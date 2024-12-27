@@ -8,6 +8,8 @@ ExecStart=/bin/bash /run.sh &
 SuccessExitStatus=0
 Restart=no
 RestartSec=1
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 
 [Install]
 WantedBy=multi-user.target

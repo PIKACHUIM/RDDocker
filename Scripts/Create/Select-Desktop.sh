@@ -4,14 +4,15 @@ source Scripts/Titles.sh
 echo "   ============================Available Desktop==========================="
 echo "      [1] Servers NoGraphic  [ √ SSH / × GUI APPs / × NoMachine / × VNC ]  "
 echo "      [2] Desktop Lingmo DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-echo "      [3] Desktop Gnome GUI  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-echo "      [4] Desktop Xfce4 GUI  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-echo "      [0] X11 GUI Basic ENV  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-#echo "      [5] Desktop Deepin DDE [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+echo "      [3] Desktop Gnome3 DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+echo "      [4] Desktop Xfce4L DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+echo "      [5] Desktop Deepin DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+echo "      [6] Desktop Plasma DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 #echo "      [6] Desktop Icewm Lite [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
-#echo "      [7] Desktop KDE Plasma [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+#echo "      [7] Desktop ********** [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 #echo "      [8] Desktop ********** [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 #echo "      [9] Desktop CuteFishDE [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
+echo "      [0] X11 GUI Basic ENV  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
 echo "   ========================================================================"
 echo
 echo -n "   Choose GUI Environments Type(1): "
@@ -32,6 +33,12 @@ elif [ $GUI_ENV == 3 ]; then
 elif [ $GUI_ENV == 4 ]; then
   GUI_ENV=xfce4l
   DC_FILE=Xfce4L
+elif [ $GUI_ENV == 5 ]; then
+  GUI_ENV=deepin
+  DC_FILE=Deepin
+elif [ $GUI_ENV == 6 ]; then
+  GUI_ENV=plasma
+  DC_FILE=Plasma
 elif [ $GUI_ENV == 9 ]; then
   GUI_ENV=cuteos
   DC_FILE=CuteOS

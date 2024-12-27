@@ -30,7 +30,7 @@ sudo proxychains4 docker buildx create --use \
      --name insecure-builder \
      --buildkitd-flags '--allow-insecure-entitlement security.insecure'
 # 	 --no-cache 
-sudo proxychains4 docker buildx build  \
+sudo proxychains4 docker buildx build \
      --progress=plain \
      --allow security.insecure \
      -f Dockers/${OS_UPPE}/Desktops/${DC_FILE} \

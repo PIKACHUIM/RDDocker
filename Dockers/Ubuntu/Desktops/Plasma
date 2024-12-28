@@ -15,8 +15,9 @@ RUN apt-get install -y software-properties-common             \
 RUN echo 'echo Start Desktop ----------------------' >> /run.sh
 RUN echo 'systemctl disable sddm.service           ' >> /run.sh
 RUN echo 'service sddm stop                        ' >> /run.sh
+RUN echo 'killall plasma_session & killall startplasma-x11' >> /run.sh
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-#RUN echo 'bash /x11vnc.sh && sleep 3              ' >> /run.sh
+RUN echo 'nohup x11vnc -forever -noxdamage -repeat -rfbauth /etc/x11vnc.pass -rfbport 5900 -shared -create -display :9 &  ' >> /run.sh
 RUN echo 'DISPLAY=:9 nohup startplasma-x11 &       ' >> /run.sh                    
 

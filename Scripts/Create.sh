@@ -24,7 +24,7 @@ $GPU_LIST \
 -p $PM_RDPS:3389 \
 -v "${DATAPATH}${PV_DATA}/root:/root" \
 -v "${DATAPATH}${PV_DATA}/user:/home/user" \
-pikachuim/$OS_TYPE:$VERNAME-$GUI_ENV
+pikachuim/$OS_TYPE:$VERSION-$GUI_ENV
 
 # Set Images ---------------------------------------------------------------------
 if [ $GUI_ENV == 'server' ]; then

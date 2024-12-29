@@ -10,45 +10,32 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 ### Intros / 镜像介绍
 
-|  #   | Desktop Env |                         Introduction                         | Ubuntu | Debian | Arch | Fedora |
-| :--: | :---------: | :----------------------------------------------------------: | :----: | :----: | :--: | :----: |
-|  1   |   Server    | 无GUI和桌面，仅用于SSH远程连接<br/>No GUI and DE, only used for SSH |   √    |   √    |  ?   |   ?    |
-|  2   |   Lingmo    | 一个拥有高效和优美UI的桌面 <br/>Lingmo is a DE with efficient and beautiful UI |   ?    |   √*   |  ?   |   ?    |
-|  3   |    GNOME    | Linux常用图形的桌面环境<br/>A DE for commonly used graphics on Linux |   √    |   √    |  ?   |   ?    |
-|  4   |    Xfce4    | 一个非常轻量的桌面环境<br/>A lightweight DE for UNIX-like OS. |   √    |   √    |  ?   |   ?    |
-|  0   |     X11     | X11桌面基础环境(构建专用)<br>X11 Desktop Basic Environment<br/>(For build other DE image only) |   √    |   √    |  ?   |   ?    |
+|  #   | Desktop Env | Introduction                                                 | Ubuntu | Debian | Arch | Fedora |
+| :--: | :---------: | :----------------------------------------------------------- | :----: | :----: | :--: | :----: |
+|  1   |   Server    | 无GUI和桌面，仅用于 SSH 远程连接使用<br/>No GUI and DE, only used for SSH connect. |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
+|  2   |   Lingmo    | 一个拥有高效和优美GUI 的现代桌面环境 <br/>Lingmo is a DE with efficient and great UI |   ✔️*   |   ✔️*   |  ❌   |   ❌    |
+|  3   |    GNOME    | Linux常用图形的桌面环境, 功能齐全方便<br/>DE for commonly used graphics on Linux |   ✔️    |   ✔️    |  ❌   |   ❌    |
+|  4   |   Xfce4L    | 一个非常轻量, 简洁易用的Linux桌面环境<br/>A lightweight & easy DE for UNIX-like OS. |   ✔️    |   ✔️    |  ❌   |   ❌    |
+|  5   |   Deepin    | 深度科技自主开发的美观易用的桌面环境<br/>主要由桌面、启动器、任务栏、控制中心<br/>窗口管理器等组成，预装了深度特色应用 |   ✔️    |   ✔️    |  ❌   |   ❌    |
+|  6   |   Plasma    | 您可以使用*Plasma 桌面*环境轻松浏览网页<br/>与同事、朋友和家人保持联系，管理文件<br/>欣赏音乐和视频，并发挥创意和提高效率 |   ✔️    |   ✔️    |  ❌   |   ❌    |
+|  0   |   X11GUI    | X11桌面基础环境集成远程桌面(构建专用)<br>X11 Desktop Basic Env (For build DE only.) |   ✔️    |   ✔️    |  ❌   |   ❌    |
 
-？：表示还未支持，但后续可能支持 Not yet supported, but may be supported in the future
 
-### Ubuntu 支持情况
 
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
-|           24.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
-|           22.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
-|           20.04           |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
+### 各个系统桌面支持情况
 
-### Debian 支持情况
+| 系统名称<br/>System Name | 系统版本<br/>System Version | Server |     Lingmo      |       GNOME        | Xfce 4 |     Deepin DE     |      Plasma       | X11 GUI |
+| :----------------------: | :-------------------------: | :----: | :-------------: | :----------------: | :----: | :---------------: | :---------------: | :-----: |
+|          Ubuntu          |            24.04            |   ✔️    |        ✔️        | ✔️<br/>VNC连上报错  |   ✔️    |     ❌源未支持     |         ✔️         |    ✔️    |
+|          Ubuntu          |            22.04            |   ✔️    |    ❌源未支持    |         ✔️          |   ✔️    | ✔️<br/>nxd无法进入 |         ✔️         |    ✔️    |
+|          Ubuntu          |            20.04            |   ✔️    |    ❌源未支持    |         ✔️          |   ✔️    |     ❌源未支持     |         ✔️         |    ✔️    |
+|          Debian          |            13.00            |   ✔️    |    ❌源未支持    | ✔️<br/>x11vnc连不上 |   ✔️    |     ❌源未支持     | ✔️<br/>只有nxd能连 |    ✔️    |
+|          Debian          |            12.00            |   ✔️    | ✔️<br/>nxd连不上 | ✔️<br/>x11vnc连不上 |   ✔️    |     ❌编译报错     | ✔️<br/>只有nxd能连 |    ✔️    |
+|          Debian          |            11.00            |   ✔️    |    ❌源未支持    | ✔️<br/>x11vnc连不上 |   ✔️    |     ❌源未支持     | ✔️<br/>只有nxd能连 |    ✔️    |
+|          ArchOS          |            devel            |   /    |        /        |         /          |   /    |         /         |         /         |    /    |
+|          Fedora          |            40.00            |   /    |        /        |         /          |   /    |         /         |         /         |    /    |
 
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
-|            13             |   √    |   √    |   √   |   √    |     ×     |   ×    |    √    |
-|            12             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
-|            11             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
-
-### ArchOS 支持情况
-
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
-|          Latest           |   √    |   ×*   |   √   |   √    |     ×     |   ×    |    √    |
-
-*：目前支持CuteFish DE，Lingmo DE暂未支持，使用[9]来构建和启动CuteFish DE。Now support CuteFish DE instead of Lingmo DE, Use [9] to create or build docker with CuteFish DE.
-
-### Fedora 支持情况
-
-| System Version / 系统版本 | Server | Lingmo | GNOME | Xfce 4 | Deepin DE | Ice WM | X11 GUI |
-| :-----------------------: | :----: | :----: | :---: | :----: | :-------: | :----: | :-----: |
-|            40             |   √    |   ×    |   √   |   √    |     ×     |   ×    |    √    |
+### 
 
 ## Usages 使用方法
 

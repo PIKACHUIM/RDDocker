@@ -8,22 +8,25 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 RUN apt update && apt install -y software-properties-common       
 RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
 RUN DEBIAN_FRONTEND=noninteractive apt update && /sbin/init & 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio  
-#RUN add-apt-repository ppa:ubuntudde-dev/experimental -y    
-#RUN add-apt-repository ppa:ubuntudde-dev/unstable -y    
+RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio    
 RUN add-apt-repository ppa:ubuntudde-dev/stable -y            \  
 &&  apt-get update && DEBIAN_FRONTEND=noninteractive          \
-&&  apt install -y ubuntudde-dde git cmake ubuntudde-dde-extras                               
+    apt install -y ubuntudde-dde git cmake ubuntudde-dde-extras                               
 
 # Desktop Configs ---------------------------------------------
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh
-RUN apt -y install xvfb && chmod +x /x11vnc.sh
 
 # Desktop Startup =============================================
 RUN echo 'echo Start Desktop ----------------------' >> /run.sh
+
+# Startup Desktop ---------------------------------------------
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'bash /x11vnc.sh && sleep 3               ' >> /run.sh
-RUN echo 'DISPLAY=:9 nohup /usr/bin/startdde &     ' >> /run.sh
+RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
+RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp                                                                                                        
+CMD ["/sbin/init"]

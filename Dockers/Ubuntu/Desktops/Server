@@ -4,7 +4,7 @@ ARG OS_SYSTEMS=ubuntu
 FROM ${OS_SYSTEMS}:${OS_VERSION}
 
 # ARGS --------------------------------------------------------------------------------------------
-ARG OS_MESSAGE=""
+ARG OS_MESSAGE="Ubuntu Docker Images with OpenSSH Server"
 ARG OS_VERSION=latest
 
 # Message -----------------------------------------------------------------------------------------

@@ -1,22 +1,18 @@
-# Images ------------------------------------------------------
 # syntax=docker/dockerfile:1.3-labs
+# Images ------------------------------------------------------
 ARG OS_VERSION=latest
 ARG OS_SYSTEMS=debian
 ARG OS_VERSHOW=latest
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
 # Install -----------------------------------------------------
 #RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
-#RUN apt update  &&  apt -y install software-properties-common
 RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y  pulseaudio
-#RUN add-apt-repository ppa:mozillateam/ppa && sudo apt update  
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y  gnupg2 \
-    xfce4 git cmake wget curl sudo moka-icon-theme xfwm4 qt5ct\
-    xfce4-terminal xfce4-goodies adwaita-qt papirus-icon-theme
-           
-RUN systemctl disable lightdm && service lightdm stop || echo 1 
-RUN echo "LANG=en_US.UTF-8"   >  /etc/default/locale          \
-&&  echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale          
+#RUN apt-get install -y software-properties-common             \
+#&&  add-apt-repository ppa:kubuntu-ppa/backports              \
+
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
+    apt install -y kde-plasma-desktop git cmake sudo nano vim                               
 
 RUN DEBIAN_FRONTEND=noninteractive apt install -y xvfb curl git
 # X11VNC Root Set ---------------------------------------------
@@ -26,15 +22,16 @@ COPY X11GUI/x11vnc.sh /x11vnc.sh
 RUN echo 'echo Start Desktop ----------------------' >> /run.sh
 
 # Killall Desktop ---------------------------------------------
-RUN echo 'service lightdm stop                     ' >> /run.sh
-RUN echo 'killall xfce4-session                    ' >> /run.sh
+RUN echo 'systemctl disable sddm.service           ' >> /run.sh
+RUN echo 'service sddm stop&killall startplasma-x11' >> /run.sh
+RUN echo 'killall plasma_session & killall kwin_x11' >> /run.sh
 
 # Startup Desktop ---------------------------------------------
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
 RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup xfce4-session & ' >> /run.sh
-      
+RUN echo 'bash /x11vnc.sh &&nohup startplasma-x11 &' >> /run.sh                    
+
 # Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
+EXPOSE 4000/tcp                                                                                                        
 CMD ["/sbin/init"]

@@ -15,14 +15,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y cmake curl \
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh
-RUN apt -y install xvfb && chmod +x /x11vnc.sh
 
 # Desktop Startup =============================================
 RUN echo 'echo Start Desktop ----------------------' >> /run.sh
+
+# Startup Desktop ---------------------------------------------
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'bash /x11vnc.sh && sleep 3               ' >> /run.sh
-RUN echo 'DISPLAY=:9 nohup /bin/gnome-session &    ' >> /run.sh
+RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
+RUN echo 'bash /x11vnc.sh && nohup gnome-session & ' >> /run.sh
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp                                                                                                        

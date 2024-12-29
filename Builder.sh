@@ -8,21 +8,32 @@ echo -e "   ============================Builder Info============================
 echo -e "   Systems: $OS_TYPE";
 echo -e "   Version: $VERSION";
 echo -e "   Desktop: $GUI_ENV";
-echo -e "   ========================================================================";
+echo -e "   =======================================================================";
+# onCache ----------------------------------------------------
+echo -n "   Are you sure to use caches when build? (y/n): "
+read ONCACHE
+ISCACHE="--no-cache"
+# ---------------------=---------------------------------------
+if [ ! $CONFIRM ] || [ $ONCACHE == 'y' ]; then
+  ISCACHE=""
+fi
 # Confirm ----------------------------------------------------
 echo -n "   Are you sure to create this container? (y/n): "
 read CONFIRM
+# ------------------------------------------------------------
+if [ ! $CONFIRM ] || [ $CONFIRM == 'y' ] ; then
+  source Scripts/Titles.sh
+elif [ $CONFIRM == 'n' ]; then
+  echo "   Warn: Not Confirmed, Exit"
+  exit 0
+fi
+
+
 # Choosed ----------------------------------------------------
 #echo -n "   Would you like to test after building? (y/n): "
 #read QCCFLAG
 
-if [ ! $CONFIRM ] || [ $CONFIRM == 'n' ] ; then
-  echo "   Warn: Not Confirmed, Exit"
-  exit 0
-elif [ $CONFIRM == 'y' ]; then
-  echo -e "   ========================================================================";
-  source Scripts/Titles.sh
-fi
+
 
 # Build ---------------------------------------------------
 source Scripts/Titles.sh
@@ -30,18 +41,19 @@ sudo proxychains4 docker buildx create --use \
      --name insecure-builder \
      --buildkitd-flags '--allow-insecure-entitlement security.insecure'
 # 	 --no-cache 
-sudo proxychains4 docker buildx build \
+sudo proxychains4 docker buildx build ${ISCACHE} \
      --progress=plain \
      --allow security.insecure \
      -f Dockers/${OS_UPPE}/Desktops/${DC_FILE} \
-     -t pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV} \
+     -t pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV} \
      --build-arg OS_VERSION=${VERNAME} \
+	 --build-arg OS_VERSHOW=${VERSION} \
 	 --build-arg OS_SYSTEMS=${OS_TYPE} \
      --load\
      ./Dockers \
 && \
 sudo proxychains4 docker push \
-     pikachuim/${OS_TYPE}:${VERNAME}-${GUI_ENV}
+     pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV}
 echo "     ======================= Enter to back to menu ========================"
 read KEY
 

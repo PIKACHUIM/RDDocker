@@ -2,9 +2,10 @@
 # syntax=docker/dockerfile:1.3-labs
 ARG OS_VERSION=latest
 ARG OS_SYSTEMS=debian
-FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-server
+ARG OS_VERSHOW=latest
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
 # ARGS --------------------------------------------------------
-ARG OS_MESSAGE="Linux Docker with X11 & Nomachine & OpenVGL"
+ARG OS_MESSAGE="Debian Docker with X11 & NoMachine & VNC & RDP"
 ARG OS_VERSION=latest
 
 # Message -----------------------------------------------------
@@ -22,20 +23,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
                    xfonts-scalable dbus-user-session          \
                    dbus-x11 xinit neofetch                                  
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
-COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
 RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
 # Install Nomachine -------------------------------------------
-COPY AppImg/nomachine_8.12.12_4_amd64.deb /nomachine_amd64.deb 
-RUN (dpkg -i /nomachine_amd64.deb || echo "Ignore Nomachine") \
-&&  rm /nomachine_amd64.deb                                   \
+ENV NX="download/8.14/Linux/nomachine_8.14.2_1_amd64.deb"
+RUN wget https://download.nomachine.com/${NX} -O nx.deb       \
+&&  dpkg -i /nx.deb || echo "Ignore Nomachine" &&  rm /nx.deb \
 &&  sed -i '$a PhysicalDesktopAuthorization 0'                \
     /usr/NX/etc/node.cfg                                      \
 &&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
     /usr/NX/etc/node.cfg          
 
 # Configs Nomachine -------------------------------------------
-# RUN echo 'ConnectPolicy autocreate=1,autoconnect=1,automigrate=1,desktop=1,dialog=1,xsessions=1,udp=1' >> /usr/NX/etc/server.cfg
 RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg
 RUN echo 'VirtualDesktopMode 2'      >> /usr/NX/etc/server.cfg
 RUN echo 'PhysicalDesktopAccess all' >> /usr/NX/etc/server.cfg
@@ -45,6 +44,12 @@ RUN echo 'DisplayGeometry 1920x1080' >> /usr/NX/etc/server.cfg
 RUN echo 'StartHTTPDaemon Automatic' >> /usr/NX/etc/server.cfg
 RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
 RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
+
+# Install XRDP -----------------------------------------------
+RUN DEBIAN_FRONTEND=noninteractive apt -y install xrdp
+
+# Install x11vnc ---------------------------------------------
+RUN DEBIAN_FRONTEND=noninteractive apt -y install x11vnc
 
 # Start UP -----------------------------------------------------
 RUN echo '#!/bin/bash'                               > /run.sh \

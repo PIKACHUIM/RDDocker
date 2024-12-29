@@ -1,7 +1,8 @@
 #!/bin/bash
+
 source Scripts/Titles.sh
 echo "   ============================Available Version==========================="
-echo "      [1] 24.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2029 ]  "
+echo "      [1] 24.04 Noble Numbat     [ √ Now Recommend / Support Until 2029 ]  "
 echo "      [2] 22.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2027 ]  "
 echo "      [3] 20.04 Focal Fossa      [ × Not Recommend / Support Until 2025 ]  "
 echo "   ========================================================================"

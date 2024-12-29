@@ -3,8 +3,8 @@
 source Scripts/Titles.sh
 echo "   ============================Available Version==========================="
 echo "      [1] Debian 13 Trixie     [ √ Now Recommend / Support Until 2030 ]    "
-echo "      [2] Debian 12 bookworm   [ √ Now Recommend / Support Until 2028 ]    "
-echo "      [3] Debian 11 Bullseye   [ × Not Recommend / Support Until 2025 ]    "
+echo "      [2] Debian 12 Bookworm   [ √ Now Recommend / Support Until 2028 ]    "
+echo "      [3] Debian 11 Bullseye   [ × Not Recommend / Support Until 2026 ]    "
 echo "   ========================================================================"
 echo
 echo -n "   Choice System Version Number(1): "
@@ -17,13 +17,13 @@ if [ $VERSION == 1 ]; then
   echo "   Note: This is a testing version!"
   sleep 1
   VERNAME='trixie'
-  VERSION="13"
+  VERSION="13.00"
 elif [ $VERSION == 2 ]; then
   echo "   Note: VERSION=Debian 12 bookworm"
   VERNAME='bookworm'
-  VERSION="12"
+  VERSION="12.00"
 elif [ $VERSION == 3 ]; then
   echo "   Note: VERSION=Debian 11 Bullseye"
   VERNAME='bullseye'
-  VERSION="11"
+  VERSION="11.00"
 fi

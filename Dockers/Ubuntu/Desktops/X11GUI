@@ -22,13 +22,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
                    xfonts-scalable dbus-user-session          \
                    dbus-x11 xinit neofetch xvfb                 
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
-#COPY X11GUI/create-pulse-clientconf.sh /etc/profile.d/
 COPY X11GUI/70-ubuntu.conf /etc/lightdm/lightdm.conf.d/
-RUN echo 'load-module module-native-protocol-unix '           \
-    >> /etc/pulse/default.pa                                  \
-&&  echo 'auth-anonymous=1 socket=/tmp/pulse-socket'          \
-    >> /etc/pulse/default.pa
-RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
 # Install Nomachine -------------------------------------------
 ENV NX="download/8.14/Linux/nomachine_8.14.2_1_amd64.deb"

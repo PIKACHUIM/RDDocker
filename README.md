@@ -35,7 +35,27 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 |          ArchOS          |            devel            |   /    |        /        |         /          |   /    |         /         |         /         |    /    |
 |          Fedora          |            40.00            |   /    |        /        |         /          |   /    |         /         |         /         |    /    |
 
-### 
+## Desktop桌面展示
+
+### Lingmo
+
+![lingmo](Picture/lingmo.png)
+
+### GNOME
+
+![gnome](Picture/gnome.png)
+
+### Xfce4 Lite
+
+![xfce4l](Picture/xfce4l.png)
+
+### Deepin DE
+
+![deepin](Picture/deepin.png)
+
+### KDE Plasma
+
+![plasma](Picture/plasma.png)
 
 ## Usages 使用方法
 

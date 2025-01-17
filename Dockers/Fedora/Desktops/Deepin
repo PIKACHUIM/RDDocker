@@ -7,6 +7,7 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 # Install -----------------------------------------------------    
 #RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
 RUN dnf update -y && dnf group install "Deepin Desktop" -y                            
+RUN dnf install -y xorg-x11-server-Xvfb dbus-x11 x11vnc xrdp
 
 # Desktop Configs ---------------------------------------------
 
@@ -21,6 +22,7 @@ RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
 RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
 RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
+RUN chmod +x /run.sh
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp                                                                                                        

@@ -22,20 +22,33 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 
 
-### 各个系统桌面支持情况
+### Support DE / 各个系统桌面支持情况
 
-| 系统名称<br/>System Name | 系统版本<br/>System Version | Server |  Lingmo   |   GNOME    |  Xfce 4   | Deepin DE |  Plasma   | X11 GUI |
-| :----------------------: | :-------------------------: | :----: | :-------: | :--------: | :-------: | :-------: | :-------: | :-----: |
-|          Ubuntu          |            24.04            |   ✔️    |     ✔️     | ✔️VNC会报错 |     ✔️     | ❌源未支持 |     ✔️     |    ✔️    |
-|          Ubuntu          |            22.04            |   ✔️    | ❌源未支持 |     ✔️      |     ✔️     | ✔️NX连不上 |     ✔️     |    ✔️    |
-|          Ubuntu          |            20.04            |   ✔️    | ❌源未支持 |     ✔️      |     ✔️     | ❌源未支持 |     ✔️     |    ✔️    |
-|          Debian          |            13.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上 |     ✔️     | ❌源未支持 | ✔️仅NX能连 |    ✔️    |
-|          Debian          |            12.00            |   ✔️    | ✔️NX连不上 | ✔️VNC连不上 |     ✔️     | ❌编译报错 | ✔️仅NX能连 |    ✔️    |
-|          Debian          |            11.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上 |     ✔️     | ❌源未支持 | ✔️仅NX能连 |    ✔️    |
-|          ArchOS          |            devel            |   ✔️    | ❌源未支持 | ✔️尚未测试  | ✔️尚未测试 | ✔️尚未测试 | ✔️尚未测试 |    ✔️    |
-|          Fedora          |            40.00            |   ✔️    | ❌源未支持 | ✔️尚未测试  | ✔️尚未测试 | ✔️尚未测试 | ✔️尚未测试 |    ✔️    |
+| 系统名称<br/>System Name | 系统版本<br/>System Version | Server |  Lingmo   |     GNOME     |  Xfce 4   |  Deepin DE   |    Plasma    | X11 GUI |
+| :----------------------: | :-------------------------: | :----: | :-------: | :-----------: | :-------: | :----------: | :----------: | :-----: |
+|          Ubuntu          |            24.04            |   ✔️    |     ✔️     | ✔️VNC会报错(1) |     ✔️     |  ❌源未支持   |      ✔️       |    ✔️    |
+|          Ubuntu          |            22.04            |   ✔️    | ❌源未支持 |       ✔️       |     ✔️     | ✔️NX连不上(4) |      ✔️       |    ✔️    |
+|          Ubuntu          |            20.04            |   ✔️    | ❌源未支持 |       ✔️       |     ✔️     |  ❌源未支持   |      ✔️       |    ✔️    |
+|          Debian          |            13.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |     ✔️     |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
+|          Debian          |            12.00            |   ✔️    | ✔️NX连不上 | ✔️VNC连不上(1) |     ✔️     |  ❌编译报错   | ✔️仅NX能连(2) |    ✔️    |
+|          Debian          |            11.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |     ✔️     |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
+|          ArchOS          |            devel            |   ✔️    | ❌源未支持 |   ✔️尚未测试   | ✔️尚未测试 |  ✔️尚未测试   |  ✔️尚未测试   |    ✔️    |
+|          Fedora          |            40.00            |   ✔️    | ❌源未支持 | ✔️桌面报错(1)  |   ✔️*(3)   |      ✔️       |      ✔️       |    ✔️    |
 
-## Desktop桌面展示
+### Known Issues / 一些已知的问题
+
+- (1)部分GNOME系统VNC连不上，或者桌面首次打开会报错，点击确认后黑屏，解决办法
+  - 登录到docker内部bash：`docker exec -it <DockerName> bash`
+  - 执行：`export DISPLAY=:9 &&export $(dbus-launch)`
+  - 执行：`nohup gnome-session & `
+- (2)部分KDE Plasma环境，无法通过VNC或者RDP连接，暂时无法解决
+- (3)部分Xfce 4环境，只能通过root帐号登录，非root需要root授权
+- (4)部分Deepin DE环境，NoMachine无法点击登录按钮，可以绕过：
+  - 在登录界面，点击关机按钮，但不要确认关机
+  - 按下键盘的ESC键，你会发现可以输入密码了
+- (5)部分Lingmo系统dock无法加载，或者只能通过NoMachine连接
+
+## Desktop 桌面展示
 
 ### Lingmo
 

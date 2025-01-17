@@ -16,7 +16,8 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Install Xserver ---------------------------------------------
 RUN yum update  -y && yum install -y @base-x wget curl git vim\
-    dbus-x11 xinit neofetch                
+    dbus-x11 xinit neofetch
+RUN dnf install -y xorg-x11-server-Xvfb dbus-x11 x11vnc	xrdp
 
 # Install Nomachine -------------------------------------------
 ENV NX="download/8.15/Linux/nomachine_8.15.3_1_x86_64.rpm"
@@ -44,6 +45,7 @@ RUN echo 'export DISPLAY=:0'                        >> /run.sh \
 &&  echo 'echo Starting NX ----------------------'  >> /run.sh \
 &&  echo '/etc/NX/nxserver --startup'               >> /run.sh \
 &&  echo '/etc/NX/nxserver --restart'               >> /run.sh      
+RUN chmod +x /run.sh
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp

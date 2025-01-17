@@ -14,7 +14,8 @@ LABEL Version=${OS_VERSION}
 LABEL Description=${OS_MESSAGE}
 RUN echo "Start to build ${OS_SYSTEMS}:${OS_VERSION}-server..."
 
-# Install Xserver ---------------------------------------------     
+# Install Xserver ---------------------------------------------  
+RUN cat /etc/pacman.d/mirrorlist && pacman -Syyu --noconfirm
 RUN sudo pacman -S xorg-server xorg-xhost xorg-xset --noconfirm
 RUN sudo pacman -S xorg-xinit xorg-twm xorg-xclock  --noconfirm
 RUN sudo pacman -S xorg-iceauth xorg-sessreg xterm  --noconfirm 

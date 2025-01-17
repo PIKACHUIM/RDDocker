@@ -15,14 +15,17 @@ LABEL Description=${OS_MESSAGE}
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Install Xserver ---------------------------------------------
-RUN yum update  -y && yum install -y @base-x wget curl git vim                 
+RUN yum update  -y && yum install -y @base-x wget curl git vim\
+    dbus-x11 xinit neofetch                
 
 # Install Nomachine -------------------------------------------
-COPY AppImg/nomachine_8.13.1_1_x86_64.rpm /nomachine_amd64.rpm 
-RUN (rpm -ivh /nomachine_amd64.rpm ||echo "Ignore Nomachine") \
-&&  rm /nomachine_amd64.rpm                                   \
+ENV NX="download/8.15/Linux/nomachine_8.15.3_1_x86_64.rpm"
+RUN wget https://download.nomachine.com/${NX} -O nx.rpm       \
+&&  rpm -i /nx.rpm || echo "Ignore Nomachine" &&  rm /nx.rpm  \
+&&  sed -i '$a PhysicalDesktopAuthorization 0'                \
+    /usr/NX/etc/node.cfg                                      \
 &&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
-    /usr/NX/etc/node.cfg          
+    /usr/NX/etc/node.cfg              
 
 # Configs Nomachine -------------------------------------------
 RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg

@@ -1,16 +1,11 @@
-# Images ------------------------------------------------------
 # syntax=docker/dockerfile:1.3-labs
-ARG OS_VERSION=latest
-ARG OS_SYSTEMS=archos
+# Images ------------------------------------------------------
+ARG OS_VERSION=40
+ARG OS_SYSTEMS=fedora
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
-
 # Install -----------------------------------------------------
-#RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
-RUN sudo pacman -Syyu --noconfirm
-RUN sudo pacman -Syy archlinux-keyring              --noconfirm
-RUN sudo pacman-key --refresh-keys
-RUN sudo pacman -S xfce4 xfce4-goodies nano vim     --noconfirm
-RUN sudo pacman -S xorg-server-xvfb x11vnc x11rdp   --noconfirm
+#RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+RUN dnf update -y &&dnf groupinstall -y "KDE Plasma Workspaces"                            
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh
@@ -19,15 +14,16 @@ COPY X11GUI/x11vnc.sh /x11vnc.sh
 RUN echo 'echo Start Desktop ----------------------' >> /run.sh
 
 # Killall Desktop ---------------------------------------------
-RUN echo 'service lightdm stop                     ' >> /run.sh
-RUN echo 'killall xfce4-session                    ' >> /run.sh
+RUN echo 'systemctl disable sddm.service           ' >> /run.sh
+RUN echo 'service sddm stop&killall startplasma-x11' >> /run.sh
+RUN echo 'killall plasma_session & killall kwin_x11' >> /run.sh
 
 # Startup Desktop ---------------------------------------------
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
 RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup xfce4-session & ' >> /run.sh 
-      
+RUN echo 'bash /x11vnc.sh &&nohup startplasma-x11 &' >> /run.sh                    
+
 # Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
+EXPOSE 4000/tcp                                                                                                        
 CMD ["/sbin/init"]

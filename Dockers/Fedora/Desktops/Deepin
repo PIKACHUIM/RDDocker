@@ -4,21 +4,24 @@ ARG OS_VERSION=40
 ARG OS_SYSTEMS=fedora
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
-# Install -----------------------------------------------------
-RUN dnf update -y && dnf group install -y gnome-desktop                    
-    
+# Install -----------------------------------------------------    
+#RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
+RUN dnf update -y && dnf group install "Deepin Desktop" -y                            
+
 # Desktop Configs ---------------------------------------------
-#RUN systemctl disable gdm && service gdm stop || echo "Ignored"
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh
+
+# Desktop Startup =============================================
+RUN echo 'echo Start Desktop ----------------------' >> /run.sh
 
 # Startup Desktop ---------------------------------------------
 RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
 RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
 RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup gnome-session & ' >> /run.sh         
+RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
 
 # Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
+EXPOSE 4000/tcp                                                                                                        
 CMD ["/sbin/init"]

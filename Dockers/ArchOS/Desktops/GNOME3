@@ -5,15 +5,23 @@ ARG OS_SYSTEMS=archos
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # Install -----------------------------------------------------
-RUN sudo pacman -S gnome gnome-extra                --noconfirm
+#RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
+RUN sudo pacman -Syyu --noconfirm
+RUN sudo pacman -Syy archlinux-keyring              --noconfirm
+RUN sudo pacman-key --refresh-keys
+RUN sudo pacman -S gnome gnome-extra nano vim sudo  --noconfirm
+RUN sudo pacman -S xorg-server-xvfb x11vnc x11rdp   --noconfirm
 RUN systemctl  disable gdm.service
 #RUN systemctl disable gdm && service gdm stop || echo "Ignored"
 
-# Desktop Startup----------------------------------------------
-RUN echo 'echo Start Desktop --------------------'   >> /run.sh
-#RUN echo 'service gdm stop &&killall gdm || echo 1' >> /run.sh
-#RUN echo 'pkill -U gdm                            ' >> /run.sh
-#RUN echo 'xinit /bin/gnome-session'                 >> /run.sh            
+# X11VNC Root Set ---------------------------------------------
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+
+# Startup Desktop ---------------------------------------------
+RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
+RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
+RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
+RUN echo 'bash /x11vnc.sh && nohup gnome-session & ' >> /run.sh           
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp

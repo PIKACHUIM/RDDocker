@@ -11,7 +11,12 @@ LABEL System=${OS_SYSTEMS}
 LABEL Version=${OS_VERSION}
 LABEL Description=${OS_MESSAGE}
 # SSH Set ------------------------------------------------------------
-RUN pacman   -Sy --noconfirm sudo wget openssh base-devel git curl
+RUN cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+RUN sed -i '/^Server =/s/^/#/' /etc/pacman.d/mirrorlist
+ENV URL="https://mirrors.tuna.tsinghua.edu.cn/archlinux/" 
+RUN echo "Server = ${URL}\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist 
+RUN cat /etc/pacman.d/mirrorlist && pacman -Syyu --noconfirm
+RUN pacman -Sy --noconfirm sudo wget openssh base-devel git curl
 RUN groupadd -r -g 200 user
 RUN useradd  -m -u 200 -r -g user user 
 COPY Config/OpenSSH/authorized_keys /root/.ssh/

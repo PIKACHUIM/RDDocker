@@ -5,12 +5,12 @@ ARG OS_SYSTEMS=archos
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # Install -----------------------------------------------------
-#RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
-RUN sudo pacman -Syyu --noconfirm
-RUN sudo pacman -Syy archlinux-keyring              --noconfirm
-RUN sudo pacman-key --refresh-keys
+RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
+#RUN sudo pacman -Syyu --noconfirm
+#RUN sudo pacman -Syy archlinux-keyring              --noconfirm
+#RUN sudo pacman-key --refresh-keys
 RUN sudo pacman -S xfce4 xfce4-goodies nano vim     --noconfirm
-RUN sudo pacman -S xorg-server-xvfb x11vnc x11rdp   --noconfirm
+RUN sudo pacman -S xorg-server-xvfb x11vnc          --noconfirm
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh

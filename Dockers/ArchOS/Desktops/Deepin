@@ -5,14 +5,14 @@ ARG OS_SYSTEMS=archos
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # Install -----------------------------------------------------
-#RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
-RUN sudo pacman -Syyu --noconfirm
-RUN sudo pacman -Syy archlinux-keyring             --noconfirm
-RUN sudo pacman-key --refresh-keys
+RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
+#RUN sudo pacman -Syyu --noconfirm
+#RUN sudo pacman -Syy archlinux-keyring             --noconfirm
+#RUN sudo pacman-key --refresh-keys
 RUN sudo pacman -S ttf-dejavu networkmanager vim   --noconfirm                                 
 RUN sudo pacman -S lightdm xorg-server-xvfb nano   --noconfirm 
-RUN sudo pacman -S deepin-kwin deepin deepin-extra --noconfirm   
-RUN sudo pacman -S x11vnc x11rdp                   --noconfirm
+RUN sudo pacman -S deepin-kwin deepin deepin-extra --noconfirm --needed --skipdeepin-reader  
+RUN sudo pacman -S x11vnc                          --noconfirm
 
 # Desktop Configs ---------------------------------------------
 

@@ -2,9 +2,9 @@
 
 ## 支持多种远程桌面协议连接带有桌面环境的Docker镜像
 
-RDPDocker是一个带有X11个和桌面环境的Docker镜像构建和容器创建工具，支持创建Ubuntu、Debian、Arch Linux、Fedora（未来可能添加）系统，支持Lingmo、GNOME、Xfce4、X11（无桌面）、SSH（无图形化）等环境。同时，允许用户通过NoMachine、RDP（尚未支持）、VNC（尚未支持）、SSH等方式远程访问容器。本工具以非虚拟化和极低开销的情况下，实现了多用户共享一台主机的办法，同时创建极快，随用随开，并且只占用内存、磁盘极少的空间，只需要主机安装Docker即可，支持无桌面的Linux服务器、WSL2、LXC、安卓手机运行（通过容器或者chroot）。
+RDPDocker是一个带有X11个和桌面环境的Docker镜像构建和容器创建工具，支持创建Ubuntu、Debian、ArchLinux、Fedora系统，支持Lingmo、GNOME、Xfce4、X11、SSH等环境。同时，允许用户通过NoMachine、RDP、VNC、SSH等方式远程访问容器。本工具以非虚拟化和极低开销的情况下，实现了多用户共享一台主机的办法，同时创建极快，随用随开，并且只占用内存、磁盘极少的空间，只需要主机安装Docker即可，支持无桌面的Linux服务器、WSL2、LXC、安卓手机运行。
 
-RDPDocker is a Docker image building and container creation tool with X11 and desktop environments, supporting the creation of Ubuntu, Debian, Arch Linux, Fedora (possibly added in the future) systems, Lingmo, GNOME, Xfce4, X11 (no desktop), SSH (no graphics) and other environments. Meanwhile, users are allowed to remotely access the container through methods such as NoMachine, RDP (not yet supported), VNC (not yet supported), SSH, etc. This tool enables multiple users to share a host without virtualization and at extremely low cost. It is also very fast to create, can be used and opened at any time, and only occupies minimal memory and disk space. Docker only needs to be installed on the host. Supports running on headless Linux servers desktop, WSL2, LXC, and Android phones (via containers or chroot).
+RDPDocker is a Docker image building and container creation tool with X11 and desktop environments, supporting the creation of Ubuntu, Debian, Arch Linux, Fedora systems, Lingmo, GNOME, Xfce4, X11, SSH and other environments. Meanwhile, users are allowed to remotely access the container through methods such as NoMachine, RDP, VNC, SSH, etc. This tool enables multiple users to share a host without virtualization and at extremely low cost. It is also very fast to create, can be used and opened at any time, and only occupies minimal memory and disk space. Docker only needs to be installed on the host. Supports running on headless Linux servers desktop, WSL2, LXC, and Android phones .
 
 ## Images / 镜像概览
 
@@ -24,16 +24,16 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 ### Support DE / 各个系统桌面支持情况
 
-| 系统名称<br/>System Name | 系统版本<br/>System Version | Server |  Lingmo   |     GNOME     |  Xfce 4   |  Deepin DE   |    Plasma    | X11 GUI |
-| :----------------------: | :-------------------------: | :----: | :-------: | :-----------: | :-------: | :----------: | :----------: | :-----: |
-|          Ubuntu          |            24.04            |   ✔️    |     ✔️     | ✔️VNC会报错(1) |     ✔️     |  ❌源未支持   |      ✔️       |    ✔️    |
-|          Ubuntu          |            22.04            |   ✔️    | ❌源未支持 |       ✔️       |     ✔️     | ✔️NX连不上(4) |      ✔️       |    ✔️    |
-|          Ubuntu          |            20.04            |   ✔️    | ❌源未支持 |       ✔️       |     ✔️     |  ❌源未支持   |      ✔️       |    ✔️    |
-|          Debian          |            13.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |     ✔️     |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
-|          Debian          |            12.00            |   ✔️    | ✔️NX连不上 | ✔️VNC连不上(1) |     ✔️     |  ❌编译报错   | ✔️仅NX能连(2) |    ✔️    |
-|          Debian          |            11.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |     ✔️     |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
-|          ArchOS          |            devel            |   ✔️    | ❌源未支持 |   ✔️尚未测试   | ✔️尚未测试 |  ✔️尚未测试   |  ✔️尚未测试   |    ✔️    |
-|          Fedora          |            40.00            |   ✔️    | ❌源未支持 | ✔️桌面报错(1)  |   ✔️*(3)   |      ✔️       |      ✔️       |    ✔️    |
+| 系统名称<br/>System Name | 系统版本<br/>System Version | Server |  Lingmo   |     GNOME     |    Xfce 4    |  Deepin DE   |    Plasma    | X11 GUI |
+| :----------------------: | :-------------------------: | :----: | :-------: | :-----------: | :----------: | :----------: | :----------: | :-----: |
+|          Ubuntu          |            24.04            |   ✔️    |     ✔️     | ✔️VNC会报错(1) |      ✔️       |  ❌源未支持   |      ✔️       |    ✔️    |
+|          Ubuntu          |            22.04            |   ✔️    | ❌源未支持 |       ✔️       |      ✔️       | ✔️NX连不上(4) |      ✔️       |    ✔️    |
+|          Ubuntu          |            20.04            |   ✔️    | ❌源未支持 |       ✔️       |      ✔️       |  ❌源未支持   |      ✔️       |    ✔️    |
+|          Debian          |            13.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |      ✔️       |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
+|          Debian          |            12.00            |   ✔️    | ✔️NX连不上 | ✔️VNC连不上(1) |      ✔️       |  ❌编译报错   | ✔️仅NX能连(2) |    ✔️    |
+|          Debian          |            11.00            |   ✔️    | ❌源未支持 | ✔️VNC连不上(1) |      ✔️       |  ❌源未支持   | ✔️仅NX能连(2) |    ✔️    |
+|          ArchOS          |            devel            |   ✔️    | ❌源未支持 |   ✔️尚未测试   |  ✔️尚未测试   |  ✔️尚未测试   |  ✔️尚未测试   |    ✔️    |
+|          Fedora          |            40.00            |   ✔️    | ❌源未支持 | ✔️桌面报错(1)  | ✔️需要root(3) |      ✔️       |      ✔️       |    ✔️    |
 
 ### Known Issues / 一些已知的问题
 

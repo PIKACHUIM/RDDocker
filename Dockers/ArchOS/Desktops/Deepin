@@ -11,7 +11,7 @@ RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
 #RUN sudo pacman-key --refresh-keys
 RUN sudo pacman -S ttf-dejavu networkmanager vim   --noconfirm                                 
 RUN sudo pacman -S lightdm xorg-server-xvfb nano   --noconfirm 
-RUN sudo pacman -S deepin-kwin deepin deepin-extra --noconfirm --needed --skipdeepin-reader  
+RUN sudo pacman -S deepin-kwin deepin deepin-extra --noconfirm --overwrite '*'
 RUN sudo pacman -S x11vnc                          --noconfirm
 
 # Desktop Configs ---------------------------------------------

@@ -30,6 +30,7 @@ RUN echo "PermitRootLogin without-password" >> /etc/ssh/sshd_config  \
 &&  echo '#!/bin/bash'                       > /run.sh               \
 &&  echo 'echo Starting Basic Server ----'  >> /run.sh               \
 &&  echo 'nohup /usr/sbin/sshd -D &'        >> /run.sh
+RUN chmod +x /run.sh && ssh-keygen -A && systemctl enable sshd
 
 
 RUN  systemctl enable run

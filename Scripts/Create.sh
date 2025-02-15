@@ -9,20 +9,22 @@ sudo mkdir -p "${DATAPATH}${PV_DATA}/root"
 
 # RUN Images ---------------------------------------------------------------------
 echo -n "   Docker: "
-sudo docker run -itd \
-$GPU_LIST \
---privileged=true \
---shm-size=1024m \
---name $D_NAMES \
---cap-add SYS_ADMIN \
---cap-add=SYS_PTRACE \
+sudo docker run -itd  \
+$GPU_LIST             \
+--privileged=true     \
+--cpus=$CPUSSIZE      \
+--memory=${MEMSSIZE}m \
+--shm-size=1024m      \
+--name $D_NAMES       \
+--cap-add SYS_ADMIN   \
+--cap-add=SYS_PTRACE  \
 -h $D_NAMES.$HOSTNAME \
-   $PORTMAP \
--p $PM_SSHS:22 \
+   $PORTMAP      \
+-p $PM_SSHS:22   \
 -p $PM_NXSR:4000 \
 -p $PM_VNCS:5900 \
 -p $PM_RDPS:3389 \
--v "${DATAPATH}${PV_DATA}/root:/root" \
+-v "${DATAPATH}${PV_DATA}/root:/root"      \
 -v "${DATAPATH}${PV_DATA}/user:/home/user" \
 pikachuim/$OS_TYPE:$VERSION-$GUI_ENV
 
@@ -75,6 +77,7 @@ echo "Congratulations! Your Docker Container has been Created Successfully! " | 
 echo "----------------------------------------------------------------------" | tee $TEXT_PATH
 echo "                 Container $D_NAMES                     "               | tee $TEXT_PATH
 echo "                 OSSystem: $OS_TYPE $VERSION            "               | tee $TEXT_PATH
+echo "                 Desktops: $GUI_ENV                     "               | tee $TEXT_PATH
 echo "----------------------------------------------------------------------" | tee $TEXT_PATH
 echo "                 NXD Addr: $DOMAIN_T:$PM_NXSR    "                      | tee $TEXT_PATH
 echo "                 SSH Addr: $DOMAIN_T:$PM_SSHS    "                      | tee $TEXT_PATH

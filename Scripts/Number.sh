@@ -1,15 +1,34 @@
 #!/bin/bash
-source Scripts/Titles.sh
+
 # Config --------------------------------------------------------------------------
+source Scripts/Titles.sh
+echo "   ==========================Hardwares Limitation=========================="
+echo "                  Set Docker CPU and Memory Limitation                     "
+echo "   ========================================================================"
+echo
+echo -n "   Input CPU Limitation [Core](8): "
+read CPUSSIZE
+if [ ! $CPUSSIZE ]; then
+  echo '   Note: CPUSSIZE=8'
+  CPUSSIZE='8'
+fi
+echo -n "   Input RAM Limitation [MiBs](8192): "
+read MEMSSIZE
+if [ ! $MEMSSIZE ]; then
+  echo '   Note: MEMSSIZE=8192'
+  MEMSSIZE='8192'
+fi
+
+source Scripts/Titles.sh
 echo "   ===========================Config Port Mapping=========================="
 echo -n "   Enter Docker ID(Length=2 Like 01): "
 read USE_PID
-D_NAMES="S1V3-OCI-${USE_PID}-CD1"
+D_NAMES="${OCPREFIX}-${USE_PID}"
 # ==================================================
-PM_SSHS="1${USE_PID}22";
-PM_RDPS="1${USE_PID}39";
-PM_NXSR="1${USE_PID}40";
-PM_VNCS="1${USE_PID}41";
+PM_SSHS="${PORTRANK}${USE_PID}22";
+PM_RDPS="${PORTRANK}${USE_PID}39";
+PM_NXSR="${PORTRANK}${USE_PID}40";
+PM_VNCS="${PORTRANK}${USE_PID}41";
 PV_DATA="/OCI${USE_PID}"
 
 
@@ -52,9 +71,9 @@ do
 done
 
 if [ ! $PORTMAP ]; then
-  TMP1MAP="-p 1${USE_PID}01-1${USE_PID}21:1${USE_PID}01-1${USE_PID}21";
-  TMP2MAP="-p 1${USE_PID}23-1${USE_PID}38:1${USE_PID}23-1${USE_PID}38";
-  TMP3MAP="-p 1${USE_PID}42-1${USE_PID}99:1${USE_PID}42-1${USE_PID}99";
+  TMP1MAP="-p ${PORTRANK}${USE_PID}01-${PORTRANK}${USE_PID}21:${PORTRANK}${USE_PID}01-${PORTRANK}${USE_PID}21";
+  TMP2MAP="-p ${PORTRANK}${USE_PID}23-${PORTRANK}${USE_PID}38:${PORTRANK}${USE_PID}23-${PORTRANK}${USE_PID}38";
+  TMP3MAP="-p ${PORTRANK}${USE_PID}42-${PORTRANK}${USE_PID}99:${PORTRANK}${USE_PID}42-${PORTRANK}${USE_PID}99";
   PORTMAP="${TMP1MAP} ${TMP2MAP} ${TMP3MAP}";
 fi
 

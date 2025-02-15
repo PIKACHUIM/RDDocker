@@ -52,6 +52,7 @@ RUN echo 'VirtualDesktopAccess all'  >>/usr/NX/etc/server.cfg \
 
 # Start UP ----------------------------------------------------
 RUN echo '#!/bin/bash'                              > /run.sh \
+&&  echo '/usr/sbin/sshd &                       ' >> /run.sh \
 &&  echo 'export DISPLAY=:0'                       >> /run.sh \
 &&  echo '/etc/init.d/dbus start'                  >> /run.sh \
 &&  echo 'echo Starting NX ----------------------' >> /run.sh \

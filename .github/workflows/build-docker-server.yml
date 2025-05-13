@@ -1,0 +1,58 @@
+name: Build Server Docker Image
+
+on:
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@v4
+    - name: Build the Debian 13.00 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file Debian/Desktops/Server 
+           --tag pikachuim/debian:13.00-server 
+           --build-arg OS_VERSION=13.00 
+           --build-arg OS_VERSHOW=13.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - uses: actions/checkout@v4
+    - name: Build the Debian 12.00 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file Debian/Desktops/Server 
+           --tag pikachuim/debian:12.00-server 
+           --build-arg OS_VERSION=12.00 
+           --build-arg OS_VERSHOW=12.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - uses: actions/checkout@v4
+    - name: Build the Ubuntu 24.04 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file Ubuntu/Desktops/Server 
+           --tag pikachuim/ubuntu:24.04-server 
+           --build-arg OS_VERSION=24.04 
+           --build-arg OS_VERSHOW=24.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/
+      
+    - uses: actions/checkout@v4
+    - name: Build the Ubuntu 22.04 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file Ubuntu/Desktops/Server 
+           --tag pikachuim/ubuntu:22.04-server 
+           --build-arg OS_VERSION=22.04 
+           --build-arg OS_VERSHOW=22.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/       
+           

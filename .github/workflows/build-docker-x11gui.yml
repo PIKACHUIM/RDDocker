@@ -18,7 +18,7 @@ jobs:
            --progress=plain 
            --file ./Dockers/Debian/Desktops/X11GUI 
            --tag pikachuim/debian:13.00-x11gui 
-           --build-arg OS_VERSION=trixie 
+           --build-arg OS_VERSION=13.00 
            --build-arg OS_VERSHOW=13.00 
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
@@ -29,7 +29,7 @@ jobs:
            --progress=plain 
            --file ./Dockers/Debian/Desktops/X11GUI 
            --tag pikachuim/debian:12.00-x11gui 
-           --build-arg OS_VERSION=bookworm
+           --build-arg OS_VERSION=12.00
            --build-arg OS_VERSHOW=12.00 
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/

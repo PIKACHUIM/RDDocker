@@ -18,7 +18,7 @@ RUN if [ $OS_VERSHOW = "13.00" ]; then export VER="lizhi"; fi\
 &&  dpkg -i gxde.deb && rm -rf gxde.deb && apt install sudo -y
 RUN apt update && apt install -y aptss gxde-testing-source   
 RUN apt install gxde-desktop spark-store --install-recommends -y
-RUN apt update && apt install gxde-desktop-extra firefox nano -y      
+RUN apt update && apt install gxde-desktop-extra firefox-esr  -y      
                        
 # Desktop Configs ---------------------------------------------
 

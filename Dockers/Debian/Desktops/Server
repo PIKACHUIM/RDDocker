@@ -16,9 +16,10 @@ LABEL Description=${OS_MESSAGE}
 # Set UP APT Sources ------------------------------------------------------------------------------
 RUN echo "$OS_VERSION"
 ENV UR="mirrors.tuna.tsinghua.edu.cn"
-RUN if [ "$OS_VERSION" = "trixie" ] || [ "$OS_VERSION" = "bookworm" ]; then                                                          \
+RUN if [ "$OS_VERSION" = "trixie" ] || [ "$OS_VERSION" = "bookworm" ]; then                       \
         cp /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak      \
         && sed -i 's/deb.debian.org/'${UR}'/g' /etc/apt/sources.list.d/debian.sources             \     
+        && sed -i "s/main/main contrib non-free/g" /etc/apt/sources.list.d/debian.sources         \
         && sed -i 's/security.debian.org/'${UR}'/g' /etc/apt/sources.list.d/debian.sources        \
     ;else                                                                                         \
         cp /etc/apt/sources.list /etc/apt/sources.list.bak                                        \

@@ -14,8 +14,6 @@ if [ ! $VERSION ]; then
 fi
 if [ $VERSION == 1 ]; then
   echo "   Note: VERSION= Debian 13(Trixie)"
-  echo "   Note: This is a testing version!"
-  sleep 1
   VERNAME='trixie'
   VERSION="13.00"
 elif [ $VERSION == 2 ]; then

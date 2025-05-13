@@ -4,32 +4,22 @@ ARG OS_VERSION=latest
 ARG OS_SYSTEMS=debian
 ARG OS_VERSHOW=latest
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
-# Install -----------------------------------------------------
-#RUN apt update && apt install -y software-properties-common       
-#RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
+ARG OS_VERSHOW=latest
+# Install -----------------------------------------------------  
+ENV PR="main contrib non-free non-free-firmwar"
+RUN sed -i "s/main/main contrib non-free/g" /etc/apt/sources.list.d/debian.sources
 RUN DEBIAN_FRONTEND=noninteractive apt update && /sbin/init & 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio    
-#RUN echo 'deb [trusted=yes arch=amd64] https://deepin-community.github.io/debian-sid-dde-deps-repo sid main' >>/etc/apt/sources.list.d/deepin-git.list
-#RUN echo 'deb [trusted=yes arch=amd64] https://deepin-community.github.io/debian-sid-dde-repo sid main' >>/etc/apt/sources.list.d/deepin-git.list
-RUN rm -rf /tmp/gfdgd-xi-sources
-RUN mkdir -p /tmp/gfdgd-xi-sources
-RUN wget -P /tmp/gfdgd-xi-sources http://deb.debiandde.gfdgdxi.top/gpg.asc
-RUN wget -P /tmp/gfdgd-xi-sources http://deb.debiandde.gfdgdxi.top/sources/github.list
-RUN gpg --dearmor /tmp/gfdgd-xi-sources/gpg.asc
-#sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FD6EEA1F20CD4B27
-RUN sudo cp -v /tmp/gfdgd-xi-sources/gpg.asc.gpg /etc/apt/trusted.gpg.d/debian-dde.gpg
-RUN sudo cp -v /tmp/gfdgd-xi-sources/github.list /etc/apt/sources.list.d/debian-dde.list
-RUN sudo apt update
-
-#RUN DEBIAN_FRONTEND=noninteractive apt install -y startdde    \
-#    deepin-desktop-environment-core && systemctl enable lightdm
-
-RUN DEBIAN_FRONTEND=noninteractive apt install -y debian-dde
-
-#RUN add-apt-repository ppa:ubuntudde-dev/stable -y            \  
-#&&  apt-get update && DEBIAN_FRONTEND=noninteractive          \
-#    apt install -y ubuntudde-dde git cmake ubuntudde-dde-extras                               
-
+RUN apt install apt-transport-https ca-certificates curl   -y
+RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio 
+RUN if [ $OS_VERSHOW = "13.00" ]; then export VER="lizhi"; fi\
+&&  if [ $OS_VERSHOW = "12.00" ]; then export VER="bixie"; fi\
+&&  export SRC="repo.gxde.top/gxde-os/${VER}/g/gxde-source/" \ 
+&&  wget https://${SRC}gxde-source_1.1.8_all.deb -O gxde.deb \
+&&  dpkg -i gxde.deb && rm -rf gxde.deb && apt install sudo -y
+RUN apt update && apt install -y aptss gxde-testing-source   \
+&& apt install gxde-desktop spark-store --install-recommends \
+&& apt update && apt install gxde-desktop-extra firefox nano -y      
+                       
 # Desktop Configs ---------------------------------------------
 
 # X11VNC Root Set ---------------------------------------------

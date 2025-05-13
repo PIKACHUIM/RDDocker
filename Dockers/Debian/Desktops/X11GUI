@@ -21,7 +21,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
                    xserver-xorg-video-dummy curl  net-tools   \   
                    xfonts-base xfonts-75dpi xfonts-100dpi git \
                    xfonts-scalable dbus-user-session          \
-                   dbus-x11 xinit neofetch                                  
+                   dbus-x11 xinit
+RUN apt install -y neofetch || echo "Ignored"                                  
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
 RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 

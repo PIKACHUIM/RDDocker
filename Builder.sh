@@ -37,7 +37,7 @@ fi
 
 # Build ---------------------------------------------------
 source Scripts/Titles.sh
-sudo proxychains4 docker buildx create --use \
+sudo docker buildx create --use \
      --name insecure-builder \
      --buildkitd-flags '--allow-insecure-entitlement security.insecure'
 # 	 --no-cache 
@@ -52,7 +52,7 @@ sudo proxychains4 docker buildx build ${ISCACHE} \
      --load\
      ./Dockers \
 && \
-sudo proxychains4 docker push \
+sudo docker push \
      pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV}
 echo "     ======================= Enter to back to menu ========================"
 read KEY

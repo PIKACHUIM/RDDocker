@@ -16,9 +16,9 @@ jobs:
     - name: Build the Debian 13.00 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file Debian/Desktops/X11GUI 
+           --file ./Dockers/Debian/Desktops/X11GUI 
            --tag pikachuim/debian:13.00-x11gui 
-           --build-arg OS_VERSION=13.00 
+           --build-arg OS_VERSION=trixie 
            --build-arg OS_VERSHOW=13.00 
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
@@ -27,9 +27,9 @@ jobs:
     - name: Build the Debian 12.00 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file Debian/Desktops/X11GUI 
+           --file ./Dockers/Debian/Desktops/X11GUI 
            --tag pikachuim/debian:12.00-x11gui 
-           --build-arg OS_VERSION=12.00 
+           --build-arg OS_VERSION=bookworm
            --build-arg OS_VERSHOW=12.00 
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
@@ -38,7 +38,7 @@ jobs:
     - name: Build the Ubuntu 24.04 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file Ubuntu/Desktops/X11GUI 
+           --file ./Dockers/Ubuntu/Desktops/X11GUI 
            --tag pikachuim/ubuntu:24.04-x11gui 
            --build-arg OS_VERSION=24.04 
            --build-arg OS_VERSHOW=24.04 
@@ -46,10 +46,10 @@ jobs:
            ./Dockers/
       
     - uses: actions/checkout@v4
-    - name: Build the Ubuntu 22.04 Server Docker Image
+    - name: Build the Ubuntu 22.04 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file Ubuntu/Desktops/X11GUI 
+           --file ./Dockers/Ubuntu/Desktops/X11GUI 
            --tag pikachuim/ubuntu:22.04-x11gui 
            --build-arg OS_VERSION=22.04 
            --build-arg OS_VERSHOW=22.04 

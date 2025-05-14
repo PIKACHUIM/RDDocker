@@ -17,7 +17,7 @@ jobs:
     - name: Login to Docker Git
       uses: docker/login-action@v2
       with:
-        registry: ghcr.io
+        registry: ${{ GHCRIO_DOCKER_ADDR }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
           
@@ -30,9 +30,9 @@ jobs:
     - name: Login to Coding Git
       uses: docker/login-action@v2
       with:
-        registry: ${{env.CODING_DOCKER_USER}}
-        username: ${{env.CODING_DOCKER_UUID}}
-        password: ${{secrets.CODING_DOCKER_PASS}}
+        registry: ${{ CODING_DOCKER_USER }}
+        username: ${{ CODING_DOCKER_UUID }}
+        password: ${{ secrets.CODING_DOCKER_PASS }}
     
     - name: Build the Debian 13.00 Server Docker Image
       run: docker buildx build 

@@ -12,6 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
+    # Pre-Login ==========================================
+    - name: Checkout Code Files
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.GHCRIO_DOCKER_ADDR }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_PUBHUB_USER }}
+        password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+        
+    - name: Login to Coding Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.CODING_DOCKER_USER }}
+        username: ${{ vars.CODING_DOCKER_UUID }}
+        password: ${{ secrets.CODING_DOCKER_PASS }}
+
+    # Build Docker Images ===============================
     - uses: actions/checkout@v4
     - name: Build the Debian 13.00 X11GUI Docker Image
       run: docker buildx build 
@@ -55,4 +80,24 @@ jobs:
            --build-arg OS_VERSHOW=22.04 
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/       
-           
+
+    # Push Docker Images =============================================================================================
+    - name: Build the Ubuntu 22.04 Server Docker Image
+      run:     docker push pikachuim/debian:13.00-x11gui && docker push pikachuim/debian:12.00-x11gui
+            && docker push pikachuim/ubuntu:24.04-x11gui && docker push pikachuim/ubuntu:22.04-x11gui
+            && docker tag  pikachuim/debian:13.00-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:12.00-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:24.04-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:22.04-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:13.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-x11gui
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker tag  pikachuim/debian:12.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker tag  pikachuim/ubuntu:24.04-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker tag  pikachuim/ubuntu:22.04-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server

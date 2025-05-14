@@ -11,6 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+
+    # Pre-Login ==========================================
     - name: Checkout Code Files
       uses: actions/checkout@v4
 
@@ -33,7 +35,8 @@ jobs:
         registry: ${{ vars.CODING_DOCKER_USER }}
         username: ${{ vars.CODING_DOCKER_UUID }}
         password: ${{ secrets.CODING_DOCKER_PASS }}
-    
+
+    # Build Docker Images ===============================
     - name: Build the Debian 13.00 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -43,7 +46,7 @@ jobs:
            --build-arg OS_VERSHOW=13.00 
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
-           
+    
     - name: Build the Debian 12.00 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -73,9 +76,10 @@ jobs:
            --build-arg OS_VERSHOW=22.04 
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/     
-           
+    
+    # Push Docker Images =============================================================================================
     - name: Build the Ubuntu 22.04 Server Docker Image
-      run:     docker push pikachuim/debian:12.00-server && docker push pikachuim/debian:12.00-server
+      run:     docker push pikachuim/debian:13.00-server && docker push pikachuim/debian:12.00-server
             && docker push pikachuim/ubuntu:24.04-server && docker push pikachuim/ubuntu:22.04-server
             && docker tag  pikachuim/debian:13.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>

@@ -78,18 +78,12 @@ jobs:
            ./Dockers/     
     
     # Push Docker Images =============================================================================================
-    - name: Build the Ubuntu 22.04 Server Docker Image
+    - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-server && docker push pikachuim/debian:12.00-server
             && docker push pikachuim/ubuntu:24.04-server && docker push pikachuim/ubuntu:22.04-server
-            && docker tag  pikachuim/debian:13.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
-            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
-            && docker tag  pikachuim/debian:12.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
-            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
-            && docker tag  pikachuim/ubuntu:24.04-server ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
-            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
-            && docker tag  pikachuim/ubuntu:22.04-server ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
-            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
-            && docker tag  pikachuim/debian:13.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+
+    - name: Push Docker Image to Github Pkg
+      run:     docker tag  pikachuim/debian:13.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
             && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
             && docker tag  pikachuim/debian:12.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
@@ -97,4 +91,14 @@ jobs:
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
             && docker tag  pikachuim/ubuntu:22.04-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            
+    - name: Push Docker Image to Coding Pkg
+      run:     docker tag  pikachuim/debian:13.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
+            && docker tag  pikachuim/debian:12.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
+            && docker tag  pikachuim/ubuntu:24.04-server ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
+            && docker tag  pikachuim/ubuntu:22.04-server ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server  
             

@@ -1,0 +1,108 @@
+name: Build GNOME3 Docker Image
+
+on:
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    # Pre-Login ==========================================
+    - name: Checkout Code Files
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.GHCRIO_DOCKER_ADDR }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_PUBHUB_USER }}
+        password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+        
+    - name: Login to Coding Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.CODING_DOCKER_USER }}
+        username: ${{ vars.CODING_DOCKER_UUID }}
+        password: ${{ secrets.CODING_DOCKER_PASS }}
+    
+    # Build Docker Images ===============================
+    - uses: actions/checkout@v4
+    - name: Build the Debian 13.00 GNOME3 Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Debian/Desktops/GNOME3 
+           --tag pikachuim/debian:13.00-gnome3 
+           --build-arg OS_VERSION=13.00 
+           --build-arg OS_VERSHOW=13.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - uses: actions/checkout@v4
+    - name: Build the Debian 12.00 GNOME3 Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Debian/Desktops/GNOME3 
+           --tag pikachuim/debian:12.00-gnome3 
+           --build-arg OS_VERSION=12.00
+           --build-arg OS_VERSHOW=12.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - uses: actions/checkout@v4
+    - name: Build the Ubuntu 24.04 GNOME3 Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/GNOME3 
+           --tag pikachuim/ubuntu:24.04-gnome3 
+           --build-arg OS_VERSION=24.04 
+           --build-arg OS_VERSHOW=24.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/
+      
+    - uses: actions/checkout@v4
+    - name: Build the Ubuntu 22.04 GNOME3 Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/GNOME3 
+           --tag pikachuim/ubuntu:22.04-gnome3 
+           --build-arg OS_VERSION=22.04 
+           --build-arg OS_VERSHOW=22.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/       
+
+    # Push Docker Images =============================================================================================
+    - name: Push Docker Image to Docker Hub
+      run:     docker push pikachuim/debian:13.00-gnome3 && docker push pikachuim/debian:12.00-gnome3
+            && docker push pikachuim/ubuntu:24.04-gnome3 && docker push pikachuim/ubuntu:22.04-gnome3
+
+    - name: Push Docker Image to Github Pkg
+      run:     docker tag  pikachuim/debian:13.00-gnome3 ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-gnome3
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-gnome3
+            && docker tag  pikachuim/debian:12.00-gnome3 ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-gnome3
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-gnome3
+            && docker tag  pikachuim/ubuntu:24.04-gnome3 ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-gnome3
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-gnome3
+            && docker tag  pikachuim/ubuntu:22.04-gnome3 ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-gnome3
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-gnome3
+            
+    - name: Push Docker Image to Coding Pkg
+      run:     docker tag  pikachuim/debian:13.00-gnome3 ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-gnome3
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-gnome3
+            && docker tag  pikachuim/debian:12.00-gnome3 ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-gnome3
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-gnome3
+            && docker tag  pikachuim/ubuntu:24.04-gnome3 ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-gnome3
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-gnome3
+            && docker tag  pikachuim/ubuntu:22.04-gnome3 ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-gnome3
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-gnome3 
+           

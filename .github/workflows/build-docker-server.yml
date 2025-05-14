@@ -17,7 +17,7 @@ jobs:
     - name: Login to Docker Git
       uses: docker/login-action@v2
       with:
-        registry: ghcr.io
+        registry: ${{env.GHCRIO_DOCKER_ADDR}}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
           
@@ -26,6 +26,13 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_PUBHUB_USER }}
         password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+        
+    - name: Login to Coding Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{env.CODING_DOCKER_USER}}
+        username: ${{env.CODING_DOCKER_UUID}}
+        password: ${{secrets.CODING_DOCKER_PASS}}
     
     - name: Build the Debian 13.00 Server Docker Image
       run: docker buildx build 
@@ -68,21 +75,22 @@ jobs:
            ./Dockers/     
            
     - name: Build the Ubuntu 22.04 Server Docker Image
-      run:  docker login -u {{env.CODING_DOCKER_UUID}} -p {{secrets.CODING_DOCKER_PASS}} {{env.CODING_DOCKER_USER}} 
-            && docker tag  pikachuim/debian:13.00-server {{env.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
-            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
-            && docker tag  pikachuim/debian:12.00-server {{env.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
-            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
-            && docker tag  pikachuim/ubuntu:24.04-server {{env.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
-            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
-            && docker tag  pikachuim/ubuntu:22.04-server {{env.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
-            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
-            && docker tag  pikachuim/debian:13.00-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
-            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
-            && docker tag  pikachuim/debian:12.00-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
-            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
-            && docker tag  pikachuim/ubuntu:24.04-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
-            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
-            && docker tag  pikachuim/ubuntu:22.04-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
-            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+      run:     docker push pikachuim/debian:12.00-server && docker push pikachuim/debian:12.00-server
+            && docker push pikachuim/ubuntu:24.04-server && docker push pikachuim/ubuntu:22.04-server
+            && docker tag  pikachuim/debian:13.00-server ${{env.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
+            && docker push ${{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:12.00-server ${{env.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
+            && docker push ${{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:24.04-server ${{env.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
+            && docker push ${{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:22.04-server ${{env.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
+            && docker push ${{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:13.00-server ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker tag  pikachuim/debian:12.00-server ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker tag  pikachuim/ubuntu:24.04-server ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker tag  pikachuim/ubuntu:22.04-server ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             

@@ -36,7 +36,6 @@ jobs:
         password: ${{ secrets.CODING_DOCKER_PASS }}
 
     # Build Docker Images ===============================
-    - uses: actions/checkout@v4
     - name: Build the Debian 13.00 Lingmo Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -47,7 +46,6 @@ jobs:
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
            
-    # - uses: actions/checkout@v4
     # - name: Build the Debian 12.00 Lingmo Docker Image
     #   run: docker buildx build 
     #        --progress=plain 
@@ -58,7 +56,6 @@ jobs:
     #        --build-arg OS_SYSTEMS=debian 
     #        ./Dockers/
            
-    - uses: actions/checkout@v4
     - name: Build the Ubuntu 24.04 Lingmo Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -69,7 +66,6 @@ jobs:
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/
       
-    # - uses: actions/checkout@v4
     # - name: Build the Ubuntu 22.04 Lingmo Docker Image
     #   run: docker buildx build 
     #        --progress=plain 

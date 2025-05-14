@@ -77,12 +77,12 @@ jobs:
             && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
             && docker tag  pikachuim/ubuntu:22.04-server {{env.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
             && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
-            && docker tag  pikachuim/debian:13.00-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:13.00-server
-            && docker push ghcr.io/pikachuim/debian:13.00-server
-            && docker tag  pikachuim/debian:12.00-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:12.00-server
-            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:12.00-server
-            && docker tag  pikachuim/ubuntu:24.04-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
-            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
-            && docker tag  pikachuim/ubuntu:22.04-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
-            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            && docker tag  pikachuim/debian:13.00-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker tag  pikachuim/debian:12.00-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker tag  pikachuim/ubuntu:24.04-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker tag  pikachuim/ubuntu:22.04-server {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            && docker push {{env.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             

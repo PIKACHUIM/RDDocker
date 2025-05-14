@@ -88,7 +88,7 @@ jobs:
 
     - name: Push Docker Image to Github Pkg
       run:     docker tag  pikachuim/debian:13.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-x11gui
-            && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-x11gui
             && docker tag  pikachuim/debian:12.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-x11gui
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-x11gui
             && docker tag  pikachuim/ubuntu:24.04-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-x11gui

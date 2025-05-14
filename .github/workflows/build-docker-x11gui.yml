@@ -79,8 +79,9 @@ jobs:
            --build-arg OS_VERSION=22.04 
            --build-arg OS_VERSHOW=22.04 
            --build-arg OS_SYSTEMS=ubuntu 
-           ./Dockers/       
-# Push Docker Images =============================================================================================
+           ./Dockers/   
+           
+    # Push Docker Images =============================================================================================
     - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-x11gui && docker push pikachuim/debian:12.00-x11gui
             && docker push pikachuim/ubuntu:24.04-x11gui && docker push pikachuim/ubuntu:22.04-x11gui

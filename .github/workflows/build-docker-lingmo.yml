@@ -104,6 +104,6 @@ jobs:
             # && docker tag  pikachuim/ubuntu:22.04-lingmo ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-lingmo
             # && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-lingmo
             # && docker tag  pikachuim/debian:13.00-lingmo ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-lingmo
-            # && docker push ${{env.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-lingmo
+            # && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-lingmo
             # && docker tag  pikachuim/ubuntu:22.04-lingmo ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-lingmo
             # && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-lingmo  

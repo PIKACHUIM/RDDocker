@@ -11,8 +11,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Code Files
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Git
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_PUBHUB_USER }}
+        password: ${{ secrets.DOCKER_PUBHUB_PASS }}
     
-    - uses: actions/checkout@v4
     - name: Build the Debian 13.00 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -23,7 +37,6 @@ jobs:
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
            
-    - uses: actions/checkout@v4
     - name: Build the Debian 12.00 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -34,7 +47,6 @@ jobs:
            --build-arg OS_SYSTEMS=debian 
            ./Dockers/
            
-    - uses: actions/checkout@v4
     - name: Build the Ubuntu 24.04 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -45,7 +57,6 @@ jobs:
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/
       
-    - uses: actions/checkout@v4
     - name: Build the Ubuntu 22.04 Server Docker Image
       run: docker buildx build 
            --progress=plain 
@@ -54,5 +65,24 @@ jobs:
            --build-arg OS_VERSION=22.04 
            --build-arg OS_VERSHOW=22.04 
            --build-arg OS_SYSTEMS=ubuntu 
-           ./Dockers/       
+           ./Dockers/     
            
+    - name: Build the Ubuntu 22.04 Server Docker Image
+      run:  docker login -u {{env.CODING_DOCKER_UUID}} -p {{secrets.CODING_DOCKER_PASS}} {{env.CODING_DOCKER_USER}} 
+            && docker tag  pikachuim/debian:13.00-server {{env.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
+            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:12.00-server {{env.CODING_DOCKER_USER}}/open/docker/debian:12.00-server
+            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:24.04-server {{env.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
+            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/ubuntu:22.04-server {{env.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
+            && docker push {{env.CODING_DOCKER_USER}}/open/docker/<PACKAGE>:<VERSION>
+            && docker tag  pikachuim/debian:13.00-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:13.00-server
+            && docker push ghcr.io/pikachuim/debian:13.00-server
+            && docker tag  pikachuim/debian:12.00-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/debian:12.00-server
+            && docker tag  pikachuim/ubuntu:24.04-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
+            && docker tag  pikachuim/ubuntu:22.04-server {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            && docker push {{env.GITHUB_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            

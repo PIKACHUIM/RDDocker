@@ -97,21 +97,32 @@ jobs:
            --build-arg OS_SYSTEMS=fedora 
            ./Dockers/
       
-    # - name: Build the ArchOS devel Server Docker Image
-    #   run: docker buildx build 
-    #        --progress=plain 
-    #        --file ./Dockers/Ubuntu/Desktops/Server 
-    #        --tag pikachuim/archos:devel-server 
-    #        --build-arg OS_VERSION=devel
-    #        --build-arg OS_VERSHOW=devel
-    #        --build-arg OS_SYSTEMS=archlinux 
-    #        ./Dockers/  
+    - name: Build the Alpine 32103 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Alpine 
+           --tag pikachuim/alpine:32103-server 
+           --build-arg OS_VERSION=3.21.3
+           --build-arg OS_VERSHOW=32103
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/  
+
+    - name: Build the Alpine 32006 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Alpine 
+           --tag pikachuim/alpine:32006-server 
+           --build-arg OS_VERSION=3.20.6
+           --build-arg OS_VERSHOW=32006
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/  
     
     # Push Docker Images =============================================================================================
     - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-server && docker push pikachuim/debian:12.00-server
             && docker push pikachuim/ubuntu:24.04-server && docker push pikachuim/ubuntu:22.04-server
             && docker push pikachuim/fedora:42.00-server && docker push pikachuim/fedora:41.00-server
+            && docker push pikachuim/alpine:32103-server && docker push pikachuim/alpine:32006-server
 
     - name: Push Docker Image to Github Pkg
       run:     docker tag  pikachuim/debian:13.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
@@ -126,6 +137,10 @@ jobs:
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-server
             && docker tag  pikachuim/fedora:41.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
+            & docker tag   pikachuim/alpine:32103-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-server
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-server
+            && docker tag  pikachuim/alpine:32006-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-server
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-server
             
     - name: Push Docker Image to Coding Pkg
       run:     docker tag  pikachuim/debian:13.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
@@ -140,4 +155,8 @@ jobs:
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-server
             && docker tag  pikachuim/fedora:41.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-server
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-server
+            && docker tag  pikachuim/alpine:32103-server ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-server
+            && docker tag  pikachuim/alpine:32006-server ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-server
             

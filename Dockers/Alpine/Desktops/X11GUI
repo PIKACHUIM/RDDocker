@@ -27,27 +27,28 @@ RUN apk add polkit nawk nano gawk linux-headers linux-pam wget \
 
 
 # Install Nomachine -------------------------------------------
-ENV VE="nomachine_8.16.1_1_x86_64.tar.gz"
-ENV UR="https://download.nomachine.com/download/8.16/Linux/"
-RUN wget ${UR}${VE} -O /usr/nx.tar.gz && cd /usr/ && tar -xzf nx.tar.gz
-RUN /usr/NX/nxserver --install
-RUN /etc/NX/nxserver --restart
+#ENV VE="nomachine_8.16.1_1_x86_64.tar.gz"
+#ENV UR="https://download.nomachine.com/download/8.16/Linux/"
+#RUN wget ${UR}${VE} -O /usr/nx.tar.gz && cd /usr/ && tar -xzf nx.tar.gz
+#RUN /usr/NX/nxserver --install
+#RUN /etc/NX/nxserver --restart
 
 # Configs Nomachine -------------------------------------------
-RUN echo 'VirtualDesktopAccess all'  >>/usr/NX/etc/server.cfg \
-&&  echo 'VirtualDesktopMode 2'      >>/usr/NX/etc/server.cfg \
-&&  echo 'PhysicalDesktopAccess all' >>/usr/NX/etc/server.cfg \
-&&  echo 'PhysicalDesktopMode 2'     >>/usr/NX/etc/server.cfg \
-&&  echo 'CreateDisplay 1'           >>/usr/NX/etc/server.cfg \
-&&  echo 'DisplayGeometry 1920x1080' >>/usr/NX/etc/server.cfg \
-&&  echo 'StartHTTPDaemon Automatic' >>/usr/NX/etc/server.cfg \
-&&  echo 'EnableWebPlayer 1'         >>/usr/NX/etc/server.cfg \
-&&  echo 'WebAccessType systemlogin' >>/usr/NX/etc/server.cfg
+#RUN echo 'VirtualDesktopAccess all'  >>/usr/NX/etc/server.cfg \
+#&&  echo 'VirtualDesktopMode 2'      >>/usr/NX/etc/server.cfg \
+#&&  echo 'PhysicalDesktopAccess all' >>/usr/NX/etc/server.cfg \
+#&&  echo 'PhysicalDesktopMode 2'     >>/usr/NX/etc/server.cfg \
+#&&  echo 'CreateDisplay 1'           >>/usr/NX/etc/server.cfg \
+#&&  echo 'DisplayGeometry 1920x1080' >>/usr/NX/etc/server.cfg \
+#&&  echo 'StartHTTPDaemon Automatic' >>/usr/NX/etc/server.cfg \
+#&&  echo 'EnableWebPlayer 1'         >>/usr/NX/etc/server.cfg \
+#&&  echo 'WebAccessType systemlogin' >>/usr/NX/etc/server.cfg
 
 # VNC ---------------------------------------------------------
 #RUN pacman -S tigervnc --noconfirm                            \
 #&&  echo -e "PIKAPIKA\nPIKAPIKA" | vncpasswd                  \
-#&&  echo 'session=cutefish-xsession' >> ~/.vnc/config         \
+RUN apk add x11vnc xrdp xorgxrdp
+#RUN echo 'session=cutefish-xsession' >> ~/.vnc/config         \
 #&&  echo 'geometry=1920x1080' >> ~/.vnc/config                \
 #&&  echo 'alwaysshared' >> ~/.vnc/config                      \
 #&&  touch /root/.Xauthority                                   \

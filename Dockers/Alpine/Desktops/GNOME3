@@ -2,17 +2,12 @@
 # syntax=docker/dockerfile:1.3-labs
 ARG OS_VERSION=latest
 ARG OS_SYSTEMS=archos
-FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+ARG OS_VERSHOW=latest
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
 
 # Install -----------------------------------------------------
-RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
-#RUN sudo pacman -Syyu --noconfirm
-#RUN sudo pacman -Syy archlinux-keyring              --noconfirm
-#RUN sudo pacman-key --refresh-keys
-RUN sudo pacman -S gnome gnome-extra nano vim sudo  --noconfirm
-RUN sudo pacman -S xorg-server-xvfb x11vnc          --noconfirm
-RUN systemctl  disable gdm.service
-#RUN systemctl disable gdm && service gdm stop || echo "Ignored"
+RUN apk add dbus alpine-conf firefox nano && rc-update add dbus
+RUN setup-apkrepos -cf apk update && setup-desktop gnome
 
 # X11VNC Root Set ---------------------------------------------
 COPY X11GUI/x11vnc.sh /x11vnc.sh

@@ -1,0 +1,43 @@
+# Images -------------------------------------------------------------
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=alpine
+FROM ${OS_SYSTEMS}:${OS_VERSION}
+# PARMAS -------------------------------------------------------------
+ARG OS_MESSAGE=""
+ARG OS_VERSION=latest
+# Message ------------------------------------------------------------
+MAINTAINER Pikachu Ren <pikachuim@qq.com>
+LABEL System=${OS_SYSTEMS}
+LABEL Version=${OS_VERSION}
+LABEL Description=${OS_MESSAGE}
+# SSH Set ------------------------------------------------------------
+RUN apk update && apk upgrade --no-cache && apk add --no-cache \
+    sudo wget openssh git curl openrc
+RUN addgroup -g 200 user && adduser -D -u 200 -G user user
+COPY Config/OpenSSH/authorized_keys /root/.ssh/
+COPY Config/OpenSSH/sshd /etc/pam.d/
+
+# Startup ------------------------------------------------------------
+COPY Config/StartUP/run.service /etc/systemd/system/
+RUN echo "PermitRootLogin without-password" >> /etc/ssh/sshd_config  \
+&&  echo "ListenAddress 0.0.0.0"            >> /etc/ssh/sshd_config  \
+&&  echo '#!/bin/bash'                       > /run.sh               \
+&&  echo 'echo Starting Basic Server ----'  >> /run.sh               \
+&&  echo 'nohup /usr/sbin/sshd -D &'        >> /run.sh
+RUN chmod +x /run.sh && ssh-keygen -A && rc-update add sshd default
+
+#  Run Script --------------------------------------------------------
+RUN cat > /etc/init.d/runscript <<EOF
+#!/bin/sh
+start() {
+  echo "Starting custom script..."
+  /run.sh &
+}
+stop() {
+  echo "Stopping custom script..."
+}
+EOF
+RUN chmod +x /etc/init.d/runscript && rc-update add runscript default
+# Port Mapping -------------------------------------------------------
+EXPOSE 22/tcp
+CMD ["/sbin/init"]

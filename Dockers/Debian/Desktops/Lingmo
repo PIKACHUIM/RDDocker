@@ -16,8 +16,6 @@ ENV DE="${UR}/elysia:/LingmoOS/Debian_12/ ./"
 ENV KR="https://build.opensuse.org/projects/home:"
 ENV KF="${KR}elysia:LingmoOS/signing_keys/download?kind=gpg"
 RUN echo ${DE} >> /etc/apt/sources.list                  ||echo 1
-#RUN echo ${DE} >> /etc/apt/sources.list.d/debian.sources ||echo 2
-#RUN cat           /etc/apt/sources.list.d/debian.sources ||echo 2
 RUN apt -y install wget gnupg2 nano vim openssl curl git ||echo 3
 RUN wget ${KF} -O lingmo.gpg && apt-key add ./lingmo.gpg ||echo 4
 RUN apt update &&DEBIAN_FRONTEND=noninteractive apt install -y \

@@ -6,6 +6,7 @@ echo "   [1]Ubuntu [√ Server / × Lingmo / √ GNOME / √ xfce4 / × Deepin /
 echo "   [2]Debian [√ Server / √ Lingmo / √ GNOME / √ xfce4 / × Deepin / × IceVM]"
 echo "   [3]ArchOS [√ Server / × Lingmo / × GNOME / × xfce4 / × Deepin / × IceVM]"
 echo "   [4]Fedora [√ Server / × Lingmo / × GNOME / × xfce4 / × Deepin / × IceVM]"
+echo "   [9]Apline [√ Server / × Lingmo / × GNOME / × xfce4 / × Deepin / × IceVM]"
 echo "   ========================================================================"
 echo 
 echo -n "   Choose Platforms Type Number(1): "
@@ -27,6 +28,10 @@ elif [ $OS_TYPE == 3 ]; then
   source Scripts/Create/ArchOS-Version.sh
   OS_TYPE=archos
   OS_UPPE=ArchOS
+elif [ $OS_TYPE == 9 ]; then
+  source Scripts/Create/Alpine-Version.sh
+  OS_TYPE=alpine
+  OS_UPPE=Alpine
 elif [ $OS_TYPE == 4 ]; then
   source Scripts/Create/Fedora-Version.sh
   OS_TYPE=fedora

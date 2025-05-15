@@ -47,8 +47,8 @@ sudo proxychains4 docker buildx build ${ISCACHE} \
      -f Dockers/${OS_UPPE}/Desktops/${DC_FILE} \
      -t pikachuim/${OS_TYPE}:${VERSION}-${GUI_ENV} \
      --build-arg OS_VERSION=${VERNAME} \
-	 --build-arg OS_VERSHOW=${VERSION} \
-	 --build-arg OS_SYSTEMS=${OS_TYPE} \
+	   --build-arg OS_VERSHOW=${VERSION} \
+	   --build-arg OS_SYSTEMS=${OS_TYPE} \
      --load\
      ./Dockers \
 && \

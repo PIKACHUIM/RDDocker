@@ -1,0 +1,34 @@
+# Images ------------------------------------------------------
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=archos
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+
+# Install -----------------------------------------------------
+RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
+#RUN sudo pacman -Syyu --noconfirm
+#RUN sudo pacman -Syy archlinux-keyring             --noconfirm
+#RUN sudo pacman-key --refresh-keys
+RUN sudo pacman -S ttf-dejavu networkmanager vim   --noconfirm                                 
+RUN sudo pacman -S lightdm xorg-server-xvfb nano   --noconfirm 
+RUN sudo pacman -S deepin-kwin deepin deepin-extra --noconfirm --overwrite '*'
+RUN sudo pacman -S x11vnc                          --noconfirm
+
+# Desktop Configs ---------------------------------------------
+
+# X11VNC Root Set ---------------------------------------------
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+
+# Desktop Startup =============================================
+RUN echo 'echo Start Desktop ----------------------' >> /run.sh
+
+# Startup Desktop ---------------------------------------------
+RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
+RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
+RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
+RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
+RUN chmod +x /run.sh
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp                                                                                                        
+CMD ["/sbin/init"]

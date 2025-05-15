@@ -3,26 +3,26 @@ source Scripts/Titles.sh
 # Choose Desktop -------------------------------------------------------------------
 
 case $OS_TYPE in
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "   ============================Available Desktop==========================="
         echo "      [1] Servers NoGraphic  [ √ SSH / × GUI APPs / × NoMachine / × VNC ]  "
         ;&
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "      [2] Desktop Lingmo DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;&
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "      [3] Desktop Gnome3 DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;&
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "      [4] Desktop Xfce4L DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;&
     "ubuntu"|"debian")
         echo "      [5] Desktop Deepin DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;&
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "      [6] Desktop Plasma DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;&
-    "ubuntu"|"debian"|"archos"|"fedora")
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         #echo "      [6] Desktop Icewm Lite [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         #echo "      [7] Desktop ********** [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         #echo "      [8] Desktop ********** [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "

@@ -16,7 +16,7 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 |  2   |   Lingmo    | 一个拥有高效和优美GUI 的现代桌面环境 <br/>Lingmo is a DE with efficient and great UI |   ✔️*   |   ✔️*   |  ❌   |   ❌    |
 |  3   |    GNOME    | Linux常用图形的桌面环境, 功能齐全方便<br/>DE for commonly used graphics on Linux |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
 |  4   |   Xfce4L    | 一个非常轻量, 简洁易用的Linux桌面环境<br/>A lightweight & easy DE for UNIX-like OS. |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
-|  5   |   Deepin    | 深度科技自主开发的美观易用的桌面环境<br/>主要由桌面、启动器、任务栏、控制中心<br/>窗口管理器等组成，预装了深度特色应用 |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
+|  5   |     DDE     | 深度科技自主开发的美观易用的桌面环境<br/>主要由桌面、启动器、任务栏、控制中心<br/>窗口管理器等组成，预装了深度特色应用 |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
 |  6   |   Plasma    | 您可以使用*Plasma 桌面*环境轻松浏览网页<br/>与同事、朋友和家人保持联系，管理文件<br/>欣赏音乐和视频，并发挥创意和提高效率 |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
 |  0   |   X11GUI    | X11桌面基础环境集成远程桌面(构建专用)<br>X11 Desktop Basic Env (For build DE only.) |   ✔️    |   ✔️    |  ✔️   |   ✔️    |
 
@@ -24,18 +24,18 @@ RDPDocker is a Docker image building and container creation tool with X11 and de
 
 ### Support DE / 各个系统桌面支持情况
 
-| 系统名称<br/>System Name | 系统版本<br/>System Version | Server | Lingmo |  GNOME   | Xfce 4 | Deepin DE |  Plasma  | X11 GUI |
-| :----------------------: | :-------------------------: | :----: | :----: | :------: | :----: | :-------: | :------: | :-----: |
-|          Ubuntu          |            24.04            |   ✔️    |   ✔️    |   ✔️(1)   |   ✔️    |    ❌**    |    ✔️     |    ✔️    |
-|          Ubuntu          |            22.04            |   ✔️    |   /    |    ✔️     |   ✔️    |   ✔️(4)    |    ✔️     |    ✔️    |
-|        ~~Ubuntu~~        |          ~~20.04~~          | ~~✔️~~  | ~~/~~  |  ~~✔️~~   | ~~✔️~~  |   ~~/~~   |  ~~✔️~~   |  ~~✔️~~  |
-|          Debian          |            13.00            |   ✔️    |   /    |   ✔️(1)   |   ✔️    |  ✔️(GXDE)  |   ✔️(2)   |    ✔️    |
-|          Debian          |            12.00            |   ✔️    |  ✔️(4)  |   ✔️(1)   |   ✔️    |  ✔️(GXDE)  |   ✔️(2)   |    ✔️    |
-|        ~~Debian~~        |          ~~11.00~~          | ~~✔️~~  | ~~/~~  | ~~✔️(1)~~ | ~~✔️~~  |   ~~/~~   | ~~✔️(2)~~ |  ~~✔️~~  |
-|          ArchOS          |            devel            |   ✔️    |   /    |    ✔️*    |   ✔️*   |    ✔️*     |    ✔️*    |    ✔️    |
-|          Fedora          |            40.00            |   ✔️    |   /    |   ✔️(1)   |  ✔️(3)  |     ✔️     |    ✔️     |    ✔️    |
+| 系统名称<br/>System Name | 系统版本<br/>System Version | Server | Lingmo | GNOME | Xfce 4 |   DDE   | Plasma | X11 GUI |
+| :----------------------: | :-------------------------: | :----: | :----: | :---: | :----: | :-----: | :----: | :-----: |
+|          Ubuntu          |            24.04            |   ✔️    |   ✔️    | ✔️(1)  |   ✔️    |   ❌**   |   ✔️    |    ✔️    |
+|          Ubuntu          |            22.04            |   ✔️    |   /    |   ✔️   |   ✔️    | ✔️DDE(4) |   ✔️    |    ✔️    |
+|          Debian          |            13.00            |   ✔️    |   /    | ✔️(1)  |   ✔️    | ✔️(GXDE) |  ✔️(2)  |    ✔️    |
+|          Debian          |            12.00            |   ✔️    |  ✔️(4)  | ✔️(1)  |   ✔️    | ✔️(GXDE) |  ✔️(2)  |    ✔️    |
+|          ArchOS          |            devel            |   ✔️    |   /    |  ✔️*   |   ✔️*   |   ✔️*    |   ✔️*   |    ✔️    |
+|          Fedora          |            40.00            |   ✔️    |   /    | ✔️(1)  |  ✔️(3)  |    ✔️    |   ✔️    |    ✔️    |
 
-*：尚未测试；**：桌面源不支持；/：尚无支持计划；Ubuntu 22.04和Debian 11已不再提供更新支持，仅保留给之前的用户使用
+*：尚未测试；**：桌面源不支持；/：尚无支持计划；
+
+Ubuntu 20.04和Debian 11已不再提供更新支持，仅保留给之前的用户使用
 
 ### Known Issues / 一些已知的问题
 

@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:1.3-labs
+# Images ------------------------------------------------------
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=archos
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+# Install -----------------------------------------------------
+RUN echo "SigLevel = Never" >> /etc/pacman.conf && pacman -Syy
+#RUN sudo pacman -Syyu --noconfirm
+#RUN sudo pacman -Syy archlinux-keyring             --noconfirm
+#RUN sudo pacman-key --refresh-keys
+RUN sudo pacman -S plasma-desktop xorg-server-xvfb --noconfirm                   
+RUN sudo pacman -S kde-applications x11vnc         --noconfirm 
+
+# X11VNC Root Set ---------------------------------------------
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+
+# Desktop Startup =============================================
+RUN echo 'echo Start Desktop ----------------------' >> /run.sh
+
+# Killall Desktop ---------------------------------------------
+RUN echo 'systemctl disable sddm.service           ' >> /run.sh
+RUN echo 'service sddm stop&killall startplasma-x11' >> /run.sh
+RUN echo 'killall plasma_session & killall kwin_x11' >> /run.sh
+
+# Startup Desktop ---------------------------------------------
+RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
+RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
+RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
+RUN echo 'bash /x11vnc.sh &&nohup startplasma-x11 &' >> /run.sh                    
+RUN chmod +x /run.sh
+
+# Port Mapping ------------------------------------------------
+EXPOSE 4000/tcp                                                                                                        
+CMD ["/sbin/init"]

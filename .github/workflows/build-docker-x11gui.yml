@@ -77,10 +77,52 @@ jobs:
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/   
            
+    - name: Build the Fedora 42.00 X11GUI Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/X11GUI 
+           --tag pikachuim/fedora:42.00-x11gui 
+           --build-arg OS_VERSION=42
+           --build-arg OS_VERSHOW=42.00
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+           
+    - name: Build the Fedora 41.00 X11GUI Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/X11GUI 
+           --tag pikachuim/fedora:41.00-x11gui 
+           --build-arg OS_VERSION=41
+           --build-arg OS_VERSHOW=41.00 
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+      
+    - name: Build the Alpine 32103 X11GUI Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/X11GUI 
+           --tag pikachuim/alpine:32103-x11gui 
+           --build-arg OS_VERSION=32103
+           --build-arg OS_VERSHOW=32103
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/  
+
+    - name: Build the Alpine 32006 X11GUI Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/X11GUI 
+           --tag pikachuim/alpine:32006-x11gui 
+           --build-arg OS_VERSION=32006
+           --build-arg OS_VERSHOW=32006
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/
+           
     # Push Docker Images =============================================================================================
     - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-x11gui && docker push pikachuim/debian:12.00-x11gui
             && docker push pikachuim/ubuntu:24.04-x11gui && docker push pikachuim/ubuntu:22.04-x11gui
+            && docker push pikachuim/fedora:42.00-x11gui && docker push pikachuim/fedora:41.00-x11gui
+            && docker push pikachuim/alpine:32103-x11gui && docker push pikachuim/alpine:32006-x11gui
 
     - name: Push Docker Image to Github Pkg
       run:     docker tag  pikachuim/debian:13.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-x11gui
@@ -91,6 +133,14 @@ jobs:
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-x11gui
             && docker tag  pikachuim/ubuntu:22.04-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-x11gui
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-x11gui
+            && docker tag  pikachuim/fedora:42.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-x11gui
+            && docker tag  pikachuim/fedora:41.00-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-x11gui
+            & docker tag   pikachuim/alpine:32103-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-x11gui
+            && docker tag  pikachuim/alpine:32006-x11gui ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-x11gui
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-x11gui
             
     - name: Push Docker Image to Coding Pkg
       run:     docker tag  pikachuim/debian:13.00-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-x11gui
@@ -101,5 +151,13 @@ jobs:
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-x11gui
             && docker tag  pikachuim/ubuntu:22.04-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-x11gui
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-x11gui 
+            && docker tag  pikachuim/fedora:42.00-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-x11gui
+            && docker tag  pikachuim/fedora:41.00-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-x11gui
+            && docker tag  pikachuim/alpine:32103-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-x11gui
+            && docker tag  pikachuim/alpine:32006-x11gui ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-x11gui
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-x11gui
 
             

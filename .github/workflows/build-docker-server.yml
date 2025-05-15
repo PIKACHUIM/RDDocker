@@ -123,7 +123,7 @@ jobs:
             && docker tag  pikachuim/ubuntu:22.04-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             && docker tag  pikachuim/fedora:42.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-server
-            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:fedora:42.00-server
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-server
             && docker tag  pikachuim/fedora:41.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
             

@@ -1,0 +1,162 @@
+name: Build Xfce4L Docker Image
+
+on:
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    # Pre-Login ==========================================
+    - name: Checkout Code Files
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.GHCRIO_DOCKER_ADDR }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+          
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_PUBHUB_USER }}
+        password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+        
+    - name: Login to Coding Git
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.CODING_DOCKER_USER }}
+        username: ${{ vars.CODING_DOCKER_UUID }}
+        password: ${{ secrets.CODING_DOCKER_PASS }}
+    
+    # Build Docker Images ===============================
+    - name: Build the Debian 13.00 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Debian/Desktops/Xfce4L 
+           --tag pikachuim/debian:13.00-xfce4l 
+           --build-arg OS_VERSION=13.00 
+           --build-arg OS_VERSHOW=13.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - name: Build the Debian 12.00 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Debian/Desktops/Xfce4L 
+           --tag pikachuim/debian:12.00-xfce4l 
+           --build-arg OS_VERSION=12.00
+           --build-arg OS_VERSHOW=12.00 
+           --build-arg OS_SYSTEMS=debian 
+           ./Dockers/
+           
+    - name: Build the Ubuntu 24.04 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --tag pikachuim/ubuntu:24.04-xfce4l 
+           --build-arg OS_VERSION=24.04 
+           --build-arg OS_VERSHOW=24.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/
+      
+    - name: Build the Ubuntu 22.04 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --tag pikachuim/ubuntu:22.04-xfce4l 
+           --build-arg OS_VERSION=22.04 
+           --build-arg OS_VERSHOW=22.04 
+           --build-arg OS_SYSTEMS=ubuntu 
+           ./Dockers/   
+           
+    - name: Build the Fedora 42.00 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/Xfce4L 
+           --tag pikachuim/fedora:42.00-xfce4l 
+           --build-arg OS_VERSION=42
+           --build-arg OS_VERSHOW=42.00
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+           
+    - name: Build the Fedora 41.00 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/Xfce4L 
+           --tag pikachuim/fedora:41.00-xfce4l 
+           --build-arg OS_VERSION=41
+           --build-arg OS_VERSHOW=41.00 
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+      
+    - name: Build the Alpine 32103 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --tag pikachuim/alpine:32103-xfce4l 
+           --build-arg OS_VERSION=32103
+           --build-arg OS_VERSHOW=32103
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/  
+
+    - name: Build the Alpine 32006 Xfce4L Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --tag pikachuim/alpine:32006-xfce4l 
+           --build-arg OS_VERSION=32103
+           --build-arg OS_VERSHOW=32006
+           --build-arg OS_SYSTEMS=alpine 
+           ./Dockers/  
+
+    # Push Docker Images =============================================================================================
+    - name: Push Docker Image to Docker Hub
+      run:     docker push pikachuim/debian:13.00-xfce4l && docker push pikachuim/debian:12.00-xfce4l
+            && docker push pikachuim/ubuntu:24.04-xfce4l && docker push pikachuim/ubuntu:22.04-xfce4l
+            && docker push pikachuim/fedora:42.00-xfce4l && docker push pikachuim/fedora:41.00-xfce4l
+            && docker push pikachuim/alpine:32103-xfce4l && docker push pikachuim/alpine:32006-xfce4l
+
+    - name: Push Docker Image to Github Pkg
+      run:     docker tag  pikachuim/debian:13.00-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-xfce4l
+            && docker tag  pikachuim/debian:12.00-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-xfce4l
+            && docker tag  pikachuim/ubuntu:24.04-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-xfce4l
+            && docker tag  pikachuim/ubuntu:22.04-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-xfce4l
+            && docker tag  pikachuim/fedora:42.00-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-xfce4l
+            && docker tag  pikachuim/fedora:41.00-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-xfce4l
+            & docker tag   pikachuim/alpine:32103-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-xfce4l
+            && docker tag  pikachuim/alpine:32006-xfce4l ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-xfce4l
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-xfce4l
+            
+    - name: Push Docker Image to Coding Pkg
+      run:     docker tag  pikachuim/debian:13.00-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-xfce4l
+            && docker tag  pikachuim/debian:12.00-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-xfce4l
+            && docker tag  pikachuim/ubuntu:24.04-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-xfce4l
+            && docker tag  pikachuim/ubuntu:22.04-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-xfce4l 
+            && docker tag  pikachuim/fedora:42.00-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-xfce4l
+            && docker tag  pikachuim/fedora:41.00-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-xfce4l
+            && docker tag  pikachuim/alpine:32103-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-xfce4l
+            && docker tag  pikachuim/alpine:32006-xfce4l ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-xfce4l
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-xfce4l
+           

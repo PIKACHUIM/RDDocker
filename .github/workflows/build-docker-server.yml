@@ -75,12 +75,43 @@ jobs:
            --build-arg OS_VERSION=22.04 
            --build-arg OS_VERSHOW=22.04 
            --build-arg OS_SYSTEMS=ubuntu 
-           ./Dockers/     
+           ./Dockers/   
+
+    - name: Build the Fedora 42.00 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/Server 
+           --tag pikachuim/fedora:42.00-server 
+           --build-arg OS_VERSION=42
+           --build-arg OS_VERSHOW=42.00
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+           
+    - name: Build the Fedora 41.00 Server Docker Image
+      run: docker buildx build 
+           --progress=plain 
+           --file ./Dockers/Fedora/Desktops/Server 
+           --tag pikachuim/fedora:41.00-server 
+           --build-arg OS_VERSION=41
+           --build-arg OS_VERSHOW=41.00 
+           --build-arg OS_SYSTEMS=fedora 
+           ./Dockers/
+      
+    # - name: Build the ArchOS devel Server Docker Image
+    #   run: docker buildx build 
+    #        --progress=plain 
+    #        --file ./Dockers/Ubuntu/Desktops/Server 
+    #        --tag pikachuim/archos:devel-server 
+    #        --build-arg OS_VERSION=devel
+    #        --build-arg OS_VERSHOW=devel
+    #        --build-arg OS_SYSTEMS=archlinux 
+    #        ./Dockers/  
     
     # Push Docker Images =============================================================================================
     - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-server && docker push pikachuim/debian:12.00-server
             && docker push pikachuim/ubuntu:24.04-server && docker push pikachuim/ubuntu:22.04-server
+            && docker push pikachuim/fedora:42.00-server && docker push pikachuim/fedora:41.00-server
 
     - name: Push Docker Image to Github Pkg
       run:     docker tag  pikachuim/debian:13.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-server
@@ -91,6 +122,10 @@ jobs:
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:24.04-server
             && docker tag  pikachuim/ubuntu:22.04-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-server
+            && docker tag  pikachuim/fedora:42.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-server
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:fedora:42.00-server
+            && docker tag  pikachuim/fedora:41.00-server ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
+            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-server
             
     - name: Push Docker Image to Coding Pkg
       run:     docker tag  pikachuim/debian:13.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/debian:13.00-server
@@ -101,4 +136,8 @@ jobs:
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-server
             && docker tag  pikachuim/ubuntu:22.04-server ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-server  
+            && docker tag  pikachuim/fedora:42.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-server
+            && docker tag  pikachuim/fedora:41.00-server ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-server
+            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-server
             

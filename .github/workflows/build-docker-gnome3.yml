@@ -100,7 +100,7 @@ jobs:
     - name: Build the Alpine 32103 GNOME3 Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/GNOME3 
+           --file ./Dockers/Alpine/Desktops/GNOME3 
            --tag pikachuim/alpine:32103-gnome3 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32103
@@ -110,7 +110,7 @@ jobs:
     - name: Build the Alpine 32006 GNOME3 Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/GNOME3 
+           --file ./Dockers/Alpine/Desktops/GNOME3 
            --tag pikachuim/alpine:32006-gnome3 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32006

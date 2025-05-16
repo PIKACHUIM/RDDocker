@@ -100,7 +100,7 @@ jobs:
     - name: Build the Alpine 32103 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/X11GUI 
+           --file ./Dockers/Alpine/Desktops/X11GUI 
            --tag pikachuim/alpine:32103-x11gui 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32103
@@ -110,7 +110,7 @@ jobs:
     - name: Build the Alpine 32006 X11GUI Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/X11GUI 
+           --file ./Dockers/Alpine/Desktops/X11GUI 
            --tag pikachuim/alpine:32006-x11gui 
            --build-arg OS_VERSION=32006
            --build-arg OS_VERSHOW=32006

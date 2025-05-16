@@ -9,7 +9,7 @@ ARG OS_MESSAGE="LingmoOS Docker Image with NoMachine & OpenSSH"
 ARG OS_VERSION=24.04
 
 # Install Desktop ---------------------------------------------
-RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.bak ||echo 0
 RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
 ENV UR="deb https://download.opensuse.org/repositories/home:"
 ENV DE="${UR}/elysia:/LingmoOS/xUbuntu_24.04/ ./"

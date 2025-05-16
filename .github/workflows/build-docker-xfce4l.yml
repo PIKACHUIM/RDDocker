@@ -100,7 +100,7 @@ jobs:
     - name: Build the Alpine 32103 Xfce4L Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --file ./Dockers/Alpine/Desktops/Xfce4L 
            --tag pikachuim/alpine:32103-xfce4l 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32103
@@ -110,7 +110,7 @@ jobs:
     - name: Build the Alpine 32006 Xfce4L Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Xfce4L 
+           --file ./Dockers/Alpine/Desktops/Xfce4L 
            --tag pikachuim/alpine:32006-xfce4l 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32006

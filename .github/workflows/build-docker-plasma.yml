@@ -100,7 +100,7 @@ jobs:
     - name: Build the Alpine 32103 Plasma Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Plasma 
+           --file ./Dockers/Alpine/Desktops/Plasma 
            --tag pikachuim/alpine:32103-plasma 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32103
@@ -110,7 +110,7 @@ jobs:
     - name: Build the Alpine 32006 Plasma Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Plasma 
+           --file ./Dockers/Alpine/Desktops/Plasma 
            --tag pikachuim/alpine:32006-plasma 
            --build-arg OS_VERSION=32103
            --build-arg OS_VERSHOW=32006

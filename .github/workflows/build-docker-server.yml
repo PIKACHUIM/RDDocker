@@ -100,7 +100,7 @@ jobs:
     - name: Build the Alpine 32103 Server Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Server 
+           --file ./Dockers/Alpine/Desktops/Server 
            --tag pikachuim/alpine:32103-server 
            --build-arg OS_VERSION=3.21.3
            --build-arg OS_VERSHOW=32103
@@ -110,7 +110,7 @@ jobs:
     - name: Build the Alpine 32006 Server Docker Image
       run: docker buildx build 
            --progress=plain 
-           --file ./Dockers/Ubuntu/Desktops/Server 
+           --file ./Dockers/Alpine/Desktops/Server 
            --tag pikachuim/alpine:32006-server 
            --build-arg OS_VERSION=3.20.6
            --build-arg OS_VERSHOW=32006

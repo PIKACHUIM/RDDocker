@@ -16,7 +16,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 
 # Install Xserver ---------------------------------------------
 RUN yum update  -y && yum install -y @base-x wget curl git vim\
-    dbus-x11 xinit neofetch
+    dbus-x11 xinit neofetch --skip-unavailable
 RUN dnf install -y xorg-x11-server-Xvfb dbus-x11 x11vnc	xrdp
 
 # Install Nomachine -------------------------------------------

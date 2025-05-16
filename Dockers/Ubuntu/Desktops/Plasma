@@ -4,7 +4,7 @@ ARG OS_VERSION=latest
 ARG OS_SYSTEMS=ubuntu
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 # Install -----------------------------------------------------
-# RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
 RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
 RUN apt-get install -y software-properties-common             \
 &&  add-apt-repository ppa:kubuntu-ppa/backports              \

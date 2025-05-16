@@ -5,7 +5,7 @@ ARG OS_SYSTEMS=ubuntu
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # Install -----------------------------------------------------
-RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
+# RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
 RUN apt update  &&  apt -y install software-properties-common
 RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
 RUN DEBIAN_FRONTEND=noninteractive apt install -y  pulseaudio

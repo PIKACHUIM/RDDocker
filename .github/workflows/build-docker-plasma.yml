@@ -82,7 +82,7 @@ jobs:
            --progress=plain 
            --file ./Dockers/Fedora/Desktops/Plasma 
            --tag pikachuim/fedora:42.00-plasma 
-           --build-arg OS_VERSION=42
+           --build-arg OS_VERSION=42.00
            --build-arg OS_VERSHOW=42.00
            --build-arg OS_SYSTEMS=fedora 
            ./Dockers/
@@ -92,7 +92,7 @@ jobs:
            --progress=plain 
            --file ./Dockers/Fedora/Desktops/Plasma 
            --tag pikachuim/fedora:41.00-plasma 
-           --build-arg OS_VERSION=41
+           --build-arg OS_VERSION=41.00
            --build-arg OS_VERSHOW=41.00 
            --build-arg OS_SYSTEMS=fedora 
            ./Dockers/

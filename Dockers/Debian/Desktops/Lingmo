@@ -17,7 +17,7 @@ ENV KR="https://build.opensuse.org/projects/home:"
 ENV KF="${KR}elysia:LingmoOS/signing_keys/download?kind=gpg"
 RUN echo ${DE} >> /etc/apt/sources.list                  ||echo 1
 RUN apt -y install wget gnupg2 nano vim openssl curl git ||echo 3
-RUN wget ${KF} -O /etc/apt/trusted.gpg.d/lingmo.gpg      ||echo 4
+RUN wget ${KF} -O /etc/apt/trusted.gpg.d/lingmo.asc      ||echo 4
 RUN apt update &&DEBIAN_FRONTEND=noninteractive apt install -y \
     lingmo-workspace-base psmisc
 COPY X11GUI/de-lingmo.sh /lingmo.sh

@@ -5,7 +5,7 @@ ARG OS_SYSTEMS=fedora
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 # Install -----------------------------------------------------
 #RUN mv /etc/pulse/default.pa        /etc/pulse/default.pa.bak 
-RUN dnf update -y &&dnf groupinstall -y "KDE Plasma Workspaces"                            
+RUN dnf update -y &&dnf groupinstall -y kde-desktop-environment                            
 RUN dnf install -y xorg-x11-server-Xvfb dbus-x11 x11vnc xrdp
 
 # X11VNC Root Set ---------------------------------------------

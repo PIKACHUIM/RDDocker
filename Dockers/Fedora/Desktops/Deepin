@@ -6,8 +6,11 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
 
 # Install -----------------------------------------------------    
 #RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
-RUN dnf update -y && dnf group install "Deepin Desktop" -y                            
-RUN dnf install -y xorg-x11-server-Xvfb dbus-x11 x11vnc xrdp
+RUN dnf update -y && dnf group install -y deepin-desktop xrdp
+RUN dnf install -y deepin-calendar deepin-calculator dbus-x11
+RUN dnf install -y deepin-image-viewer deepin-screenshot x11vnc
+RUN dnf install -y deepin-system-monitor deepin-editor sudo 
+RUN dnf install -y xorg-x11-server-Xvfb  deepin-picker curl
 
 # Desktop Configs ---------------------------------------------
 

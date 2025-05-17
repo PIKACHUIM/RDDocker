@@ -77,15 +77,15 @@ jobs:
            --build-arg OS_SYSTEMS=ubuntu 
            ./Dockers/   
            
-    - name: Build the Fedora 42.00 Deepin Docker Image
-      run: docker buildx build 
-           --progress=plain 
-           --file ./Dockers/Fedora/Desktops/Deepin 
-           --tag pikachuim/fedora:42.00-deepin 
-           --build-arg OS_VERSION=42.00
-           --build-arg OS_VERSHOW=42.00
-           --build-arg OS_SYSTEMS=fedora 
-           ./Dockers/
+    # - name: Build the Fedora 42.00 Deepin Docker Image
+    #   run: docker buildx build 
+    #        --progress=plain 
+    #        --file ./Dockers/Fedora/Desktops/Deepin 
+    #        --tag pikachuim/fedora:42.00-deepin 
+    #        --build-arg OS_VERSION=42.00
+    #        --build-arg OS_VERSHOW=42.00
+    #        --build-arg OS_SYSTEMS=fedora 
+    #        ./Dockers/
            
     - name: Build the Fedora 41.00 Deepin Docker Image
       run: docker buildx build 
@@ -121,9 +121,11 @@ jobs:
     - name: Push Docker Image to Docker Hub
       run:     docker push pikachuim/debian:13.00-deepin && docker push pikachuim/debian:12.00-deepin
             && docker push pikachuim/ubuntu:22.04-deepin
-            && docker push pikachuim/fedora:42.00-deepin && docker push pikachuim/fedora:41.00-deepin
-            # && docker push pikachuim/alpine:32103-deepin && docker push pikachuim/alpine:32006-deepin
+            && docker push pikachuim/fedora:41.00-deepin
+            # && docker push pikachuim/alpine:32103-deepin
+            # && docker push pikachuim/alpine:32006-deepin
             # && docker push pikachuim/ubuntu:24.04-deepin
+            # && docker push pikachuim/fedora:42.00-deepin 
 
     - name: Push Docker Image to Github Pkg
       run:     docker tag  pikachuim/debian:13.00-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:13.00-deepin
@@ -132,10 +134,10 @@ jobs:
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/debian:12.00-deepin
             && docker tag  pikachuim/ubuntu:22.04-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-deepin
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/ubuntu:22.04-deepin
-            && docker tag  pikachuim/fedora:42.00-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-deepin
-            && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-deepin
             && docker tag  pikachuim/fedora:41.00-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-deepin
             && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:41.00-deepin
+            # && docker tag  pikachuim/fedora:42.00-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-deepin
+            # && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/fedora:42.00-deepin
             # && docker tag  pikachuim/alpine:32103-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-deepin
             # && docker push ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32103-deepin
             # && docker tag  pikachuim/alpine:32006-deepin ${{vars.GHCRIO_DOCKER_ADDR}}/pikachuim/alpine:32006-deepin
@@ -150,8 +152,6 @@ jobs:
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/debian:12.00-deepin
             && docker tag  pikachuim/ubuntu:22.04-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-deepin
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:22.04-deepin 
-            && docker tag  pikachuim/fedora:42.00-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-deepin
-            && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-deepin
             && docker tag  pikachuim/fedora:41.00-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-deepin
             && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:41.00-deepin
             # && docker tag  pikachuim/alpine:32103-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32103-deepin
@@ -160,4 +160,6 @@ jobs:
             # && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/alpine:32006-deepin
             # && docker tag  pikachuim/ubuntu:24.04-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-deepin
             # && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/ubuntu:24.04-deepin
+            # && docker tag  pikachuim/fedora:42.00-deepin ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-deepin
+            # && docker push ${{vars.CODING_DOCKER_USER}}/open/docker/fedora:42.00-deepin
            

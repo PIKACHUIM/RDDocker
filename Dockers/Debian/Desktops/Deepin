@@ -7,7 +7,6 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
 ARG OS_VERSHOW=latest
 # Install -----------------------------------------------------  
 ENV PR="main contrib non-free non-free-firmwar"
-RUN sed -i "s/main/main contrib non-free/g" /etc/apt/sources.list.d/debian.sources
 RUN DEBIAN_FRONTEND=noninteractive apt update && /sbin/init & 
 RUN apt install apt-transport-https ca-certificates curl   -y
 RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio 

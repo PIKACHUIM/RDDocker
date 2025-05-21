@@ -36,7 +36,7 @@ jobs:
         username: ${{ vars.CODING_DOCKER_UUID }}
         password: ${{ secrets.CODING_DOCKER_PASS }}
     
-    Build Docker Images ===============================
+    # Build Docker Images ===============================
     - name: Build the Debian 13.00 Plasma Docker Image
       run: docker buildx build 
            --progress=plain 

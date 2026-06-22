@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=jammy
+ARG OS_SYSTEMS=ubuntu
+ARG OS_VERSHOW=jammy
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+
+# GXDE Repository ---------------------------------------------
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl \
+ && curl -fsSL https://repo.gxde.top/gxde-os/key.gpg | gpg --dearmor -o /usr/share/keyrings/gxde.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/gxde.gpg] https://repo.gxde.top/gxde-os jammy main" \
+    > /etc/apt/sources.list.d/gxde.list \
+ && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    gxde-desktop gxde-dock gxde-wallpapers || \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop pulseaudio
+
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+RUN echo 'echo Start GXDeOS Desktop ----------------' >> /run.sh \
+ && echo 'export DISPLAY=:9 && export $(dbus-launch)' >> /run.sh \
+ && echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh \
+ && echo 'bash /x11vnc.sh && nohup startdde &'        >> /run.sh
+
+# Optional Software -------------------------------------------
+ARG INSTALL_FIREFOX=false
+ARG INSTALL_VSCODE=false
+RUN if [ "$INSTALL_FIREFOX" = "true" ]; then apt-get install -y firefox-esr; fi \
+ && if [ "$INSTALL_VSCODE" = "true" ]; then \
+      wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg \
+      && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" \
+         > /etc/apt/sources.list.d/vscode.list \
+      && apt-get update && apt-get install -y code; fi
+
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

@@ -18,7 +18,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 # Install Xserver ---------------------------------------------
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
     apt install -y xserver-xorg-core xauth xorg wget gnupg2   \
-                   xserver-xorg-video-dummy curl  net-tools   \   
+                   xserver-xorg-video-dummy curl  net-tools   \
                    xfonts-base xfonts-75dpi xfonts-100dpi git \
                    xfonts-scalable dbus-user-session          \
                    dbus-x11 xinit
@@ -26,14 +26,18 @@ RUN apt install -y neofetch || echo "Ignored"
 COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
 RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
-# Install Nomachine -------------------------------------------
-ENV NX="download/8.14/Linux/nomachine_8.14.2_1_amd64.deb"
-RUN wget https://download.nomachine.com/${NX} -O nx.deb       \
-&&  dpkg -i /nx.deb || echo "Ignore Nomachine" &&  rm /nx.deb \
-&&  sed -i '$a PhysicalDesktopAuthorization 0'                \
-    /usr/NX/etc/node.cfg                                      \
-&&  sed -i '$a WaylandModes "egl,compositor,drm"'             \
-    /usr/NX/etc/node.cfg          
+# Install Wayland (optional) ----------------------------------
+RUN apt-get install -y weston wayland-protocols libwayland-dev xwayland || echo "wayland optional"
+
+# Install Nomachine (multi-arch) ------------------------------
+RUN ARCH=$(dpkg --print-architecture | sed 's/arm64/aarch64/')  \
+ && NX="download/8.14/Linux/nomachine_8.14.2_1_${ARCH}.deb"    \
+ && wget https://download.nomachine.com/${NX} -O nx.deb         \
+ && dpkg -i /nx.deb || echo "Ignore Nomachine" && rm /nx.deb   \
+ && sed -i '$a PhysicalDesktopAuthorization 0'                  \
+    /usr/NX/etc/node.cfg                                        \
+ && sed -i '$a WaylandModes "egl,compositor,drm"'               \
+    /usr/NX/etc/node.cfg
 
 # Configs Nomachine -------------------------------------------
 RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg
@@ -60,7 +64,7 @@ RUN echo '#!/bin/bash'                               > /run.sh \
 &&  echo '/etc/init.d/dbus start'                   >> /run.sh \
 &&  echo 'echo Starting NX ----------------------'  >> /run.sh \
 &&  echo '/etc/NX/nxserver --startup'               >> /run.sh \
-&&  echo '/etc/NX/nxserver --restart'               >> /run.sh      
+&&  echo '/etc/NX/nxserver --restart'               >> /run.sh
 
 # Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp

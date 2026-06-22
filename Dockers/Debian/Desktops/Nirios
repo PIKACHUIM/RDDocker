@@ -1,0 +1,31 @@
+# syntax=docker/dockerfile:1.3-labs
+ARG OS_VERSION=trixie
+ARG OS_SYSTEMS=debian
+ARG OS_VERSHOW=trixie
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+
+# Niri Wayland WM + foot terminal + waybar -------------------
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    niri foot waybar wofi xwayland swaybg \
+    wayland-protocols weston pulseaudio pavucontrol \
+    fonts-noto fonts-noto-cjk || \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    sway foot waybar wofi xwayland wayland-protocols weston pulseaudio
+
+RUN echo '#!/bin/bash'                                       >> /run.sh \
+ && echo 'export WAYLAND_DISPLAY=wayland-1'                 >> /run.sh \
+ && echo 'export XDG_RUNTIME_DIR=/tmp/runtime-root'         >> /run.sh \
+ && echo 'mkdir -p $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR' >> /run.sh \
+ && echo 'export DISPLAY=:9'                                >> /run.sh \
+ && echo 'nohup Xvfb :9 -ac -screen 0 1920x1080x24 &'      >> /run.sh \
+ && echo 'nohup weston --backend=headless &'                >> /run.sh \
+ && echo 'sleep 2 && nohup niri &'                          >> /run.sh
+
+COPY X11GUI/x11vnc.sh /x11vnc.sh
+RUN echo 'bash /x11vnc.sh' >> /run.sh
+
+ARG INSTALL_FIREFOX=false
+RUN if [ "$INSTALL_FIREFOX" = "true" ]; then apt-get install -y firefox-esr; fi
+
+EXPOSE 4000/tcp 5900/tcp
+CMD ["/sbin/init"]

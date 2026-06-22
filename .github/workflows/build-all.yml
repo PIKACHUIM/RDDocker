@@ -1,11 +1,6 @@
 name: Build All Images
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'Dockers/**'
-      - 'Scripts/**'
   workflow_dispatch:
 
 jobs:

@@ -2,8 +2,10 @@ name: Build Changed Docker Images
 
 on:
   push:
+    branches: [master]
     paths:
       - 'Dockers/**'
+      - 'Scripts/**'
 
 jobs:
   changes:
@@ -13,6 +15,7 @@ jobs:
       debian: ${{ steps.filter.outputs.debian }}
       fedora: ${{ steps.filter.outputs.fedora }}
       alpine: ${{ steps.filter.outputs.alpine }}
+      archos: ${{ steps.filter.outputs.archos }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -21,12 +24,19 @@ jobs:
           filters: |
             ubuntu:
               - 'Dockers/Ubuntu/**'
+              - 'Scripts/**'
             debian:
               - 'Dockers/Debian/**'
+              - 'Scripts/**'
             fedora:
               - 'Dockers/Fedora/**'
+              - 'Scripts/**'
             alpine:
               - 'Dockers/Alpine/**'
+              - 'Scripts/**'
+            archos:
+              - 'Dockers/ArchOS/**'
+              - 'Scripts/**'
 
   build-ubuntu:
     needs: changes
@@ -50,4 +60,10 @@ jobs:
     needs: changes
     if: needs.changes.outputs.alpine == 'true'
     uses: ./.github/workflows/build-alpine.yml
+    secrets: inherit
+
+  build-archos:
+    needs: changes
+    if: needs.changes.outputs.archos == 'true'
+    uses: ./.github/workflows/build-archos.yml
     secrets: inherit

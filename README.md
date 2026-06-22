@@ -50,13 +50,13 @@
 
 ### 操作系统 & 版本
 
-| 系统 | 版本 | 架构 |
-|------|------|------|
+| 系统 | 版本                          | 架构 |
+|------|-----------------------------|------|
 | **Debian** | 12 (bookworm) / 13 (trixie) | amd64 · arm64 |
-| **Ubuntu** | 24.04 / 26.04 | amd64 · arm64 |
-| **Alpine** | 3.19 / 3.20 | amd64 · arm64 |
-| **Fedora** | 40 / 41 | amd64 · arm64 |
-| **Arch Linux** | latest | amd64 |
+| **Ubuntu** | 24.04 / 26.04               | amd64 · arm64 |
+| **Alpine** | 3.23 / 3.24                 | amd64 · arm64 |
+| **Fedora** | 40 / 41                     | amd64 · arm64 |
+| **Arch Linux** | latest                      | amd64 |
 
 ### 桌面环境
 
@@ -309,7 +309,7 @@ RDDocker/
 镜像采用**三层分层构建**，每一层都是独立的镜像，上层基于下层：
 
 ```
-[OS 基础镜像]  debian:bookworm / ubuntu:24.04 / alpine:3.20 ...
+[OS 基础镜像]  debian:bookworm / ubuntu:24.04 / alpine:3.23 ...
       ↓  Scripts/Install/mirrors.sh + server.sh
   [Server 层]  SSH 服务 + 用户管理 + systemd
       ↓  Scripts/Install/x11gui.sh + wayland.sh

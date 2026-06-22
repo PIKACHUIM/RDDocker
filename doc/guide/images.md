@@ -12,7 +12,7 @@ pikachuim/{os}:{version}-{desktop}
 - `pikachuim/debian:12-xfce4l` — Debian 12 + Xfce4 轻量桌面
 - `pikachuim/ubuntu:24.04-gnome3` — Ubuntu 24.04 + GNOME 桌面
 - `pikachuim/debian:13-plasma` — Debian 13 + KDE Plasma
-- `pikachuim/alpine:3.20-server` — Alpine 3.20 服务器模式（无 GUI）
+- `pikachuim/alpine:3.24-server` — Alpine 3.24 服务器模式（无 GUI）
 
 桌面标识对应关系：
 

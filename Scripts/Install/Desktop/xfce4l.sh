@@ -10,7 +10,7 @@ case "$OS_ID" in
     systemctl disable lightdm 2>/dev/null || true ;;
   fedora)
     eval "$PKG_INSTALL pulseaudio @xfce-desktop xfce4-terminal git" ;;
-  arch)
+  arch|archlinux)
     eval "$PKG_INSTALL pulseaudio xfce4 xfce4-goodies git" ;;
   alpine)
     eval "$PKG_INSTALL pulseaudio xfce4 xfce4-terminal xfce4-goodies git" ;;

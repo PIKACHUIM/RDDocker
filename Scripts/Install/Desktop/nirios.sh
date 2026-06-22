@@ -11,7 +11,7 @@ case "$OS_ID" in
   fedora)
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio 2>/dev/null || \
       dnf install -y sway foot waybar wofi xwayland weston pulseaudio" ;;
-  arch)
+  arch|archlinux)
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
 esac
 

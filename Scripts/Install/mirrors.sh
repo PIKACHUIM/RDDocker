@@ -22,7 +22,7 @@ case "$OS_ID" in
   fedora)
     echo "fastestmirror=True" >> /etc/dnf/dnf.conf
     ;;
-  arch)
+  arch|archlinux)
     sed -i '/^Server =/s/^/#/' /etc/pacman.d/mirrorlist
     echo "Server = https://$MIRROR/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
     # archlinuxcn

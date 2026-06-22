@@ -1,0 +1,11 @@
+* text=auto
+*.sh text eol=lf
+Dockers/**/Server text eol=lf
+Dockers/**/X11GUI text eol=lf
+Dockers/**/GNOME3 text eol=lf
+Dockers/**/Xfce4L text eol=lf
+Dockers/**/Plasma text eol=lf
+Dockers/**/Deepin text eol=lf
+Dockers/**/GXDeOS text eol=lf
+Dockers/**/Nirios text eol=lf
+Dockers/**/CuteOS text eol=lf

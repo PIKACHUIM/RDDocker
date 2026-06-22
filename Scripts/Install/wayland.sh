@@ -7,7 +7,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL weston wayland-protocols xwayland libwayland-dev" || true ;;
   fedora)
     eval "$PKG_INSTALL weston wayland-protocols xwayland" || true ;;
-  arch)
+  arch|archlinux)
     eval "$PKG_INSTALL weston wayland wayland-protocols xorg-xwayland" || true ;;
   alpine)
     eval "$PKG_INSTALL weston wayland-protocols xwayland" || true ;;

@@ -16,7 +16,7 @@ case "$OS_ID" in
     rm -f /etc/pam.d/sshd
     cp "$INSTALL_DIR/conf/sshd" /etc/pam.d/sshd
     ;;
-  arch)
+  arch|archlinux)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL openssh sudo wget curl git openssl base-devel"
     mkdir -p /var/run/sshd /root/.ssh
@@ -43,7 +43,7 @@ case "$OS_ID" in
     addgroup -g 2000 user 2>/dev/null || true
     adduser -u 2000 -G user -s /bin/bash -D user 2>/dev/null || true
     ;;
-  arch)
+  arch|archlinux)
     groupadd -r -g 200 user 2>/dev/null || true
     useradd -m -u 200 -r -g user user 2>/dev/null || true
     ;;

@@ -14,10 +14,6 @@ env:
 jobs:
   build-server:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [linux/amd64, linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -26,17 +22,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
-      - id: vars
-        run: |
-          ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
-          echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
       - uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockers/ArchOS/Desktops/Server
-          platforms: ${{ matrix.arch }}
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-server${{ steps.vars.outputs.arch_suffix }}
+          tags: ${{ env.IMAGE_PREFIX }}:latest-server
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux
@@ -47,10 +39,6 @@ jobs:
   build-x11gui:
     needs: build-server
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [linux/amd64, linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -59,18 +47,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
-      - id: vars
-        run: |
-          ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
-          echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
       - uses: docker/build-push-action@v5
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == 'x11gui' || github.event_name != 'workflow_dispatch' }}
         with:
           context: .
           file: Dockers/ArchOS/Desktops/X11GUI
-          platforms: ${{ matrix.arch }}
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-x11gui${{ steps.vars.outputs.arch_suffix }}
+          tags: ${{ env.IMAGE_PREFIX }}:latest-x11gui
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux
@@ -85,7 +69,6 @@ jobs:
       fail-fast: false
       matrix:
         desktop: [gnome3, xfce4l, plasma, deepin, cuteos]
-        arch: [linux/amd64, linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -96,8 +79,6 @@ jobs:
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
       - id: vars
         run: |
-          ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
-          echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
           case "${{ matrix.desktop }}" in
             gnome3)  echo "dockerfile=GNOME3"  >> $GITHUB_OUTPUT ;;
             xfce4l)  echo "dockerfile=Xfce4L"  >> $GITHUB_OUTPUT ;;
@@ -110,9 +91,9 @@ jobs:
         with:
           context: .
           file: Dockers/ArchOS/Desktops/${{ steps.vars.outputs.dockerfile }}
-          platforms: ${{ matrix.arch }}
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}${{ steps.vars.outputs.arch_suffix }}
+          tags: ${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux

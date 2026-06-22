@@ -8,7 +8,7 @@ if [ "${INSTALL_FIREFOX:-false}" = "true" ]; then
   case "$OS_ID" in
     debian|ubuntu) eval "$PKG_INSTALL firefox-esr 2>/dev/null || $PKG_INSTALL firefox" ;;
     fedora)        eval "$PKG_INSTALL firefox" ;;
-    arch)          eval "$PKG_INSTALL firefox" ;;
+    arch|archlinux) eval "$PKG_INSTALL firefox" ;;
     alpine)        eval "$PKG_INSTALL firefox" ;;
   esac
 fi

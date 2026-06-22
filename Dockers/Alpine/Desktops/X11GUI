@@ -1,72 +1,12 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
-ARG OS_VERSION=latest
+ARG OS_VERSION=3.20
 ARG OS_SYSTEMS=alpine
-ARG OS_VERSHOW=latest
+ARG OS_VERSHOW=3.20
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
-# ARGS --------------------------------------------------------
-ARG OS_MESSAGE="Linux Docker with X11 & Nomachine & OpenVGL"
-ARG OS_VERSION=latest
+ARG OS_MESSAGE="Alpine with X11 + VNC + XRDP"
 
-# Message -----------------------------------------------------
-MAINTAINER Pikachu Ren <pikachuim@qq.com>
-LABEL System=${OS_SYSTEMS}
-LABEL Version=${OS_VERSION}
-LABEL Description=${OS_MESSAGE}
-RUN echo "Start to build ${OS_SYSTEMS}:${OS_VERSION}-server..."
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/x11gui.sh && /install/wayland.sh
 
-# Install Xserver ---------------------------------------------
-#RUN cat /etc/pacman.d/mirrorlist && pacman -Syyu --noconfirm
-#RUN sudo pacman -S xorg-server xorg-xhost xorg-xset --noconfirm
-#RUN sudo pacman -S xorg-xinit xorg-twm xorg-xclock  --noconfirm
-#RUN sudo pacman -S xorg-iceauth xorg-sessreg xterm  --noconfirm
-RUN apk update && apk upgrade --no-cache && apk add --no-cache \
- xorg-server xhost xset xinit twm xclock iceauth sessreg xterm
-RUN apk add polkit nawk nano gawk linux-headers linux-pam wget \
-&&  apk add build-base linux-virt-dev
-
-
-# Install Nomachine -------------------------------------------
-#ENV VE="nomachine_8.16.1_1_x86_64.tar.gz"
-#ENV UR="https://download.nomachine.com/download/8.16/Linux/"
-#RUN wget ${UR}${VE} -O /usr/nx.tar.gz && cd /usr/ && tar -xzf nx.tar.gz
-#RUN /usr/NX/nxserver --install
-#RUN /etc/NX/nxserver --restart
-
-# Configs Nomachine -------------------------------------------
-#RUN echo 'VirtualDesktopAccess all'  >>/usr/NX/etc/server.cfg \
-#&&  echo 'VirtualDesktopMode 2'      >>/usr/NX/etc/server.cfg \
-#&&  echo 'PhysicalDesktopAccess all' >>/usr/NX/etc/server.cfg \
-#&&  echo 'PhysicalDesktopMode 2'     >>/usr/NX/etc/server.cfg \
-#&&  echo 'CreateDisplay 1'           >>/usr/NX/etc/server.cfg \
-#&&  echo 'DisplayGeometry 1920x1080' >>/usr/NX/etc/server.cfg \
-#&&  echo 'StartHTTPDaemon Automatic' >>/usr/NX/etc/server.cfg \
-#&&  echo 'EnableWebPlayer 1'         >>/usr/NX/etc/server.cfg \
-#&&  echo 'WebAccessType systemlogin' >>/usr/NX/etc/server.cfg
-
-# VNC ---------------------------------------------------------
-#RUN pacman -S tigervnc --noconfirm                            \
-#&&  echo -e "PIKAPIKA\nPIKAPIKA" | vncpasswd                  \
-RUN apk add x11vnc xrdp xorgxrdp
-#RUN echo 'session=cutefish-xsession' >> ~/.vnc/config         \
-#&&  echo 'geometry=1920x1080' >> ~/.vnc/config                \
-#&&  echo 'alwaysshared' >> ~/.vnc/config                      \
-#&&  touch /root/.Xauthority                                   \
-#&&  chmod 700 ~/.vnc                                          \
-#&&  ls -l /usr/share/xsessions/                               \
-#&&  touch /root/.Xauthority
-
-
-# Start UP ----------------------------------------------------
-RUN echo '#!/bin/bash'                              > /run.sh \
-&&  echo '/usr/sbin/sshd &                       ' >> /run.sh \
-&&  echo 'export DISPLAY=:0'                       >> /run.sh \
-&&  echo '/etc/init.d/dbus start'                  >> /run.sh \
-&&  echo 'echo Starting NX ----------------------' >> /run.sh \
-&&  echo '/etc/NX/nxserver --startup'              >> /run.sh \
-&&  echo '/etc/NX/nxserver --restart'              >> /run.sh
-
-# Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
-EXPOSE 4443/tcp
-CMD ["/sbin/init"]
+EXPOSE 4000/tcp 5900/tcp 3389/tcp
+CMD ["/bin/sh", "/run.sh"]

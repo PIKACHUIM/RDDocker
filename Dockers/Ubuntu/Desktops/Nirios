@@ -1,31 +1,17 @@
-# syntax=docker/dockerfile:1.3-labs
-ARG OS_VERSION=noble
+ARG OS_VERSION=24.04
 ARG OS_SYSTEMS=ubuntu
-ARG OS_VERSHOW=noble
+ARG OS_VERSHOW=24.04
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
-
-# Niri Wayland WM + foot terminal + waybar -------------------
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    niri foot waybar wofi xwayland swaybg \
-    wayland-protocols weston pulseaudio pavucontrol \
-    fonts-noto fonts-noto-cjk || \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    sway foot waybar wofi xwayland wayland-protocols weston pulseaudio
-
-RUN echo '#!/bin/bash'                                       >> /run.sh \
- && echo 'export WAYLAND_DISPLAY=wayland-1'                 >> /run.sh \
- && echo 'export XDG_RUNTIME_DIR=/tmp/runtime-root'         >> /run.sh \
- && echo 'mkdir -p $XDG_RUNTIME_DIR && chmod 0700 $XDG_RUNTIME_DIR' >> /run.sh \
- && echo 'export DISPLAY=:9'                                >> /run.sh \
- && echo 'nohup Xvfb :9 -ac -screen 0 1920x1080x24 &'      >> /run.sh \
- && echo 'nohup weston --backend=headless &'                >> /run.sh \
- && echo 'sleep 2 && nohup niri &'                          >> /run.sh
-
-COPY X11GUI/x11vnc.sh /x11vnc.sh
-RUN echo 'bash /x11vnc.sh' >> /run.sh
-
+ARG OS_MESSAGE="Ubuntu with Nirios Desktop"
 ARG INSTALL_FIREFOX=false
-RUN if [ "$INSTALL_FIREFOX" = "true" ]; then apt-get install -y firefox-esr; fi
+ARG INSTALL_CHROME=false
+ARG INSTALL_VSCODE=false
+ARG INSTALL_QQ=false
 
-EXPOSE 4000/tcp 5900/tcp
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/nirios.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
+
+EXPOSE 4000/tcp
 CMD ["/sbin/init"]

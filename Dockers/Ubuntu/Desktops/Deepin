@@ -1,32 +1,17 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
 ARG OS_VERSION=24.04
 ARG OS_SYSTEMS=ubuntu
-FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+ARG OS_VERSHOW=24.04
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_MESSAGE="Ubuntu with Deepin Desktop"
+ARG INSTALL_FIREFOX=false
+ARG INSTALL_CHROME=false
+ARG INSTALL_VSCODE=false
+ARG INSTALL_QQ=false
 
-# Install -----------------------------------------------------
-RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.bak ||echo 0
-RUN apt update && apt install -y software-properties-common       
-RUN DEBIAN_FRONTEND=noninteractive apt update && /sbin/init & 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio    
-RUN add-apt-repository ppa:ubuntudde-dev/stable -y            \  
-&&  apt-get update && DEBIAN_FRONTEND=noninteractive          \
-    apt install -y ubuntudde-dde git cmake ubuntudde-dde-extras                               
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/deepin.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
 
-# Desktop Configs ---------------------------------------------
-
-# X11VNC Root Set ---------------------------------------------
-COPY X11GUI/x11vnc.sh /x11vnc.sh
-
-# Desktop Startup =============================================
-RUN echo 'echo Start Desktop ----------------------' >> /run.sh
-
-# Startup Desktop ---------------------------------------------
-RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
-RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
-
-# Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp                                                                                                        
+EXPOSE 4000/tcp
 CMD ["/sbin/init"]

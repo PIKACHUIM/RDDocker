@@ -1,53 +1,11 @@
-# Images ------------------------------------------------------------------------------------------
-ARG OS_VERSION=latest
+ARG OS_VERSION=bookworm
 ARG OS_SYSTEMS=debian
-FROM ${OS_SYSTEMS}:${OS_VERSION}
+FROM debian:${OS_VERSION}
+ARG OS_MESSAGE="Debian with OpenSSH Server"
 
-# ARGS --------------------------------------------------------------------------------------------
-ARG OS_MESSAGE="Debian Docker Images with OpenSSH Server"
-ARG OS_VERSION=latest
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN chmod -R +x /install && /install/mirrors.sh && /install/server.sh
 
-# Message -----------------------------------------------------------------------------------------
-MAINTAINER Pikachu Ren <pikachuim@qq.com>
-LABEL System=${OS_SYSTEMS}
-LABEL Version=${OS_VERSION}
-LABEL Description=${OS_MESSAGE}
-
-# Set UP APT Sources ------------------------------------------------------------------------------
-RUN echo "$OS_VERSION"
-ENV UR="mirrors.tuna.tsinghua.edu.cn"
-RUN if [ "$OS_VERSION" = "trixie" ] || [ "$OS_VERSION" = "bookworm" ]; then                       \
-        cp /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak      \
-        && sed -i 's/deb.debian.org/'${UR}'/g' /etc/apt/sources.list.d/debian.sources             \     
-        && sed -i "s/main/main contrib non-free/g" /etc/apt/sources.list.d/debian.sources         \
-        && sed -i 's/security.debian.org/'${UR}'/g' /etc/apt/sources.list.d/debian.sources        \
-    ;else                                                                                         \
-        cp /etc/apt/sources.list /etc/apt/sources.list.bak                                        \
-        && sed -i 's/deb.debian.org/'${UR}'/g' /etc/apt/sources.list                              \     
-        && sed -i 's/security.debian.org/'${UR}'/g' /etc/apt/sources.list                         \
-    ;fi
-
-# Install Softwares -------------------------------------------------------------------------------
-RUN apt update && apt install -y openssh-server sudo vim nano \
-&&  mkdir -p /var/run/sshd && mkdir -p /root/.ssh/
-
-# Allow SSH PAM & Password Login ------------------------------------------------------------------
-RUN echo "#!/bin/bash" > /run.sh
-RUN echo "PermitRootLogin without-password" >> /etc/ssh/sshd_config   \
-&&  echo "ListenAddress 0.0.0.0" >> /etc/ssh/sshd_config \
-&&  chmod +x /run.sh && rm /etc/pam.d/sshd && mkdir -p /run/sshd
-COPY Config/OpenSSH/sshd /etc/pam.d/
-
-
-# User ---------------------------------------------------------------------------------------------
-RUN groupadd -r -g 2000 user \
-&&  useradd -u 2000 -m -r -g user user \
-&&  echo "user ALL=(ALL)      ALL" >> /etc/sudoers
-
-# Init ---------------------------------------------------------------------------------------------
-COPY Config/StartUP/run.service /etc/systemd/system/
-RUN systemctl enable run
-
-# Port Mapping -------------------------------------------------------------------------------------
 EXPOSE 22/tcp
 CMD ["/sbin/init"]

@@ -1,46 +1,17 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
 ARG OS_VERSION=24.04
-ARG OS_SYSTEMS=debian
-FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+ARG OS_SYSTEMS=ubuntu
+ARG OS_VERSHOW=24.04
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_MESSAGE="Ubuntu with Lingmo Desktop"
+ARG INSTALL_FIREFOX=false
+ARG INSTALL_CHROME=false
+ARG INSTALL_VSCODE=false
+ARG INSTALL_QQ=false
 
-# ARGS --------------------------------------------------------
-ARG OS_MESSAGE="LingmoOS Docker Image with NoMachine & OpenSSH"
-ARG OS_VERSION=24.04
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/lingmo.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
 
-# Install Desktop ---------------------------------------------
-RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.bak ||echo 0
-RUN DEBIAN_FRONTEND=noninteractive apt update  &&  /sbin/init & 
-ENV UR="deb https://download.opensuse.org/repositories/home:"
-ENV DE="${UR}/elysia:/LingmoOS/xUbuntu_24.04/ ./"
-ENV KR="https://build.opensuse.org/projects/home:"
-ENV KF="${KR}elysia:LingmoOS/signing_keys/download?kind=gpg"
-RUN echo ${DE} >> /etc/apt/sources.list                  ||echo 1
-RUN apt -y install wget gnupg2 nano vim openssl curl git ||echo 3
-RUN wget ${KF} -O /etc/apt/trusted.gpg.d/lingmo.asc      ||echo 4
-RUN apt update &&DEBIAN_FRONTEND=noninteractive apt install -y \
-    lingmo-workspace-base
-RUN apt -y install psmisc
-COPY X11GUI/de-lingmo.sh /lingmo.sh
-RUN chmod 755 /lingmo.sh
-
-# X11VNC Root Set ---------------------------------------------
-COPY X11GUI/x11vnc.sh /x11vnc.sh
-
-# Desktop Startup =============================================
-RUN echo 'echo Start Desktop ----------------------' >> /run.sh 
-
-# Killall Desktop ---------------------------------------------
-RUN echo 'systemctl disable sddm.service           ' >> /run.sh
-RUN echo 'service sddm stop                        ' >> /run.sh
-
-# Startup Desktop ---------------------------------------------
-RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
-RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup /lingmo.sh &    ' >> /run.sh
-RUN echo 'sleep 60 && killall lingmo-dock          ' >> /run.sh
-
-# Port Mapping ------------------------------------------------
 EXPOSE 4000/tcp
 CMD ["/sbin/init"]

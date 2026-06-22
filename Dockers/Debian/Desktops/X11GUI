@@ -1,71 +1,12 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
-ARG OS_VERSION=latest
+ARG OS_VERSION=bookworm
 ARG OS_SYSTEMS=debian
-ARG OS_VERSHOW=latest
+ARG OS_VERSHOW=bookworm
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
-# ARGS --------------------------------------------------------
-ARG OS_MESSAGE="Debian Docker with X11 & NoMachine & VNC & RDP"
-ARG OS_VERSION=latest
+ARG OS_MESSAGE="Debian with X11 + NoMachine + VNC + XRDP"
 
-# Message -----------------------------------------------------
-MAINTAINER Pikachu Ren <pikachuim@qq.com>
-LABEL System=${OS_SYSTEMS}
-LABEL Version=${OS_VERSION}
-LABEL Description=${OS_MESSAGE}
-RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/x11gui.sh && /install/wayland.sh
 
-# Install Xserver ---------------------------------------------
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive          \
-    apt install -y xserver-xorg-core xauth xorg wget gnupg2   \
-                   xserver-xorg-video-dummy curl  net-tools   \
-                   xfonts-base xfonts-75dpi xfonts-100dpi git \
-                   xfonts-scalable dbus-user-session          \
-                   dbus-x11 xinit
-RUN apt install -y neofetch || echo "Ignored"                                  
-COPY X11GUI/xorg.conf /usr/share/X11/xorg.conf.d/
-RUN echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
-
-# Install Wayland (optional) ----------------------------------
-RUN apt-get install -y weston wayland-protocols libwayland-dev xwayland || echo "wayland optional"
-
-# Install Nomachine (multi-arch) ------------------------------
-RUN ARCH=$(dpkg --print-architecture | sed 's/arm64/aarch64/')  \
- && NX="download/8.14/Linux/nomachine_8.14.2_1_${ARCH}.deb"    \
- && wget https://download.nomachine.com/${NX} -O nx.deb         \
- && dpkg -i /nx.deb || echo "Ignore Nomachine" && rm /nx.deb   \
- && sed -i '$a PhysicalDesktopAuthorization 0'                  \
-    /usr/NX/etc/node.cfg                                        \
- && sed -i '$a WaylandModes "egl,compositor,drm"'               \
-    /usr/NX/etc/node.cfg
-
-# Configs Nomachine -------------------------------------------
-RUN echo 'VirtualDesktopAccess all'  >> /usr/NX/etc/server.cfg
-RUN echo 'VirtualDesktopMode 2'      >> /usr/NX/etc/server.cfg
-RUN echo 'PhysicalDesktopAccess all' >> /usr/NX/etc/server.cfg
-RUN echo 'PhysicalDesktopMode 2'     >> /usr/NX/etc/server.cfg
-RUN echo 'CreateDisplay 1'           >> /usr/NX/etc/server.cfg
-RUN echo 'DisplayGeometry 1920x1080' >> /usr/NX/etc/server.cfg
-RUN echo 'StartHTTPDaemon Automatic' >> /usr/NX/etc/server.cfg
-RUN echo 'EnableWebPlayer 1'         >> /usr/NX/etc/server.cfg
-RUN echo 'WebAccessType systemlogin' >> /usr/NX/etc/server.cfg
-
-# Install XRDP -----------------------------------------------
-RUN DEBIAN_FRONTEND=noninteractive apt -y install xrdp
-
-# Install x11vnc ---------------------------------------------
-RUN DEBIAN_FRONTEND=noninteractive apt -y install x11vnc
-
-# Start UP -----------------------------------------------------
-RUN echo '#!/bin/bash'                               > /run.sh \
-&&  echo 'echo Starting Basic Server ------------'  >> /run.sh \
-&&  echo 'nohup /usr/sbin/sshd -D &'                >> /run.sh \
-&&  echo 'export DISPLAY=:0'                        >> /run.sh \
-&&  echo '/etc/init.d/dbus start'                   >> /run.sh \
-&&  echo 'echo Starting NX ----------------------'  >> /run.sh \
-&&  echo '/etc/NX/nxserver --startup'               >> /run.sh \
-&&  echo '/etc/NX/nxserver --restart'               >> /run.sh
-
-# Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp
+EXPOSE 4000/tcp 5900/tcp 3389/tcp
 CMD ["/sbin/init"]

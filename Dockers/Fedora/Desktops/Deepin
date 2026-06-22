@@ -1,32 +1,17 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
-ARG OS_VERSION=40
+ARG OS_VERSION=42
 ARG OS_SYSTEMS=fedora
-FROM pikachuim/${OS_SYSTEMS}:${OS_VERSION}-x11gui
+ARG OS_VERSHOW=42
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_MESSAGE="Fedora with Deepin Desktop"
+ARG INSTALL_FIREFOX=false
+ARG INSTALL_CHROME=false
+ARG INSTALL_VSCODE=false
+ARG INSTALL_QQ=false
 
-# Install -----------------------------------------------------    
-#RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.docker.bak   
-RUN dnf update -y && dnf group install -y deepin-desktop
-RUN dnf install -y deepin-calendar deepin-calculator dbus-x11
-RUN dnf install -y deepin-image-viewer deepin-screenshot x11vnc
-RUN dnf install -y deepin-system-monitor deepin-editor sudo 
-RUN dnf install -y xorg-x11-server-Xvfb  deepin-picker curl
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/deepin.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
 
-# Desktop Configs ---------------------------------------------
-
-# X11VNC Root Set ---------------------------------------------
-COPY X11GUI/x11vnc.sh /x11vnc.sh
-
-# Desktop Startup =============================================
-RUN echo 'echo Start Desktop ----------------------' >> /run.sh
-
-# Startup Desktop ---------------------------------------------
-RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
-RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup startdde &      ' >> /run.sh
-RUN chmod +x /run.sh
-
-# Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp                                                                                                        
+EXPOSE 4000/tcp
 CMD ["/sbin/init"]

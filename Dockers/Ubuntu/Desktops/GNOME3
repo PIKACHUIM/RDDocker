@@ -1,48 +1,19 @@
-# Images ------------------------------------------------------
-# syntax=docker/dockerfile:1.3-labs
 ARG OS_VERSION=24.04
 ARG OS_SYSTEMS=ubuntu
 ARG OS_VERSHOW=24.04
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
-
-# Install -----------------------------------------------------
-RUN mv /etc/pulse/default.pa /etc/pulse/default.pa.bak ||echo 0
-RUN DEBIAN_FRONTEND=noninteractive apt update &&  /sbin/init & 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y pulseaudio 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y cmake curl \
-    git gnome software-properties-common sudo
-
-# Optional Software -------------------------------------------
+ARG OS_MESSAGE="Ubuntu with GNOME3 Desktop"
 ARG INSTALL_FIREFOX=false
 ARG INSTALL_CHROME=false
 ARG INSTALL_VSCODE=false
 ARG INSTALL_QQ=false
-RUN if [ "$INSTALL_FIREFOX" = "true" ]; then \
-        apt-get install -y firefox-esr 2>/dev/null || apt-get install -y firefox; fi \
- && if [ "$INSTALL_CHROME" = "true" ]; then \
-        wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-        && dpkg -i /tmp/chrome.deb || apt-get install -f -y && rm /tmp/chrome.deb; fi \
- && if [ "$INSTALL_VSCODE" = "true" ]; then \
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg \
-        && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" \
-           > /etc/apt/sources.list.d/vscode.list \
-        && apt-get update && apt-get install -y code; fi \
- && if [ "$INSTALL_QQ" = "true" ]; then \
-        wget -O /tmp/qq.deb https://dldir1.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.12_240927_amd64_01.deb \
-        && dpkg -i /tmp/qq.deb || apt-get install -f -y && rm /tmp/qq.deb; fi
 
-# X11VNC Root Set ---------------------------------------------
-COPY X11GUI/x11vnc.sh /x11vnc.sh
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/gnome3.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME} \
+    INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ} \
+    /install/software.sh
 
-# Desktop Startup =============================================
-RUN echo 'echo Start Desktop ----------------------' >> /run.sh
-
-# Startup Desktop ---------------------------------------------
-RUN echo 'export DISPLAY=:9 &&export $(dbus-launch)' >> /run.sh
-RUN echo 'nohup Xvfb :9 -ac -screen 0 1600x900x24 &' >> /run.sh
-RUN echo 'chmod +x /x11vnc.sh && export HOME=/root ' >> /run.sh
-RUN echo 'bash /x11vnc.sh && nohup gnome-session & ' >> /run.sh
-
-# Port Mapping ------------------------------------------------
-EXPOSE 4000/tcp                                                                                                        
+EXPOSE 4000/tcp
 CMD ["/sbin/init"]

@@ -1,13 +1,17 @@
-FROM pikachuim/archos:latest-server
-# -------------------------------------------------------------------------
-RUN pacman -Syy --noconfirm
-RUN pacman -S --noconfirm cutefish
-RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk     
- 
-# Run ---------------------------------------------------------------------
-RUN echo 'export $(dbus-launch)'                              >> /run.sh  \
-&&  echo 'xinit /bin/cutefish-session'                        >> /run.sh               
-# Port Mapping ------------------------------------------------------------
+ARG OS_VERSION=latest
+ARG OS_SYSTEMS=archlinux
+ARG OS_VERSHOW=latest
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_MESSAGE="Arch Linux with CuteOS Desktop"
+ARG INSTALL_FIREFOX=false
+ARG INSTALL_CHROME=false
+ARG INSTALL_VSCODE=false
+ARG INSTALL_QQ=false
+
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY Scripts/Install/ /install/
+RUN /install/Desktop/gnome3.sh
+RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
+
 EXPOSE 4000/tcp
-EXPOSE 5900/tcp
-CMD ["/run.sh"]
+CMD ["/sbin/init"]

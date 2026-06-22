@@ -1,0 +1,95 @@
+name: Build Changed Docker Images
+
+on:
+  push:
+    paths:
+      - 'Dockers/**'
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ steps.filter.outputs.server }}
+      x11gui: ${{ steps.filter.outputs.x11gui }}
+      gnome3: ${{ steps.filter.outputs.gnome3 }}
+      plasma: ${{ steps.filter.outputs.plasma }}
+      xfce4l: ${{ steps.filter.outputs.xfce4l }}
+      deepin: ${{ steps.filter.outputs.deepin }}
+      lingmo: ${{ steps.filter.outputs.lingmo }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            server:
+              - 'Dockers/**/Desktops/Server'
+            x11gui:
+              - 'Dockers/**/Desktops/X11GUI'
+            gnome3:
+              - 'Dockers/**/Desktops/GNOME3'
+            plasma:
+              - 'Dockers/**/Desktops/Plasma'
+            xfce4l:
+              - 'Dockers/**/Desktops/Xfce4L'
+            deepin:
+              - 'Dockers/**/Desktops/Deepin'
+            lingmo:
+              - 'Dockers/**/Desktops/Lingmo'
+
+  build-server:
+    needs: changes
+    if: needs.changes.outputs.server == 'true'
+    uses: ./.github/workflows/build-docker-server.yml
+    secrets: inherit
+
+  build-x11gui:
+    needs: changes
+    if: needs.changes.outputs.x11gui == 'true'
+    uses: ./.github/workflows/build-docker-x11gui.yml
+    secrets: inherit
+
+  build-gnome3:
+    needs: [changes, build-x11gui]
+    if: |
+      always() && !cancelled() &&
+      (needs.build-x11gui.result == 'success' || needs.build-x11gui.result == 'skipped') &&
+      (needs.changes.outputs.gnome3 == 'true' || needs.changes.outputs.x11gui == 'true')
+    uses: ./.github/workflows/build-docker-gnome3.yml
+    secrets: inherit
+
+  build-plasma:
+    needs: [changes, build-x11gui]
+    if: |
+      always() && !cancelled() &&
+      (needs.build-x11gui.result == 'success' || needs.build-x11gui.result == 'skipped') &&
+      (needs.changes.outputs.plasma == 'true' || needs.changes.outputs.x11gui == 'true')
+    uses: ./.github/workflows/build-docker-plasma.yml
+    secrets: inherit
+
+  build-xfce4l:
+    needs: [changes, build-x11gui]
+    if: |
+      always() && !cancelled() &&
+      (needs.build-x11gui.result == 'success' || needs.build-x11gui.result == 'skipped') &&
+      (needs.changes.outputs.xfce4l == 'true' || needs.changes.outputs.x11gui == 'true')
+    uses: ./.github/workflows/build-docker-xfce4l.yml
+    secrets: inherit
+
+  build-deepin:
+    needs: [changes, build-x11gui]
+    if: |
+      always() && !cancelled() &&
+      (needs.build-x11gui.result == 'success' || needs.build-x11gui.result == 'skipped') &&
+      (needs.changes.outputs.deepin == 'true' || needs.changes.outputs.x11gui == 'true')
+    uses: ./.github/workflows/build-docker-deepin.yml
+    secrets: inherit
+
+  build-lingmo:
+    needs: [changes, build-x11gui]
+    if: |
+      always() && !cancelled() &&
+      (needs.build-x11gui.result == 'success' || needs.build-x11gui.result == 'skipped') &&
+      (needs.changes.outputs.lingmo == 'true' || needs.changes.outputs.x11gui == 'true')
+    uses: ./.github/workflows/build-docker-lingmo.yml
+    secrets: inherit

@@ -2,9 +2,8 @@
 
 source Scripts/Titles.sh
 echo "   ============================Available Version==========================="
-echo "      [1] 24.04 Noble Numbat     [ √ Now Recommend / Support Until 2029 ]  "
-echo "      [2] 22.04 Jammy Jellyfish  [ √ Now Recommend / Support Until 2027 ]  "
-# echo "      [3] 20.04 Focal Fossa      [ × Not Recommend / Support Until 2025 ]  "
+echo "      [1] 26.04 Next Release      [ √ Now Recommend / Support Until 2031 ]  "
+echo "      [2] 24.04 Noble Numbat     [ √ Now Recommend / Support Until 2029 ]  "
 echo "   ========================================================================"
 echo
 echo -n "   Choice System Version Number(1): "
@@ -13,17 +12,13 @@ if [ ! $VERSION ]; then
   VERSION=1
 fi
 if [ $VERSION == 1 ]; then
+  echo Note: VERSION='26.04'
+  VERNAME='26.04'
+  VERSION='26.04'
+elif [ $VERSION == 2 ]; then
   echo Note: VERSION='24.04'
   VERNAME='24.04'
   VERSION='24.04'
-elif [ $VERSION == 2 ]; then
-  echo Note: VERSION='22.04'
-  VERNAME='22.04'
-  VERSION='22.04'
-elif [ $VERSION == 3 ]; then 
-  echo Note: VERSION='20.04'
-  VERNAME='20.04'
-  VERSION='20.04'
 fi
 
 

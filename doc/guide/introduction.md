@@ -1,8 +1,8 @@
 # 项目介绍
 
-## 什么是 RDDockerRepo / EasyDesk？
+## 什么是 RDDocker / EasyDesk？
 
-**RDDockerRepo** 是一套完整的桌面容器解决方案，由两部分组成：
+**RDDocker** 是一套完整的桌面容器解决方案，由两部分组成：
 
 - **Docker 镜像构建系统**：为多种 Linux 发行版构建预装桌面环境和远程访问工具的容器镜像
 - **easydesk 管理工具**：统一管理 Docker/Podman/LXC/LXD 容器的 CLI 工具和 REST API 服务

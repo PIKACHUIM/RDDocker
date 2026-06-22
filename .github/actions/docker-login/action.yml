@@ -1,0 +1,16 @@
+name: Docker Login with Retry
+inputs:
+  username:
+    required: true
+  password:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Login to Docker Hub
+      shell: bash
+      run: |
+        for i in 1 2 3; do
+          echo "${{ inputs.password }}" | docker login -u "${{ inputs.username }}" --password-stdin && break
+          [ $i -lt 3 ] && echo "Retry $i/3, waiting 20s..." && sleep 20
+        done

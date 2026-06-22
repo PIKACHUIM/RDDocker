@@ -30,7 +30,7 @@ docker exec my-desktop passwd user
 ### 一键安装
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDockerRepo/master/easydesk/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDocker/master/easydesk/install.sh | bash
 ```
 
 ### 验证安装
@@ -69,8 +69,8 @@ easydesk desk new pikachuim/debian:12-xfce4l \
 ### 克隆仓库
 
 ```bash
-git clone https://github.com/PIKACHUIM/RDDockerRepo.git
-cd RDDockerRepo
+git clone https://github.com/PIKACHUIM/RDDocker.git
+cd RDDocker
 ```
 
 ### 运行构建脚本

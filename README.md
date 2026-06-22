@@ -1,10 +1,10 @@
 <div align="center">
 
-<h1>🖥️ RDDockerRepo</h1>
+<h1>🖥️ RDDocker</h1>
 
 <p>开箱即用的桌面容器环境 · Ready-to-use Desktop Containers</p>
 
-[![Build](https://github.com/PIKACHUIM/RDDockerRepo/actions/workflows/build-all.yml/badge.svg)](https://github.com/PIKACHUIM/RDDockerRepo/actions)
+[![Build](https://github.com/PIKACHUIM/RDDocker/actions/workflows/build-all.yml/badge.svg)](https://github.com/PIKACHUIM/RDDocker/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-pikachuim-2496ED?logo=docker)](https://hub.docker.com/u/pikachuim)
 [![Arch](https://img.shields.io/badge/arch-amd64%20%7C%20arm64-green)](#支持矩阵)
@@ -15,7 +15,7 @@
 
 ## 📖 简介
 
-**RDDockerRepo** 是一套带桌面环境的 Linux 容器镜像构建系统，配套管理工具 **easydesk**。
+**RDDocker** 是一套带桌面环境的 Linux 容器镜像构建系统，配套管理工具 **easydesk**。
 
 无需虚拟化，极低开销，创建秒级完成——在一台主机上运行多个独立的 Linux 桌面，通过 **NoMachine / VNC / XRDP** 远程连接使用。适用于：
 
@@ -89,7 +89,7 @@
 
 ```bash
 # 一键安装 easydesk（需要 root）
-curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDockerRepo/master/easydesk/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDocker/master/easydesk/install.sh | bash
 ```
 
 安装完成后：
@@ -131,8 +131,8 @@ docker run -d \
 ### 方式三：克隆仓库自行构建
 
 ```bash
-git clone https://github.com/PIKACHUIM/RDDockerRepo.git
-cd RDDockerRepo
+git clone https://github.com/PIKACHUIM/RDDocker.git
+cd RDDocker
 bash Manager.sh    # 交互式构建和管理
 ```
 
@@ -258,7 +258,7 @@ npm run docs:build  # 构建静态站
 ## 📁 项目结构
 
 ```
-RDDockerRepo/
+RDDocker/
 │
 ├── Dockers/                    # Dockerfile（每个文件极简，仅调用安装脚本）
 │   ├── Debian/Desktops/        #   Server / X11GUI / GNOME3 / Xfce4L / Plasma ...

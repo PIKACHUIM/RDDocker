@@ -16,7 +16,7 @@ case "$OS_ID" in
     ;;
   fedora)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-utils \
+    eval "$PKG_INSTALL xorg-x11-server-Xorg xorg-x11-xauth \
       xorg-x11-server-Xvfb wget curl net-tools dbus xrdp x11vnc"
     ;;
   arch|archlinux)

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'EasyDesk / RDDockerRepo',
+  title: 'EasyDesk / RDDocker',
   description: '开箱即用的桌面容器环境，支持 Docker/Podman/LXC 多平台',
   lang: 'zh-CN',
   themeConfig: {
@@ -9,7 +9,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '指南', link: '/guide/introduction' },
       { text: 'API 文档', link: '/api/reference' },
-      { text: 'GitHub', link: 'https://github.com/PIKACHUIM/RDDockerRepo' }
+      { text: 'GitHub', link: 'https://github.com/PIKACHUIM/RDDocker' }
     ],
     sidebar: {
       '/guide/': [
@@ -34,7 +34,7 @@ export default defineConfig({
       ]
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/PIKACHUIM/RDDockerRepo' }
+      { icon: 'github', link: 'https://github.com/PIKACHUIM/RDDocker' }
     ],
     footer: {
       message: 'MIT License',

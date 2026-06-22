@@ -1,6 +1,6 @@
 # EasyDesk CLI
 
-`easydesk` 是 RDDockerRepo 的统一容器管理工具，支持 Docker、Podman、LXC、LXD 四种后端。
+`easydesk` 是 RDDocker 的统一容器管理工具，支持 Docker、Podman、LXC、LXD 四种后端。
 
 ## 配置管理
 

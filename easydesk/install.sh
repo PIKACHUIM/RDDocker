@@ -12,7 +12,7 @@ DATA_DIR="${DATA_INPUT:-/opt/easydesk/data}"
 mkdir -p "$DATA_DIR" "$CONF_DIR" "$CONTAINER_CONF_DIR"
 
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-BINARY_URL="https://github.com/pikachuim/RDDockerRepo/releases/latest/download/easydesk-linux-${ARCH}"
+BINARY_URL="https://github.com/pikachuim/RDDocker/releases/latest/download/easydesk-linux-${ARCH}"
 
 if command -v go &>/dev/null && [ -f "$(dirname "$0")/go.mod" ]; then
     echo "Building from source..."

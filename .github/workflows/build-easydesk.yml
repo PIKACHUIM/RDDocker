@@ -24,6 +24,10 @@ jobs:
           go-version: '1.22'
           cache-dependency-path: easydesk/go.sum
 
+      - name: Download dependencies
+        working-directory: easydesk
+        run: go mod download
+
       - name: Build
         working-directory: easydesk
         env:

@@ -2,6 +2,8 @@ ARG OS_VERSION=bookworm
 ARG OS_SYSTEMS=debian
 ARG OS_VERSHOW=bookworm
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
+ARG OS_VERSION
+ARG OS_SYSTEMS
 ARG OS_MESSAGE="Debian with X11 + NoMachine + VNC + XRDP"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}

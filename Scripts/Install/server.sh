@@ -68,8 +68,8 @@ case "$OS_ID" in
     rc-update add sshd default
     ;;
   *)
-    cp "$INSTALL_DIR/conf/run.service" /etc/systemd/system/run.service
-    systemctl enable run
+    cp "$INSTALL_DIR/conf/run.service" /etc/systemd/system/run.service 2>/dev/null || true
+    systemctl enable run 2>/dev/null || true
     systemctl enable sshd 2>/dev/null || true
     ;;
 esac

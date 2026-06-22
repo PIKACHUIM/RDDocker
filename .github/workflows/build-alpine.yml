@@ -12,45 +12,102 @@ env:
   IMAGE_PREFIX: pikachuim/alpine
 
 jobs:
-  build:
+  build-server:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         version: ['3.20', '3.21']
-        desktop: [server, x11gui, gnome3, xfce4l, plasma]
         arch: [linux/amd64, linux/arm64]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+      - id: vars
+        run: |
+          ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
+          echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockers/Alpine/Desktops/Server
+          platforms: ${{ matrix.arch }}
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-server${{ steps.vars.outputs.arch_suffix }}
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=alpine
+            OS_VERSHOW=${{ matrix.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Set variables
-        id: vars
+  build-x11gui:
+    needs: build-server
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['3.20', '3.21']
+        arch: [linux/amd64, linux/arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+      - id: vars
+        run: |
+          ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
+          echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
+      - uses: docker/build-push-action@v5
+        if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == 'x11gui' || github.event_name != 'workflow_dispatch' }}
+        with:
+          context: .
+          file: Dockers/Alpine/Desktops/X11GUI
+          platforms: ${{ matrix.arch }}
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-x11gui${{ steps.vars.outputs.arch_suffix }}
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=alpine
+            OS_VERSHOW=${{ matrix.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-desktops:
+    needs: build-x11gui
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['3.20', '3.21']
+        desktop: [gnome3, xfce4l, plasma]
+        arch: [linux/amd64, linux/arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+      - id: vars
         run: |
           ARCH_SUFFIX=$(echo "${{ matrix.arch }}" | sed 's|linux/||;s|amd64||;s|arm64|-arm64|')
           echo "arch_suffix=${ARCH_SUFFIX}" >> $GITHUB_OUTPUT
           case "${{ matrix.desktop }}" in
-            server) echo "dockerfile=Server" >> $GITHUB_OUTPUT ;;
-            x11gui) echo "dockerfile=X11GUI" >> $GITHUB_OUTPUT ;;
             gnome3) echo "dockerfile=GNOME3" >> $GITHUB_OUTPUT ;;
             xfce4l) echo "dockerfile=Xfce4L" >> $GITHUB_OUTPUT ;;
             plasma) echo "dockerfile=Plasma" >> $GITHUB_OUTPUT ;;
           esac
-
-      - name: Build and push
+      - uses: docker/build-push-action@v5
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == matrix.desktop || github.event_name != 'workflow_dispatch' }}
-        uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockers/Alpine/Desktops/${{ steps.vars.outputs.dockerfile }}

@@ -21,3 +21,7 @@ jobs:
   build-fedora:
     uses: ./.github/workflows/build-fedora.yml
     secrets: inherit
+
+  build-archlinux:
+    uses: ./.github/workflows/build-archlinux.yml
+    secrets: inherit

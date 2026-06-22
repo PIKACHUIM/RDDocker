@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$INSTALL_DIR/common.sh"
 
@@ -56,7 +56,7 @@ echo "user ALL=(ALL) ALL" >> /etc/sudoers
 
 # /run.sh
 cat > /run.sh <<'EOF'
-#!/bin/bash
+#!/bin/sh
 echo "Starting Basic Server..."
 nohup /usr/sbin/sshd -D &
 EOF

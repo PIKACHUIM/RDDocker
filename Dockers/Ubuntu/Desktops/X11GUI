@@ -7,7 +7,7 @@ ARG OS_SYSTEMS
 ARG OS_MESSAGE="Ubuntu with X11 + NoMachine + VNC + XRDP"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
-COPY Scripts/Install/ /install/
+COPY --chmod=755 Scripts/Install/ /install/
 RUN /install/x11gui.sh && /install/wayland.sh
 
 EXPOSE 4000/tcp 5900/tcp 3389/tcp

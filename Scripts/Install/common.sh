@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Common utilities - source this in every install script
 set -e
 

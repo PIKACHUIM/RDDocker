@@ -6,7 +6,7 @@ ARG OS_SYSTEMS
 ARG OS_MESSAGE="Debian with OpenSSH Server"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
-COPY Scripts/Install/ /install/
+COPY --chmod=755 Scripts/Install/ /install/
 RUN chmod -R +x /install && /install/mirrors.sh && /install/server.sh
 
 EXPOSE 22/tcp

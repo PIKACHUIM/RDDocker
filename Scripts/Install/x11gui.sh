@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$INSTALL_DIR/common.sh"
 
@@ -39,7 +39,7 @@ x11vnc -storepasswd 12345678 /etc/x11vnc.pass 2>/dev/null || echo "12345678" > /
 
 # Write x11vnc startup helper
 cat > /x11vnc.sh <<'EOF'
-#!/bin/bash
+#!/bin/sh
 export DISPLAY=:9
 nohup x11vnc -forever -noxdamage -repeat -rfbauth /etc/x11vnc.pass \
   -rfbport 5900 -shared -create -display :9 &

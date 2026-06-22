@@ -11,7 +11,7 @@ ARG INSTALL_VSCODE=false
 ARG INSTALL_QQ=false
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
-COPY Scripts/Install/ /install/
+COPY --chmod=755 Scripts/Install/ /install/
 RUN /install/Desktop/nirios.sh
 RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
 

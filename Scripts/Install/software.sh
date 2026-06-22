@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Optional software installer - controlled by env vars
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$INSTALL_DIR/common.sh"

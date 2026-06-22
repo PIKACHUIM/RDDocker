@@ -9,7 +9,7 @@ on:
         default: 'all'
 
 env:
-  IMAGE_PREFIX: pikachuim/archlinux
+  IMAGE_PREFIX: pikachuim/archos
 
 jobs:
   build-server:
@@ -25,14 +25,14 @@ jobs:
         with:
           context: .
           file: Dockers/ArchOS/Desktops/Server
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.IMAGE_PREFIX }}:latest-server
             ghcr.io/${{ env.IMAGE_PREFIX }}:latest-server
           build-args: |
             OS_VERSION=latest
-            OS_SYSTEMS=archlinux
+            OS_SYSTEMS=archos
             OS_VERSHOW=latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -52,14 +52,14 @@ jobs:
         with:
           context: .
           file: Dockers/ArchOS/Desktops/X11GUI
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.IMAGE_PREFIX }}:latest-x11gui
             ghcr.io/${{ env.IMAGE_PREFIX }}:latest-x11gui
           build-args: |
             OS_VERSION=latest
-            OS_SYSTEMS=archlinux
+            OS_SYSTEMS=archos
             OS_VERSHOW=latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -92,14 +92,14 @@ jobs:
         with:
           context: .
           file: Dockers/ArchOS/Desktops/${{ steps.vars.outputs.dockerfile }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
             ghcr.io/${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
           build-args: |
             OS_VERSION=latest
-            OS_SYSTEMS=archlinux
+            OS_SYSTEMS=archos
             OS_VERSHOW=latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

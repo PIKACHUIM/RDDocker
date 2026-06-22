@@ -1,4 +1,4 @@
-name: Build easydesk
+name: Build App EasyDesk
 
 on:
   push:

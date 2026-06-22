@@ -14,7 +14,7 @@ case "$OS_ID" in
     PKG_UPDATE="dnf check-update || true"
     PKG_INSTALL="dnf install -y"
     ;;
-  arch|archlinux)
+  arch|archos)
     PKG_UPDATE="pacman -Sy --noconfirm"
     PKG_INSTALL="pacman -S --noconfirm"
     ;;

@@ -1,5 +1,5 @@
 ARG OS_VERSION=latest
-ARG OS_SYSTEMS=archlinux
+ARG OS_SYSTEMS=archos
 ARG OS_VERSHOW=latest
 FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
 ARG OS_VERSION

@@ -12,15 +12,9 @@ runs:
   steps:
     - uses: docker/setup-qemu-action@v3
 
-    - name: Pull buildkit with retry
-      shell: bash
-      run: |
-        for i in 1 2 3; do
-          docker pull moby/buildkit:buildx-stable-1 && break
-          [ $i -lt 3 ] && echo "Retry $i/3, waiting 20s..." && sleep 20
-        done
-
     - uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: image=ghcr.io/moby/buildkit:buildx-stable-1
 
     - name: Login to Docker Hub
       shell: bash

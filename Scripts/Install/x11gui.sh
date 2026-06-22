@@ -19,7 +19,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL xorg-x11-server-Xorg xorg-x11-xauth \
       xorg-x11-server-Xvfb wget curl net-tools dbus xrdp x11vnc"
     ;;
-  arch|archlinux)
+  arch|archos)
     eval "$PKG_INSTALL xorg-server xf86-video-dummy xorg-xauth \
       xorg-xvfb xrdp x11vnc dbus curl wget"
     ;;

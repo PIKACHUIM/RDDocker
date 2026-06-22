@@ -155,36 +155,36 @@ jobs:
     uses: ./.github/workflows/build-fedora-lingmo.yml
     secrets: inherit
 
-  archlinux-server:
-    uses: ./.github/workflows/build-archlinux-server.yml
+  archos-server:
+    uses: ./.github/workflows/build-archos-server.yml
     secrets: inherit
 
-  archlinux-x11gui:
-    needs: [archlinux-server]
-    uses: ./.github/workflows/build-archlinux-x11gui.yml
+  archos-x11gui:
+    needs: [archos-server]
+    uses: ./.github/workflows/build-archos-x11gui.yml
     secrets: inherit
 
-  archlinux-gnome3:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-gnome3.yml
+  archos-gnome3:
+    needs: [archos-x11gui]
+    uses: ./.github/workflows/build-archos-gnome3.yml
     secrets: inherit
 
-  archlinux-xfce4l:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-xfce4l.yml
+  archos-xfce4l:
+    needs: [archos-x11gui]
+    uses: ./.github/workflows/build-archos-xfce4l.yml
     secrets: inherit
 
-  archlinux-plasma:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-plasma.yml
+  archos-plasma:
+    needs: [archos-x11gui]
+    uses: ./.github/workflows/build-archos-plasma.yml
     secrets: inherit
 
-  archlinux-deepin:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-deepin.yml
+  archos-deepin:
+    needs: [archos-x11gui]
+    uses: ./.github/workflows/build-archos-deepin.yml
     secrets: inherit
 
-  archlinux-cuteos:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-cuteos.yml
+  archos-cuteos:
+    needs: [archos-x11gui]
+    uses: ./.github/workflows/build-archos-cuteos.yml
     secrets: inherit

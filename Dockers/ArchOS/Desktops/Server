@@ -1,6 +1,6 @@
 ARG OS_VERSION=latest
-ARG OS_SYSTEMS=archlinux
-FROM archlinux:${OS_VERSION}
+ARG OS_SYSTEMS=archos
+FROM archos:${OS_VERSION}
 ARG OS_VERSION
 ARG OS_SYSTEMS
 ARG OS_MESSAGE="Arch Linux with OpenSSH Server"

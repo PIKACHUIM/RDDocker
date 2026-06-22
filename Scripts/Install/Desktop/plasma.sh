@@ -14,7 +14,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL pulseaudio kubuntu-desktop git cmake nano vim" ;;
   fedora)
     eval "$PKG_INSTALL pulseaudio @kde-desktop-environment cmake git" ;;
-  arch|archlinux)
+  arch|archos)
     eval "$PKG_INSTALL pulseaudio plasma kde-applications cmake git" ;;
   alpine)
     eval "$PKG_INSTALL pulseaudio plasma-desktop kde-applications-base cmake git" ;;

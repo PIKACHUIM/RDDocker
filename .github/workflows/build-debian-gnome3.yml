@@ -1,0 +1,47 @@
+name: Build Debian - gnome3
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  IMAGE_PREFIX: pikachuim/debian
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['bookworm', 'trixie']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/docker-login
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
+      - id: vers
+        run: |
+          case "${{ matrix.version }}" in
+            bookworm) echo "vershow=12" >> $GITHUB_OUTPUT ;;
+            trixie) echo "vershow=13" >> $GITHUB_OUTPUT ;;
+            *) echo "vershow=${{ matrix.version }}" >> $GITHUB_OUTPUT ;;
+          esac
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockers/Debian/Desktops/GNOME3
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:${{ steps.vers.outputs.vershow }}-gnome3
+            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-gnome3
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ steps.vers.outputs.vershow }}-gnome3
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-gnome3
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=debian
+            OS_VERSHOW=${{ steps.vers.outputs.vershow }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

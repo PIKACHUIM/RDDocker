@@ -1,0 +1,38 @@
+name: Build Alpine - server
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  IMAGE_PREFIX: pikachuim/alpine
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['3.20', '3.21']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/docker-login
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockers/Alpine/Desktops/Server
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-server
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-server
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=alpine
+            OS_VERSHOW=${{ matrix.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

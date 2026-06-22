@@ -55,7 +55,7 @@ jobs:
            --build-arg OS_VERSION=12.00
            --build-arg OS_VERSHOW=12.00 
            --build-arg OS_SYSTEMS=debian 
-           ./Dockers/
+           .
            
     - name: Build the Ubuntu 24.04 Lingmo Docker Image
       run: docker buildx build 
@@ -65,7 +65,7 @@ jobs:
            --build-arg OS_VERSION=24.04 
            --build-arg OS_VERSHOW=24.04 
            --build-arg OS_SYSTEMS=ubuntu 
-           ./Dockers/
+           .
       
     # - name: Build the Ubuntu 22.04 Lingmo Docker Image
     #   run: docker buildx build 

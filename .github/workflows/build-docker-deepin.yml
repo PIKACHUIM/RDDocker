@@ -48,7 +48,7 @@ jobs:
            --build-arg OS_VERSION=13.00
            --build-arg OS_VERSHOW=13.00
            --build-arg OS_SYSTEMS=debian
-           ./Dockers/
+           .
 
     - name: Build the Debian 12.00 Deepin Docker Image
       run: docker buildx build
@@ -58,7 +58,7 @@ jobs:
            --build-arg OS_VERSION=12.00
            --build-arg OS_VERSHOW=12.00
            --build-arg OS_SYSTEMS=debian
-           ./Dockers/
+           .
 
     - name: Build the Ubuntu 24.04 Deepin Docker Image
       run: docker buildx build
@@ -68,7 +68,7 @@ jobs:
            --build-arg OS_VERSION=24.04
            --build-arg OS_VERSHOW=24.04
            --build-arg OS_SYSTEMS=ubuntu
-           ./Dockers/
+           .
 
     - name: Build the Ubuntu 22.04 Deepin Docker Image
       run: docker buildx build
@@ -78,7 +78,7 @@ jobs:
            --build-arg OS_VERSION=22.04
            --build-arg OS_VERSHOW=22.04
            --build-arg OS_SYSTEMS=ubuntu
-           ./Dockers/
+           .
 
     - name: Build the Fedora 41.00 Deepin Docker Image
       run: docker buildx build
@@ -88,7 +88,7 @@ jobs:
            --build-arg OS_VERSION=41.00
            --build-arg OS_VERSHOW=41.00
            --build-arg OS_SYSTEMS=fedora
-           ./Dockers/
+           .
 
     # Push Docker Images =============================================================================================
     - name: Push Docker Image to Docker Hub

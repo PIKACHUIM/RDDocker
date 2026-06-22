@@ -20,7 +20,7 @@ jobs:
     uses: ./.github/workflows/build-fedora.yml
     secrets: inherit
 
-  build-archos:
-    uses: ./.github/workflows/build-archos.yml
-    secrets: inherit
+  # build-archos:
+  #   uses: ./.github/workflows/build-archos.yml
+  #   secrets: inherit
 

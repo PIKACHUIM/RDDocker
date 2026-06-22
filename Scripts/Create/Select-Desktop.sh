@@ -69,9 +69,6 @@ elif [ $GUI_ENV == 5 ]; then
 elif [ $GUI_ENV == 6 ]; then
   GUI_ENV=plasma
   DC_FILE=Plasma
-elif [ $GUI_ENV == 9 ]; then
-  GUI_ENV=cuteos
-  DC_FILE=CuteOS
 elif [ $GUI_ENV == 0 ]; then
   GUI_ENV=x11gui
   DC_FILE=X11GUI

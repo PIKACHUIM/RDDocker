@@ -5,10 +5,10 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 case "$OS_ID" in
   debian|ubuntu)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL ca-certificates apt-transport-https curl gnupg"
-    curl -fsSL https://repo.gxde.top/gxde-os/key.gpg \
-      | gpg --dearmor -o /usr/share/keyrings/gxde.gpg
-    echo "deb [signed-by=/usr/share/keyrings/gxde.gpg] https://repo.gxde.top/gxde-os ${VERSION_CODENAME:-bookworm} main" \
+    eval "$PKG_INSTALL ca-certificates apt-transport-https curl"
+    # GXDE uses flat repos; codenames (zhuangzhuang, hetao, …) are not Debian codenames
+    GXDE_CODENAME="${GXDE_CODENAME:-zhuangzhuang}"
+    echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL gxde-desktop gxde-dock gxde-wallpapers pulseaudio 2>/dev/null || \

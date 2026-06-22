@@ -17,18 +17,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
       - uses: docker/setup-buildx-action@v3
       - uses: ./.github/actions/docker-login
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockers/ArchOS/Desktops/Server
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-server
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:latest-server
+            ghcr.io/${{ env.IMAGE_PREFIX }}:latest-server
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux
@@ -42,11 +49,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
       - uses: docker/setup-buildx-action@v3
       - uses: ./.github/actions/docker-login
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == 'x11gui' || github.event_name != 'workflow_dispatch' }}
         with:
@@ -54,7 +66,9 @@ jobs:
           file: Dockers/ArchOS/Desktops/X11GUI
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-x11gui
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:latest-x11gui
+            ghcr.io/${{ env.IMAGE_PREFIX }}:latest-x11gui
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux
@@ -72,11 +86,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
       - uses: docker/setup-buildx-action@v3
       - uses: ./.github/actions/docker-login
         with:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
       - id: vars
         run: |
           case "${{ matrix.desktop }}" in
@@ -93,7 +112,9 @@ jobs:
           file: Dockers/ArchOS/Desktops/${{ steps.vars.outputs.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
+            ghcr.io/${{ env.IMAGE_PREFIX }}:latest-${{ matrix.desktop }}
           build-args: |
             OS_VERSION=latest
             OS_SYSTEMS=archlinux

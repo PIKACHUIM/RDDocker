@@ -2,7 +2,9 @@
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$INSTALL_DIR/common.sh"
 
-MIRROR="mirrors.tuna.tsinghua.edu.cn"
+# Use MIRROR env var if set; skip rewrite if empty (keeps official mirrors for CI)
+MIRROR="${MIRROR:-}"
+[ -z "$MIRROR" ] && eval "$PKG_UPDATE" && exit 0
 
 case "$OS_ID" in
   debian)

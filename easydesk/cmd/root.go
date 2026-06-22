@@ -21,6 +21,6 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&detach, "detach", "d", false, "Run in background (detach)")
-	rootCmd.AddCommand(confCmd, listCmd, deskCmd, serveCmd)
+	rootCmd.AddCommand(confCmd, listCmd, deskCmd, serveCmd, softCmd)
 	rootCmd.AddCommand(stopCmd, startCmd, restartCmd, rmCmd, execCmd)
 }

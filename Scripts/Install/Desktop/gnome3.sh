@@ -5,7 +5,7 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 case "$OS_ID" in
   debian|ubuntu)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL pulseaudio gnome cmake git sudo software-properties-common" ;;
+    eval "$PKG_INSTALL gnome cmake git sudo software-properties-common pulseaudio-" ;;
   fedora)
     eval "$PKG_INSTALL pulseaudio @gnome-desktop cmake git" ;;
   arch|archlinux)

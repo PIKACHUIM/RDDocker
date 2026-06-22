@@ -5,15 +5,9 @@ FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
 ARG OS_VERSION
 ARG OS_SYSTEMS
 ARG OS_MESSAGE="Fedora with GNOME3 Desktop"
-ARG INSTALL_FIREFOX=false
-ARG INSTALL_CHROME=false
-ARG INSTALL_VSCODE=false
-ARG INSTALL_QQ=false
-
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
 COPY --chmod=755 Scripts/Install/ /install/
 RUN /install/Desktop/gnome3.sh
-RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME}     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ}     /install/software.sh
 
 EXPOSE 4000/tcp
 CMD ["/sbin/init"]

@@ -4,6 +4,8 @@ inputs:
     required: true
   password:
     required: true
+  ghcr_token:
+    required: false
 runs:
   using: composite
   steps:
@@ -14,3 +16,7 @@ runs:
           echo "${{ inputs.password }}" | docker login -u "${{ inputs.username }}" --password-stdin && break
           [ $i -lt 3 ] && echo "Retry $i/3, waiting 20s..." && sleep 20
         done
+    - name: Login to GitHub Container Registry
+      if: ${{ inputs.ghcr_token != '' }}
+      shell: bash
+      run: echo "${{ inputs.ghcr_token }}" | docker login ghcr.io -u "${{ inputs.username }}" --password-stdin

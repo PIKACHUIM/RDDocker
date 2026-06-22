@@ -21,6 +21,10 @@ runs:
         done
 
     - uses: docker/setup-buildx-action@v3
+      with:
+        config-inline: |
+          [registry."docker.io"]
+            mirrors = ["mirror.gcr.io"]
 
     - name: Login to GHCR
       if: ${{ inputs.ghcr_token != '' }}

@@ -3,7 +3,7 @@ ARG OS_SYSTEMS=archos
 FROM archos:${OS_VERSION}
 ARG OS_VERSION
 ARG OS_SYSTEMS
-ARG OS_MESSAGE="Arch Linux with OpenSSH Server"
+ARG OS_MESSAGE="ArchOS with OpenSSH Server"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
 COPY --chmod=755 Scripts/Install/ /install/

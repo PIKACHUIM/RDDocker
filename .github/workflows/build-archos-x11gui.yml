@@ -1,4 +1,4 @@
-name: Build archos - x11gui
+name: Build ArchOS - x11gui
 
 on:
   workflow_call:

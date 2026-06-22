@@ -1,4 +1,4 @@
-name: Build archos - xfce4l
+name: Build ArchOS - xfce4l
 
 on:
   workflow_call:

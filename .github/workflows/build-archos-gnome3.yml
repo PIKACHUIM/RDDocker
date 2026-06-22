@@ -1,4 +1,4 @@
-name: Build archos - gnome3
+name: Build ArchOS - gnome3
 
 on:
   workflow_call:

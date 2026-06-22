@@ -1,4 +1,4 @@
-name: Build archos - cuteos
+name: Build ArchOS - cuteos
 
 on:
   workflow_call:

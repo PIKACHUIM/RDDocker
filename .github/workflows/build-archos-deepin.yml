@@ -1,4 +1,4 @@
-name: Build archos - deepin
+name: Build ArchOS - deepin
 
 on:
   workflow_call:

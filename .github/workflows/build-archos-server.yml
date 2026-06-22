@@ -1,4 +1,4 @@
-name: Build archos - server
+name: Build ArchOS - server
 
 on:
   workflow_call:

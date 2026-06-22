@@ -56,7 +56,7 @@
 | **Ubuntu** | 24.04 / 26.04               | amd64 · arm64 |
 | **Alpine** | 3.23 / 3.24                 | amd64 · arm64 |
 | **Fedora** | 40 / 41                     | amd64 · arm64 |
-| **Arch Linux** | latest                      | amd64 |
+| **ArchOS** | latest                      | amd64 |
 
 ### 桌面环境
 

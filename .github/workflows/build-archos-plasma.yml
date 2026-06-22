@@ -1,4 +1,4 @@
-name: Build archos - plasma
+name: Build ArchOS - plasma
 
 on:
   workflow_call:

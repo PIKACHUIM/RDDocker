@@ -1,4 +1,4 @@
-name: Build Arch Linux Images
+name: Build ArchOS Images
 
 on:
   workflow_call:

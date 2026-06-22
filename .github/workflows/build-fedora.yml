@@ -1,20 +1,14 @@
 name: Build Fedora Images
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'Dockers/Fedora/**'
-      - 'Dockers/Config/**'
-      - '.github/workflows/build-fedora.yml'
+  workflow_call:
   workflow_dispatch:
     inputs:
       desktop:
-        description: 'Desktop to build (all/server/x11gui/gnome3/xfce4l/plasma)'
+        description: 'Desktop to build (all/server/x11gui/gnome3/xfce4l/plasma/deepin)'
         default: 'all'
 
 env:
-  REGISTRY: docker.io
   IMAGE_PREFIX: pikachuim/fedora
 
 jobs:
@@ -23,8 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['40', '41']
-        desktop: [server, x11gui, gnome3, xfce4l, plasma]
+        version: ['41', '42']
+        desktop: [server, x11gui, gnome3, xfce4l, plasma, deepin]
         arch: [linux/amd64, linux/arm64]
     steps:
       - uses: actions/checkout@v4
@@ -34,8 +28,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-flags: --allow-insecure-entitlement security.insecure
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -54,17 +46,18 @@ jobs:
             gnome3) echo "dockerfile=GNOME3" >> $GITHUB_OUTPUT ;;
             xfce4l) echo "dockerfile=Xfce4L" >> $GITHUB_OUTPUT ;;
             plasma) echo "dockerfile=Plasma" >> $GITHUB_OUTPUT ;;
+            deepin) echo "dockerfile=Deepin" >> $GITHUB_OUTPUT ;;
           esac
 
       - name: Build and push
+        if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == matrix.desktop || github.event_name != 'workflow_dispatch' }}
         uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockers/Fedora/Desktops/${{ steps.vars.outputs.dockerfile }}
           platforms: ${{ matrix.arch }}
           push: true
-          tags: |
-            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}${{ steps.vars.outputs.arch_suffix }}
+          tags: ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}${{ steps.vars.outputs.arch_suffix }}
           build-args: |
             OS_VERSION=${{ matrix.version }}
             OS_SYSTEMS=fedora

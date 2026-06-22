@@ -1,12 +1,7 @@
 name: Build Alpine Images
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'Dockers/Alpine/**'
-      - 'Dockers/Config/**'
-      - '.github/workflows/build-alpine.yml'
+  workflow_call:
   workflow_dispatch:
     inputs:
       desktop:
@@ -14,7 +9,6 @@ on:
         default: 'all'
 
 env:
-  REGISTRY: docker.io
   IMAGE_PREFIX: pikachuim/alpine
 
 jobs:
@@ -23,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['3.19', '3.20']
+        version: ['3.20', '3.21']
         desktop: [server, x11gui, gnome3, xfce4l, plasma]
         arch: [linux/amd64, linux/arm64]
     steps:
@@ -34,8 +28,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-flags: --allow-insecure-entitlement security.insecure
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -57,14 +49,14 @@ jobs:
           esac
 
       - name: Build and push
+        if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == matrix.desktop || github.event_name != 'workflow_dispatch' }}
         uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockers/Alpine/Desktops/${{ steps.vars.outputs.dockerfile }}
           platforms: ${{ matrix.arch }}
           push: true
-          tags: |
-            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}${{ steps.vars.outputs.arch_suffix }}
+          tags: ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}${{ steps.vars.outputs.arch_suffix }}
           build-args: |
             OS_VERSION=${{ matrix.version }}
             OS_SYSTEMS=alpine

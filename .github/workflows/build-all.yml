@@ -9,182 +9,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  alpine-server:
-    uses: ./.github/workflows/build-alpine-server.yml
+  build-alpine:
+    uses: ./.github/workflows/build-alpine.yml
     secrets: inherit
 
-  alpine-x11gui:
-    needs: [alpine-server]
-    uses: ./.github/workflows/build-alpine-x11gui.yml
+  build-debian:
+    uses: ./.github/workflows/build-debian.yml
     secrets: inherit
 
-  alpine-gnome3:
-    needs: [alpine-x11gui]
-    uses: ./.github/workflows/build-alpine-gnome3.yml
+  build-ubuntu:
+    uses: ./.github/workflows/build-ubuntu.yml
     secrets: inherit
 
-  alpine-xfce4l:
-    needs: [alpine-x11gui]
-    uses: ./.github/workflows/build-alpine-xfce4l.yml
+  build-fedora:
+    uses: ./.github/workflows/build-fedora.yml
     secrets: inherit
 
-  alpine-plasma:
-    needs: [alpine-x11gui]
-    uses: ./.github/workflows/build-alpine-plasma.yml
+  build-archos:
+    uses: ./.github/workflows/build-archos.yml
     secrets: inherit
 
-  debian-server:
-    uses: ./.github/workflows/build-debian-server.yml
-    secrets: inherit
-
-  debian-x11gui:
-    needs: [debian-server]
-    uses: ./.github/workflows/build-debian-x11gui.yml
-    secrets: inherit
-
-  debian-gnome3:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-gnome3.yml
-    secrets: inherit
-
-  debian-xfce4l:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-xfce4l.yml
-    secrets: inherit
-
-  debian-plasma:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-plasma.yml
-    secrets: inherit
-
-  debian-deepin:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-deepin.yml
-    secrets: inherit
-
-  debian-gxdeos:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-gxdeos.yml
-    secrets: inherit
-
-  debian-nirios:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-nirios.yml
-    secrets: inherit
-
-  debian-lingmo:
-    needs: [debian-x11gui]
-    uses: ./.github/workflows/build-debian-lingmo.yml
-    secrets: inherit
-
-  ubuntu-server:
-    uses: ./.github/workflows/build-ubuntu-server.yml
-    secrets: inherit
-
-  ubuntu-x11gui:
-    needs: [ubuntu-server]
-    uses: ./.github/workflows/build-ubuntu-x11gui.yml
-    secrets: inherit
-
-  ubuntu-gnome3:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-gnome3.yml
-    secrets: inherit
-
-  ubuntu-xfce4l:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-xfce4l.yml
-    secrets: inherit
-
-  ubuntu-plasma:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-plasma.yml
-    secrets: inherit
-
-  ubuntu-deepin:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-deepin.yml
-    secrets: inherit
-
-  ubuntu-gxdeos:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-gxdeos.yml
-    secrets: inherit
-
-  ubuntu-nirios:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-nirios.yml
-    secrets: inherit
-
-  ubuntu-lingmo:
-    needs: [ubuntu-x11gui]
-    uses: ./.github/workflows/build-ubuntu-lingmo.yml
-    secrets: inherit
-
-  fedora-server:
-    uses: ./.github/workflows/build-fedora-server.yml
-    secrets: inherit
-
-  fedora-x11gui:
-    needs: [fedora-server]
-    uses: ./.github/workflows/build-fedora-x11gui.yml
-    secrets: inherit
-
-  fedora-gnome3:
-    needs: [fedora-x11gui]
-    uses: ./.github/workflows/build-fedora-gnome3.yml
-    secrets: inherit
-
-  fedora-xfce4l:
-    needs: [fedora-x11gui]
-    uses: ./.github/workflows/build-fedora-xfce4l.yml
-    secrets: inherit
-
-  fedora-plasma:
-    needs: [fedora-x11gui]
-    uses: ./.github/workflows/build-fedora-plasma.yml
-    secrets: inherit
-
-  fedora-deepin:
-    needs: [fedora-x11gui]
-    uses: ./.github/workflows/build-fedora-deepin.yml
-    secrets: inherit
-
-  fedora-lingmo:
-    needs: [fedora-x11gui]
-    uses: ./.github/workflows/build-fedora-lingmo.yml
-    secrets: inherit
-
-  archlinux-server:
-    uses: ./.github/workflows/build-archlinux-server.yml
-    secrets: inherit
-
-  archlinux-x11gui:
-    needs: [archlinux-server]
-    uses: ./.github/workflows/build-archlinux-x11gui.yml
-    secrets: inherit
-
-  archlinux-gnome3:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-gnome3.yml
-    secrets: inherit
-
-  archlinux-xfce4l:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-xfce4l.yml
-    secrets: inherit
-
-  archlinux-plasma:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-plasma.yml
-    secrets: inherit
-
-  archlinux-deepin:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-deepin.yml
-    secrets: inherit
-
-  archlinux-cuteos:
-    needs: [archlinux-x11gui]
-    uses: ./.github/workflows/build-archlinux-cuteos.yml
-    secrets: inherit

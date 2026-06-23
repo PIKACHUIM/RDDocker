@@ -53,7 +53,7 @@
 | 系统 | 版本                          | 架构 |
 |------|-----------------------------|------|
 | **Debian** | 12 (bookworm) / 13 (trixie) | amd64 · arm64 |
-| **Ubuntu** | 24.04 / 26.04               | amd64 · arm64 |
+| **Ubuntu** | 22.04 / 24.04 / 26.04       | amd64 · arm64 |
 | **Alpine** | 3.23.4 / 3.24.1             | amd64 · arm64 |
 | **Fedora** | 43 / 44                     | amd64 · arm64 |
 | **ArchOS** | latest                      | amd64 |
@@ -73,20 +73,99 @@
 | **Lingmo** | Lingmo OS 桌面      | ✅ | ✅ | ❌ | ❌ | ❌ |
 
 备注：
-1. Ubuntu DDE只支持<=22版本，本项不再支持Ubuntu 22，因此不支持Deepin桌面 
-2. Alpine和Arch Liunx分别覆盖主流桌面，相互不重叠，且均暂不支持Lingmo DE
-3. HyperLand和Niri属于实验性支持，使用Wayland，暂不支持RDP方式连接到容器
-4. Ubuntu从26版本使用GNOME50，不再支持X11，使用Wayland，VNC/RDP组件有差异
+1. Ubuntu DDE（Deepin）仅支持 22.04，24.04 及 26.04 版本不支持
+2. Alpine 和 Arch Linux 分别覆盖主流桌面，相互不重叠，且均暂不支持 Lingmo DE
+3. HyperLand 和 Niri 属于实验性支持，使用 Wayland，暂不支持 RDP 方式连接到容器
+4. Ubuntu 26.04 使用 GNOME 50，不再支持 X11，使用 Wayland，VNC 和 RDP 组件有差异
 
+### 镜像速查
+
+> 镜像同时发布至 Docker Hub（`pikachuim/<系统>:<版本>-<桌面>`）和 GHCR（`ghcr.io/pikachuim/<系统>:<版本>-<桌面>`），下表 GHCR 列去掉 `ghcr.io/` 前缀即为 Docker Hub 镜像名。
+
+| 系统 | 版本 | 桌面 | GHCR 镜像名 | 备注 |
+|------|------|------|------------|------|
+| Debian | bookworm | server | `ghcr.io/pikachuim/debian:bookworm-server` | 纯 SSH，无图形界面 |
+| Debian | bookworm | x11gui | `ghcr.io/pikachuim/debian:bookworm-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Debian | bookworm | gnome3 | `ghcr.io/pikachuim/debian:bookworm-gnome3` | GNOME 3 桌面 |
+| Debian | bookworm | xfce4l | `ghcr.io/pikachuim/debian:bookworm-xfce4l` | Xfce4 轻量桌面 |
+| Debian | bookworm | plasma | `ghcr.io/pikachuim/debian:bookworm-plasma` | KDE Plasma |
+| Debian | bookworm | deepin | `ghcr.io/pikachuim/debian:bookworm-deepin` | 深度 DDE |
+| Debian | bookworm | nirios | `ghcr.io/pikachuim/debian:bookworm-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Debian | bookworm | lingmo | `ghcr.io/pikachuim/debian:bookworm-lingmo` | Lingmo OS，仅 amd64 |
+| Debian | bookworm | hyland | `ghcr.io/pikachuim/debian:bookworm-hyland` | Hyprland Wayland，实验性 |
+| Debian | trixie | server | `ghcr.io/pikachuim/debian:trixie-server` | 纯 SSH，无图形界面 |
+| Debian | trixie | x11gui | `ghcr.io/pikachuim/debian:trixie-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Debian | trixie | gnome3 | `ghcr.io/pikachuim/debian:trixie-gnome3` | GNOME 3 桌面 |
+| Debian | trixie | xfce4l | `ghcr.io/pikachuim/debian:trixie-xfce4l` | Xfce4 轻量桌面 |
+| Debian | trixie | plasma | `ghcr.io/pikachuim/debian:trixie-plasma` | KDE Plasma |
+| Debian | trixie | deepin | `ghcr.io/pikachuim/debian:trixie-deepin` | 深度 DDE |
+| Debian | trixie | nirios | `ghcr.io/pikachuim/debian:trixie-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Debian | trixie | lingmo | `ghcr.io/pikachuim/debian:trixie-lingmo` | Lingmo OS，仅 amd64 |
+| Debian | trixie | hyland | `ghcr.io/pikachuim/debian:trixie-hyland` | Hyprland Wayland，实验性 |
+| Ubuntu | 22.04 | server | `ghcr.io/pikachuim/ubuntu:22.04-server` | 纯 SSH，无图形界面 |
+| Ubuntu | 22.04 | x11gui | `ghcr.io/pikachuim/ubuntu:22.04-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Ubuntu | 22.04 | deepin | `ghcr.io/pikachuim/ubuntu:22.04-deepin` | 深度 DDE，Ubuntu DDE 仅支持此版本 |
+| Ubuntu | 24.04 | server | `ghcr.io/pikachuim/ubuntu:24.04-server` | 纯 SSH，无图形界面 |
+| Ubuntu | 24.04 | x11gui | `ghcr.io/pikachuim/ubuntu:24.04-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Ubuntu | 24.04 | gnome3 | `ghcr.io/pikachuim/ubuntu:24.04-gnome3` | GNOME 3 桌面 |
+| Ubuntu | 24.04 | xfce4l | `ghcr.io/pikachuim/ubuntu:24.04-xfce4l` | Xfce4 轻量桌面 |
+| Ubuntu | 24.04 | plasma | `ghcr.io/pikachuim/ubuntu:24.04-plasma` | KDE Plasma |
+| Ubuntu | 24.04 | deepin | `ghcr.io/pikachuim/ubuntu:24.04-deepin` | 深度 DDE |
+| Ubuntu | 24.04 | nirios | `ghcr.io/pikachuim/ubuntu:24.04-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Ubuntu | 24.04 | lingmo | `ghcr.io/pikachuim/ubuntu:24.04-lingmo` | Lingmo OS，仅 amd64 |
+| Ubuntu | 24.04 | hyland | `ghcr.io/pikachuim/ubuntu:24.04-hyland` | Hyprland Wayland，实验性 |
+| Ubuntu | 26.04 | server | `ghcr.io/pikachuim/ubuntu:26.04-server` | 纯 SSH，无图形界面 |
+| Ubuntu | 26.04 | x11gui | `ghcr.io/pikachuim/ubuntu:26.04-x11gui` | X11 基础层，Wayland，VNC/RDP 有差异 |
+| Ubuntu | 26.04 | gnome3 | `ghcr.io/pikachuim/ubuntu:26.04-gnome3` | GNOME 50，Wayland，VNC/RDP 有差异 |
+| Ubuntu | 26.04 | xfce4l | `ghcr.io/pikachuim/ubuntu:26.04-xfce4l` | Xfce4 轻量桌面 |
+| Ubuntu | 26.04 | plasma | `ghcr.io/pikachuim/ubuntu:26.04-plasma` | KDE Plasma |
+| Ubuntu | 26.04 | deepin | `ghcr.io/pikachuim/ubuntu:26.04-deepin` | 深度 DDE |
+| Ubuntu | 26.04 | nirios | `ghcr.io/pikachuim/ubuntu:26.04-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Ubuntu | 26.04 | lingmo | `ghcr.io/pikachuim/ubuntu:26.04-lingmo` | Lingmo OS，仅 amd64 |
+| Ubuntu | 26.04 | hyland | `ghcr.io/pikachuim/ubuntu:26.04-hyland` | Hyprland Wayland，实验性 |
+| Fedora | 43 | server | `ghcr.io/pikachuim/fedora:43-server` | 纯 SSH，无图形界面 |
+| Fedora | 43 | x11gui | `ghcr.io/pikachuim/fedora:43-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Fedora | 43 | gnome3 | `ghcr.io/pikachuim/fedora:43-gnome3` | GNOME 3 桌面 |
+| Fedora | 43 | xfce4l | `ghcr.io/pikachuim/fedora:43-xfce4l` | Xfce4 轻量桌面 |
+| Fedora | 43 | plasma | `ghcr.io/pikachuim/fedora:43-plasma` | KDE Plasma |
+| Fedora | 43 | deepin | `ghcr.io/pikachuim/fedora:43-deepin` | 深度 DDE |
+| Fedora | 43 | nirios | `ghcr.io/pikachuim/fedora:43-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Fedora | 43 | lingmo | `ghcr.io/pikachuim/fedora:43-lingmo` | Lingmo OS，仅 amd64 |
+| Fedora | 43 | hyland | `ghcr.io/pikachuim/fedora:43-hyland` | Hyprland Wayland，实验性 |
+| Fedora | 44 | server | `ghcr.io/pikachuim/fedora:44-server` | 纯 SSH，无图形界面 |
+| Fedora | 44 | x11gui | `ghcr.io/pikachuim/fedora:44-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Fedora | 44 | gnome3 | `ghcr.io/pikachuim/fedora:44-gnome3` | GNOME 3 桌面 |
+| Fedora | 44 | xfce4l | `ghcr.io/pikachuim/fedora:44-xfce4l` | Xfce4 轻量桌面 |
+| Fedora | 44 | plasma | `ghcr.io/pikachuim/fedora:44-plasma` | KDE Plasma |
+| Fedora | 44 | deepin | `ghcr.io/pikachuim/fedora:44-deepin` | 深度 DDE |
+| Fedora | 44 | nirios | `ghcr.io/pikachuim/fedora:44-nirios` | Niri Wayland，实验性，仅 amd64 |
+| Fedora | 44 | lingmo | `ghcr.io/pikachuim/fedora:44-lingmo` | Lingmo OS，仅 amd64 |
+| Fedora | 44 | hyland | `ghcr.io/pikachuim/fedora:44-hyland` | Hyprland Wayland，实验性 |
+| Alpine | 3.23.4 | server | `ghcr.io/pikachuim/alpine:3.23.4-server` | 纯 SSH，无图形界面 |
+| Alpine | 3.23.4 | x11gui | `ghcr.io/pikachuim/alpine:3.23.4-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Alpine | 3.23.4 | gnome3 | `ghcr.io/pikachuim/alpine:3.23.4-gnome3` | GNOME 3 桌面 |
+| Alpine | 3.23.4 | xfce4l | `ghcr.io/pikachuim/alpine:3.23.4-xfce4l` | Xfce4 轻量桌面 |
+| Alpine | 3.23.4 | plasma | `ghcr.io/pikachuim/alpine:3.23.4-plasma` | KDE Plasma |
+| Alpine | 3.23.4 | hyland | `ghcr.io/pikachuim/alpine:3.23.4-hyland` | Hyprland Wayland，实验性 |
+| Alpine | 3.24.1 | server | `ghcr.io/pikachuim/alpine:3.24.1-server` | 纯 SSH，无图形界面 |
+| Alpine | 3.24.1 | x11gui | `ghcr.io/pikachuim/alpine:3.24.1-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| Alpine | 3.24.1 | gnome3 | `ghcr.io/pikachuim/alpine:3.24.1-gnome3` | GNOME 3 桌面 |
+| Alpine | 3.24.1 | xfce4l | `ghcr.io/pikachuim/alpine:3.24.1-xfce4l` | Xfce4 轻量桌面 |
+| Alpine | 3.24.1 | plasma | `ghcr.io/pikachuim/alpine:3.24.1-plasma` | KDE Plasma |
+| Alpine | 3.24.1 | hyland | `ghcr.io/pikachuim/alpine:3.24.1-hyland` | Hyprland Wayland，实验性 |
+| ArchOS | latest | server | `ghcr.io/pikachuim/archos:latest-server` | 纯 SSH，无图形界面 |
+| ArchOS | latest | x11gui | `ghcr.io/pikachuim/archos:latest-x11gui` | X11 基础层 + NoMachine / VNC / XRDP |
+| ArchOS | latest | deepin | `ghcr.io/pikachuim/archos:latest-deepin` | 深度 DDE |
+| ArchOS | latest | nirios | `ghcr.io/pikachuim/archos:latest-nirios` | Niri Wayland，实验性，仅 amd64 |
 
 ### 远程访问协议
 
-| 协议 | 端口 | 说明 |
-|------|------|------|
-| **NoMachine NX** | 4000 | 低延迟，支持音频、剪贴板 |
-| **XVNC (x11vnc)** | 5900 | 通用，任意VNC客户端可连 |
-| **XRDP (x11rdp)** | 3389 | Windows 远程桌面兼容 |
-| **OpenSSH** | 22 | SSH命令行访问 |
+| 协议                | 端口   | 说明               |
+|-------------------|------|------------------|
+| **No Machine NX** | 4000 | NXD低延迟支持音频剪贴板    |
+| **XVNC (x11vnc)** | 5900 | 任意通用VNC客户端可使用    |
+| **XRDP (x11rdp)** | 3389 | Windows RDP远程桌面访问 |
+| **OpenSSHServer** | 22   | 默认使用SSH命令进行访问    |
 
 ---
 

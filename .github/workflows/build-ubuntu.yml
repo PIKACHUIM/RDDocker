@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['24.04', '26.04']
+        version: ['22.04', '24.04', '26.04']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login
@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['24.04', '26.04']
+        version: ['22.04', '24.04', '26.04']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login
@@ -78,8 +78,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['24.04', '26.04']
+        version: ['22.04', '24.04', '26.04']
         desktop: [gnome3, xfce4l, plasma, deepin, nirios, lingmo, hyland]
+        exclude:
+          - version: '22.04'
+            desktop: gnome3
+          - version: '22.04'
+            desktop: xfce4l
+          - version: '22.04'
+            desktop: plasma
+          - version: '22.04'
+            desktop: nirios
+          - version: '22.04'
+            desktop: lingmo
+          - version: '22.04'
+            desktop: hyland
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login

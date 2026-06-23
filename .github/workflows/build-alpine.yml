@@ -109,4 +109,4 @@ jobs:
             OS_SYSTEMS=alpine
             OS_VERSHOW=${{ matrix.version }}
           cache-from: type=gha
-          cache-to: type=gha,m
+          cache-to: type=gha,m          cache-to: type=gha,mode=max

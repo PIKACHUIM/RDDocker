@@ -36,10 +36,8 @@ echo "Starting Niri Wayland..."
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 mkdir -p "$XDG_RUNTIME_DIR" && chmod 0700 "$XDG_RUNTIME_DIR"
 export WAYLAND_DISPLAY=wayland-1
-export DISPLAY=:9
-nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
-bash /x11vnc.sh
-nohup weston --backend=headless &
-sleep 1
+export NIRI_DISPLAY=wayland-1
 nohup niri &
+sleep 3
+nohup wayvnc 0.0.0.0 5900 &
 RUN_END

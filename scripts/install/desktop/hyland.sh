@@ -8,6 +8,8 @@ case "$OS_ID" in
     printf 'Package: openssl openssl-provider-legacy libssl3 libssl-dev\nPin: release a=stable\nPin-Priority: 1001\nPackage: *\nPin: release a=unstable\nPin-Priority: 100\n' \
       > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
+    # hyprland postinst uses set -o pipefail (bash-only); /bin/sh is dash by default
+    ln -sf /bin/bash /bin/sh
     apt-get install -y -t unstable --no-install-recommends -o Dpkg::Options::="--force-overwrite" hyprland wayvnc xwayland kitty waybar pulseaudio git
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
@@ -35,9 +37,4 @@ echo "Starting Hyprland..."
 export XDG_RUNTIME_DIR=/tmp/xdg-runtime
 mkdir -p "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
 export WLR_BACKENDS=headless
-export WLR_RENDERER=pixman
-export WLR_LIBINPUT_NO_DEVICES=1
-nohup Hyprland &
-sleep 3
-nohup wayvnc 0.0.0.0 5900 &
-RUN_END
+export 

@@ -10,7 +10,7 @@ case "$OS_ID" in
       trixie) GXDE_CODENAME=lizhi ;;
       *)      GXDE_CODENAME=bixie ;;
     esac
-    echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
+    echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
     # Higher priority so GXDE packages override Debian dde-* packages (avoid conflicts)
     printf 'Package: *\nPin: origin repo.gxde.top\nPin-Priority: 1001\n' \
@@ -38,7 +38,7 @@ case "$OS_ID" in
     echo "Deepin DE is not supported on Alpine Linux" >&2; exit 1 ;;
 esac
 
-cat >> /run.sh <<'EOF'
+cat >> /run.sh << 'RUN_END'
 echo "Starting Deepin Desktop..."
 export DISPLAY=:9
 nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
@@ -46,4 +46,4 @@ sleep 1
 eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
 nohup startdde &
-EOF
+RUN_END

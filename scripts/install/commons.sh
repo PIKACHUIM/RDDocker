@@ -9,6 +9,9 @@ case "$OS_ID" in
   debian|ubuntu)
     PKG_UPDATE="apt-get update"
     PKG_INSTALL="DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends"
+    # Suppress service management in Docker (prevents dbus/systemd trigger failures)
+    printf '#!/bin/sh\nexit 0\n' > /usr/sbin/policy-rc.d
+    chmod +x /usr/sbin/policy-rc.d
     ;;
   fedora)
     PKG_UPDATE="dnf check-update || true"

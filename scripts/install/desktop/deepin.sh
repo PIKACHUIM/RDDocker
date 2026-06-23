@@ -7,42 +7,29 @@ case "$OS_ID" in
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL ca-certificates apt-transport-https curl"
     case "${VERSION_CODENAME:-}" in
-      trixie)
-        # GXDE lizhi has broken cross-arch deps; use GXDE with graceful fallback
-        GXDE_CODENAME=lizhi
-        echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
-          > /etc/apt/sources.list.d/gxde.list
-        printf 'Package: *\nPin: origin repo.gxde.top\nPin-Priority: 1001\n' \
-          > /etc/apt/preferences.d/99gxde
-        eval "$PKG_UPDATE" || true
-        mkdir -p /tmp/fake-trans/DEBIAN
-        printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
-          > /tmp/fake-trans/DEBIAN/control
-        dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
-        dpkg -i /tmp/fake-trans.deb
-        eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" || \
-          echo "Warning: DDE unavailable for Debian ${VERSION_CODENAME}, skipping desktop install" >&2
-        rm -f /etc/apt/sources.list.d/gxde.list /etc/apt/preferences.d/99gxde ;;
-      *)
-        GXDE_CODENAME=bixie
-        echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
-          > /etc/apt/sources.list.d/gxde.list
-        printf 'Package: *\nPin: origin repo.gxde.top\nPin-Priority: 1001\n' \
-          > /etc/apt/preferences.d/99gxde
-        eval "$PKG_UPDATE" || true
-        mkdir -p /tmp/fake-trans/DEBIAN
-        printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
-          > /tmp/fake-trans/DEBIAN/control
-        dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
-        dpkg -i /tmp/fake-trans.deb
-        eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop"
-        rm /etc/apt/preferences.d/99gxde ;;
-    esac ;;
+      trixie) GXDE_CODENAME=lizhi ;;
+      *)      GXDE_CODENAME=bixie ;;
+    esac
+    echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
+      > /etc/apt/sources.list.d/gxde.list
+    # Only give GXDE priority for DDE/deepin packages, not system libs
+    printf 'Package: dde-* deepin-* libdde-* gxde-* libgxde-* dde libdframeworkdbus*\nPin: origin repo.gxde.top\nPin-Priority: 1001\nPackage: *\nPin: origin repo.gxde.top\nPin-Priority: 100\n' \
+      > /etc/apt/preferences.d/99gxde
+    eval "$PKG_UPDATE" || true
+    mkdir -p /tmp/fake-trans/DEBIAN
+    printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
+      > /tmp/fake-trans/DEBIAN/control
+    dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
+    dpkg -i /tmp/fake-trans.deb
+    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" || \
+      echo "Warning: DDE unavailable for Debian ${VERSION_CODENAME}" >&2
+    rm -f /etc/apt/sources.list.d/gxde.list /etc/apt/preferences.d/99gxde ;;
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y ppa:ubuntudde-dev/stable 2>/dev/null || true
-    eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL ubuntudde-dde pulseaudio" ;;
+    eval "$PKG_UPDATE" || true
+    eval "$PKG_INSTALL ubuntudde-dde pulseaudio" || \
+      echo "Warning: ubuntudde-dde unavailable for Ubuntu ${VERSION_CODENAME}" >&2 ;;
   arch|archos)
     eval "$PKG_UPDATE"
     pacman -S --noconfirm --overwrite '/usr/share/dbus-1/services/org.deepin.dde.Power1.service' deepin pulseaudio ;;

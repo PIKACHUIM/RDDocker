@@ -11,7 +11,7 @@ case "$OS_ID" in
     apt-get install -y -t unstable --no-install-recommends niri 2>/dev/null || \
       apt-get install -y -t experimental --no-install-recommends niri 2>/dev/null || \
       echo "Warning: niri unavailable for Debian ${VERSION_CODENAME}" >&2
-    apt-get install -y -t unstable --no-install-recommends foot waybar wofi xwayland weston pulseaudio \
+    apt-get install -y -t unstable --no-install-recommends -o Dpkg::Options::="--force-overwrite" foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)

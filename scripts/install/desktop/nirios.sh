@@ -2,20 +2,32 @@
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 . "$INSTALL_DIR/commons.sh"
 
+# Install niri binary from GitHub releases (not in Debian/Ubuntu apt repos)
+install_niri_binary() {
+  ARCH_BIN="x86_64-unknown-linux-gnu"
+  [ "$(uname -m)" = "aarch64" ] && ARCH_BIN="aarch64-unknown-linux-gnu"
+  NIRI_VER=$(curl -fsSL "https://api.github.com/repos/YaLTeR/niri/releases/latest" \
+    | grep -o '"tag_name":"[^"]*"' | cut -d'"' -f4)
+  curl -fsSL "https://github.com/YaLTeR/niri/releases/download/${NIRI_VER}/niri-${NIRI_VER}-${ARCH_BIN}.tar.gz" \
+    | tar xz -C /usr/local/bin/ niri
+}
+
 case "$OS_ID" in
   debian)
-    # niri not in trixie; use sid (unstable) with pinning
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
     printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
-    apt-get install -y -t unstable --no-install-recommends niri foot waybar wofi xwayland weston pulseaudio \
+    eval "$PKG_INSTALL curl"
+    install_niri_binary
+    apt-get install -y -t unstable --no-install-recommends foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
-    eval "$PKG_INSTALL software-properties-common"
+    eval "$PKG_INSTALL software-properties-common curl"
     add-apt-repository -y universe
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio \
+    install_niri_binary
+    eval "$PKG_INSTALL foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk" ;;
   fedora)
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
@@ -26,7 +38,7 @@ case "$OS_ID" in
     echo "Niri is not available on Alpine Linux" >&2; exit 1 ;;
 esac
 
-cat >> /run.sh <<'EOF'
+cat >> /run.sh << 'RUN_END'
 echo "Starting Niri Wayland..."
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 mkdir -p "$XDG_RUNTIME_DIR" && chmod 0700 "$XDG_RUNTIME_DIR"
@@ -37,4 +49,4 @@ bash /x11vnc.sh
 nohup weston --backend=headless &
 sleep 1
 nohup niri &
-EOF
+RUN_END

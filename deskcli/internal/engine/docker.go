@@ -50,8 +50,6 @@ func (d *DockerEngine) Exec(name string, cmd []string, detach bool) error {
 	args := []string{"exec"}
 	if detach {
 		args = append(args, "-d")
-	} else {
-		args = append(args, "-it")
 	}
 	args = append(append(args, name), cmd...)
 	c := exec.Command(d.binary, args...)

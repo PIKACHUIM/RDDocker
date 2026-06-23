@@ -47,7 +47,7 @@ func resetPasswords(eng engine.Engine, name, password string) {
 		fmt.Sprintf("x11vnc -storepasswd '%s' /etc/x11vnc.pass", password),
 	}
 	for _, c := range cmds {
-		if err := eng.Exec(name, []string{"bash", "-c", c}, true); err != nil {
+		if err := eng.Exec(name, []string{"bash", "-c", c}, false); err != nil {
 			fmt.Printf("  warning: %v\n", err)
 		}
 	}

@@ -68,7 +68,7 @@ func CreateContainer(c *gin.Context) {
 	if name == "" {
 		name = strings.ReplaceAll(strings.Split(req.Image, ":")[0], "/", "-")
 	}
-	if err := eng.Run(req.Image, name, req.Ports, nil); err != nil {
+	if err := eng.Run(req.Image, name, req.Ports, nil, nil); err != nil {
 		fail(c, 500, err.Error())
 		return
 	}

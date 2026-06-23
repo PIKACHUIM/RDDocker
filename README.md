@@ -32,15 +32,15 @@
 
 <table>
 <tr>
-  <td align="center"><b>Lingmo DE</b><br/><img src="Picture/lingmo.png" width="320"/></td>
-  <td align="center"><b>GNOME 3</b><br/><img src="Picture/gnome3.png" width="320"/></td>
+  <td align="center"><b>Lingmo DE</b><br/><img src="picture/lingmo.png" width="320"/></td>
+  <td align="center"><b>GNOME 3</b><br/><img src="picture/gnome3.png" width="320"/></td>
 </tr>
 <tr>
-  <td align="center"><b>Xfce4 Lite</b><br/><img src="Picture/xfce4l.png" width="320"/></td>
-  <td align="center"><b>KDE Plasma</b><br/><img src="Picture/plasma.png" width="320"/></td>
+  <td align="center"><b>Xfce4 Lite</b><br/><img src="picture/xfce4l.png" width="320"/></td>
+  <td align="center"><b>KDE Plasma</b><br/><img src="picture/plasma.png" width="320"/></td>
 </tr>
 <tr>
-  <td align="center" colspan="2"><b>Deepin DE</b><br/><img src="Picture/deepin.png" width="320"/></td>
+  <td align="center" colspan="2"><b>Deepin DE</b><br/><img src="picture/deepin.png" width="320"/></td>
 </tr>
 </table>
 

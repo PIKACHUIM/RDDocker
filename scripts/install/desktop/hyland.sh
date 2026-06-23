@@ -8,7 +8,6 @@ case "$OS_ID" in
     printf 'Package: openssl openssl-provider-legacy libssl3 libssl-dev\nPin: release a=stable\nPin-Priority: 1001\nPackage: *\nPin: release a=unstable\nPin-Priority: 100\n' \
       > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
-    # hyprland postinst uses set -o pipefail (bash-only); /bin/sh is dash by default
     ln -sf /bin/bash /bin/sh
     apt-get install -y -t unstable --no-install-recommends -o Dpkg::Options::="--force-overwrite" hyprland wayvnc xwayland kitty waybar pulseaudio git
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;

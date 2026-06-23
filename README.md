@@ -15,7 +15,7 @@
 
 ## 📖 简介
 
-**RDDocker** 是一套带桌面环境的 Linux 容器镜像构建系统，配套管理工具 **easydesk**。
+**RDDocker** 是一套带桌面环境的 Linux 容器镜像构建系统，配套管理工具 **deskcli**。
 
 无需虚拟化，极低开销，创建秒级完成——在一台主机上运行多个独立的 Linux 桌面，通过 **NoMachine / VNC / XRDP** 远程连接使用。适用于：
 
@@ -33,7 +33,7 @@
 <table>
 <tr>
   <td align="center"><b>Lingmo DE</b><br/><img src="Picture/lingmo.png" width="320"/></td>
-  <td align="center"><b>GNOME 3</b><br/><img src="Picture/gnome.png" width="320"/></td>
+  <td align="center"><b>GNOME 3</b><br/><img src="Picture/gnome3.png" width="320"/></td>
 </tr>
 <tr>
   <td align="center"><b>Xfce4 Lite</b><br/><img src="Picture/xfce4l.png" width="320"/></td>
@@ -85,34 +85,34 @@
 
 ## 🚀 安装方式
 
-### 方式一：使用 easydesk 管理工具（推荐）
+### 方式一：使用 deskcli 管理工具（推荐）
 
 ```bash
-# 一键安装 easydesk（需要 root）
-curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDocker/master/easydesk/install.sh | bash
+# 一键安装 deskcli（需要 root）
+curl -fsSL https://raw.githubusercontent.com/PIKACHUIM/RDDocker/master/deskcli/install.sh | bash
 ```
 
 安装完成后：
 
 ```bash
 # 配置引擎和 API Token
-easydesk conf set engine docker        # docker / podman / lxc / lxd
-easydesk conf set token your_token
+deskcli configs set engine docker        # docker / podman / lxc / lxd
+deskcli configs set token your_token
 
 # 创建桌面容器
-easydesk desk new pikachuim/debian:12-xfce4l \
+deskcli desk new pikachuim/debian:12-xfce4l \
   --name my-desktop \
   --port 4000:4000 \
   --port 5900:5900 \
   --port 2222:22
 
 # 查看容器列表
-easydesk list
+deskcli list
 
 # 启动 / 停止 / 重启
-easydesk start my-desktop
-easydesk stop my-desktop
-easydesk restart my-desktop
+deskcli start my-desktop
+deskcli stop my-desktop
+deskcli restart my-desktop
 ```
 
 ### 方式二：直接 docker run
@@ -133,7 +133,7 @@ docker run -d \
 ```bash
 git clone https://github.com/PIKACHUIM/RDDocker.git
 cd RDDocker
-bash Manager.sh    # 交互式构建和管理
+bash manager.sh    # 交互式构建和管理
 ```
 
 ### 连接到桌面
@@ -155,19 +155,19 @@ bash Manager.sh    # 交互式构建和管理
 
 - Docker ≥ 24.0（或 Podman ≥ 4.0）
 - `docker buildx` 支持多架构构建
-- Go ≥ 1.22（仅开发 easydesk）
+- Go ≥ 1.22（仅开发 deskcli）
 - Node.js ≥ 18（仅开发文档）
 
 ### 构建镜像
 
 ```bash
 # 交互式构建单个镜像
-bash Builder.sh
+bash builds.sh
 
 # 或直接调用 buildx（以 Debian Xfce4L amd64 为例）
 docker buildx build \
   --platform linux/amd64 \
-  -f Dockers/Debian/Desktops/Xfce4L \
+  -f dockers/debian/desktops/xfce4l \
   --build-arg OS_VERSION=bookworm \
   --build-arg OS_SYSTEMS=debian \
   --build-arg OS_VERSHOW=12 \
@@ -186,7 +186,7 @@ docker buildx build \
 
 ### 添加新的桌面环境
 
-1. 在 `Scripts/Install/Desktop/` 新建 `mydesktop.sh`，参考 `xfce4l.sh`：
+1. 在 `scripts/install/desktop/` 新建 `mydesktop.sh`，参考 `xfce4l.sh`：
 
 ```bash
 #!/bin/bash
@@ -207,7 +207,7 @@ nohup mydesktop-session &
 EOF
 ```
 
-2. 在各 `Dockers/{OS}/Desktops/MyDesktop` 创建 Dockerfile：
+2. 在各 `dockers/{os}/desktops/mydesktop` 创建 Dockerfile：
 
 ```dockerfile
 ARG OS_VERSION=bookworm
@@ -219,7 +219,7 @@ ARG INSTALL_CHROME=false
 ARG INSTALL_VSCODE=false
 ARG INSTALL_QQ=false
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION}
-COPY Scripts/Install/ /install/
+COPY scripts/install/ /install/
 RUN /install/Desktop/mydesktop.sh
 RUN INSTALL_FIREFOX=${INSTALL_FIREFOX} INSTALL_CHROME=${INSTALL_CHROME} \
     INSTALL_VSCODE=${INSTALL_VSCODE} INSTALL_QQ=${INSTALL_QQ} \
@@ -228,26 +228,26 @@ EXPOSE 4000/tcp
 CMD ["/sbin/init"]
 ```
 
-3. 在 `Scripts/Create/Select-Desktop.sh` 注册新桌面名称。
+3. 在 `scripts/creator/Select-Desktop.sh` 注册新桌面名称。
 
-### 开发 easydesk
+### 开发 deskcli
 
 ```bash
-cd easydesk
+cd deskcli
 go mod tidy
 go run . --help
 
 # 构建
-go build -ldflags="-s -w" -o ../dist/easydesk .
+go build -ldflags="-s -w" -o ../dist/deskcli .
 
 # 交叉编译 arm64
-GOOS=linux GOARCH=arm64 go build -o ../dist/easydesk-arm64 .
+GOOS=linux GOARCH=arm64 go build -o ../dist/deskcli-arm64 .
 ```
 
 ### 开发文档
 
 ```bash
-cd doc
+cd docpage
 npm install
 npm run docs:dev    # 本地预览 http://localhost:5173
 npm run docs:build  # 构建静态站
@@ -260,15 +260,15 @@ npm run docs:build  # 构建静态站
 ```
 RDDocker/
 │
-├── Dockers/                    # Dockerfile（每个文件极简，仅调用安装脚本）
-│   ├── Debian/Desktops/        #   Server / X11GUI / GNOME3 / Xfce4L / Plasma ...
-│   ├── Ubuntu/Desktops/
-│   ├── Alpine/Desktops/
-│   ├── Fedora/Desktops/
-│   └── ArchOS/Desktops/
+├── dockers/                    # Dockerfile（每个文件极简，仅调用安装脚本）
+│   ├── debian/desktops/        #   Server / X11GUI / GNOME3 / Xfce4L / Plasma ...
+│   ├── ubuntu/desktops/
+│   ├── alpine/desktops/
+│   ├── fedora/desktops/
+│   └── (archos removed)
 │
-├── Scripts/
-│   ├── Install/                # 安装脚本（各 Dockerfile 复用）
+├── scripts/
+│   ├── install/                # 安装脚本（各 Dockerfile 复用）
 │   │   ├── common.sh           #   OS 检测 + 包管理器变量
 │   │   ├── mirrors.sh          #   镜像源配置（apt / dnf / pacman / apk）
 │   │   ├── server.sh           #   SSH 服务器 + 用户创建
@@ -286,7 +286,7 @@ RDDocker/
 │   │       └── nirios.sh
 │   └── Create/                 # 交互式容器创建向导
 │
-├── easydesk/                   # 管理工具（Go）
+├── deskcli/                   # 管理工具（Go）
 │   ├── cmd/                    #   CLI 命令（cobra）
 │   ├── internal/
 │   │   ├── config/             #   配置文件读写
@@ -310,17 +310,17 @@ RDDocker/
 
 ```
 [OS 基础镜像]  debian:bookworm / ubuntu:24.04 / alpine:3.23 ...
-      ↓  Scripts/Install/mirrors.sh + server.sh
+      ↓  scripts/install/mirrors.sh + server.sh
   [Server 层]  SSH 服务 + 用户管理 + systemd
-      ↓  Scripts/Install/x11gui.sh + wayland.sh
+      ↓  scripts/install/x11core.sh + wayland.sh
   [X11GUI 层]  X11 服务 + NoMachine + VNC + XRDP + Wayland
-      ↓  Scripts/Install/Desktop/{de}.sh + software.sh
+      ↓  scripts/install/desktop/{de}.sh + software.sh
   [桌面环境层]  GNOME / Xfce4 / Plasma / ... + 可选软件
 ```
 
 容器启动后，`/run.sh` 按顺序启动 SSH → dbus → NoMachine → Xvfb → 桌面会话 → VNC，用户直接连接即可使用。
 
-所有安装逻辑集中在 `Scripts/Install/` 中，各脚本通过 `common.sh` 自动检测 OS 类型，选择正确的包管理器，**同一份脚本适配所有支持的发行版**，Dockerfile 本身只需5~10 行。
+所有安装逻辑集中在 `scripts/install/` 中，各脚本通过 `common.sh` 自动检测 OS 类型，选择正确的包管理器，**同一份脚本适配所有支持的发行版**，Dockerfile 本身只需5~10 行。
 
 ---
 
@@ -338,10 +338,10 @@ RDDocker/
 
 ## 📚 文档
 
-完整文档请见 **[doc/](doc/)** 目录，或本地启动文档站：
+完整文档请见 **[doc/](docpage/)** 目录，或本地启动文档站：
 
 ```bash
-cd doc && npm install && npm run docs:dev
+cd docpage && npm install && npm run docs:dev
 ```
 
 ---

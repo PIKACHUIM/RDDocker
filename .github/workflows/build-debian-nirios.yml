@@ -20,7 +20,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/Debian/Desktops/Nirios
+          file: dockers/debian/desktops/nirios
           platforms: linux/amd64
           push: true
           tags: |

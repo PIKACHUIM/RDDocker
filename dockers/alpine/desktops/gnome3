@@ -1,0 +1,13 @@
+ARG OS_VERSION=3.24.1
+ARG OS_SYSTEMS=alpine
+ARG OS_VERSHOW=3.24.1
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_VERSION
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="Alpine with GNOME3 Desktop"
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/desktop/gnome3.sh
+
+EXPOSE 4000/tcp
+CMD ["/bin/sh", "/run.sh"]

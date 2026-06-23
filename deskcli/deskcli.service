@@ -1,0 +1,12 @@
+[Unit]
+Description=deskcli Container Manager
+After=network.target docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/deskcli serve
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

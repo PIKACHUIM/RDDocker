@@ -31,7 +31,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/Debian/Desktops/GNOME3
+          file: dockers/debian/desktops/gnome3
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |

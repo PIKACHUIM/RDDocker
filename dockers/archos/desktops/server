@@ -1,0 +1,10 @@
+ARG OS_SYSTEMS=archos
+FROM archlinux:latest
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="ArchOS with OpenSSH Server"
+LABEL System=${OS_SYSTEMS} Version=latest Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/mirrors.sh && /install/server.sh
+
+EXPOSE 22/tcp
+CMD ["/bin/sh", "/run.sh"]

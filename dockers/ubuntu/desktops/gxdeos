@@ -1,0 +1,13 @@
+ARG OS_VERSION=24.04
+ARG OS_SYSTEMS=ubuntu
+ARG OS_VERSHOW=24.04
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_VERSION
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="Ubuntu with GXDeOS Desktop"
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/desktop/deepin.sh
+
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

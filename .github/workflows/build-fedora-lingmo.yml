@@ -24,7 +24,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/Fedora/Desktops/Lingmo
+          file: dockers/fedora/desktops/lingmo
           platforms: linux/amd64
           push: true
           tags: |

@@ -1,0 +1,13 @@
+ARG OS_VERSION=42
+ARG OS_SYSTEMS=fedora
+ARG OS_VERSHOW=42
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-x11gui
+ARG OS_VERSION
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="Fedora with Lingmo Desktop"
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/desktop/lingmo.sh
+
+EXPOSE 4000/tcp
+CMD ["/sbin/init"]

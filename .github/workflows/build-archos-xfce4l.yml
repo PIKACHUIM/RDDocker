@@ -20,15 +20,13 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/ArchOS/Desktops/Xfce4L
-          platforms: linux/amd64,linux/arm64
+          file: dockers/archos/desktops/xfce4l
+          platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}:'latest'-xfce4l
-            ghcr.io/${{ env.IMAGE_PREFIX }}:'latest'-xfce4l
+            ${{ env.IMAGE_PREFIX }}:latest-xfce4l
+            ghcr.io/${{ env.IMAGE_PREFIX }}:latest-xfce4l
           build-args: |
-            OS_VERSION='latest'
             OS_SYSTEMS=archos
-            OS_VERSHOW='latest'
           cache-from: type=gha
           cache-to: type=gha,mode=max

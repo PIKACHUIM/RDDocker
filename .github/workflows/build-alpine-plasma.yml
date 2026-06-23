@@ -24,7 +24,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/Alpine/Desktops/Plasma
+          file: dockers/alpine/desktops/plasma
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |

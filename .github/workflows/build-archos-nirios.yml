@@ -1,0 +1,32 @@
+name: Build ArchOS - nirios
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  IMAGE_PREFIX: pikachuim/archos
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/docker-login
+        with:
+          username: ${{ secrets.DOCKER_PUBHUB_USER }}
+          password: ${{ secrets.DOCKER_PUBHUB_PASS }}
+          ghcr_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: dockers/archos/desktops/nirios
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:latest-nirios
+            ghcr.io/${{ env.IMAGE_PREFIX }}:latest-nirios
+          build-args: |
+            OS_SYSTEMS=archos
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

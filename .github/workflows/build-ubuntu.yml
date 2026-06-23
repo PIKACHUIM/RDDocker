@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       desktop:
-        description: 'Desktop to build (all/server/x11gui/gnome3/xfce4l/plasma/deepin/gxdeos/nirios/lingmo)'
+        description: 'desktop to build (all/server/x11gui/gnome3/xfce4l/plasma/deepin/gxdeos/nirios/lingmo)'
         default: 'all'
 
 env:
@@ -28,7 +28,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockers/Ubuntu/Desktops/Server
+          file: dockers/ubuntu/desktops/server
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -59,7 +59,7 @@ jobs:
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == 'x11gui' || github.event_name != 'workflow_dispatch' }}
         with:
           context: .
-          file: Dockers/Ubuntu/Desktops/X11GUI
+          file: dockers/ubuntu/desktops/x11gui
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -90,13 +90,13 @@ jobs:
       - id: vars
         run: |
           case "${{ matrix.desktop }}" in
-            gnome3) echo "dockerfile=GNOME3" >> $GITHUB_OUTPUT ;;
-            xfce4l) echo "dockerfile=Xfce4L" >> $GITHUB_OUTPUT ;;
-            plasma) echo "dockerfile=Plasma" >> $GITHUB_OUTPUT ;;
-            deepin) echo "dockerfile=Deepin" >> $GITHUB_OUTPUT ;;
-            gxdeos) echo "dockerfile=GXDeOS" >> $GITHUB_OUTPUT ;;
-            nirios) echo "dockerfile=Nirios" >> $GITHUB_OUTPUT ;;
-            lingmo) echo "dockerfile=Lingmo" >> $GITHUB_OUTPUT ;;
+            gnome3) echo "dockerfile=gnome3" >> $GITHUB_OUTPUT ;;
+            xfce4l) echo "dockerfile=xfce4l" >> $GITHUB_OUTPUT ;;
+            plasma) echo "dockerfile=plasma" >> $GITHUB_OUTPUT ;;
+            deepin) echo "dockerfile=deepin" >> $GITHUB_OUTPUT ;;
+            gxdeos) echo "dockerfile=gxdeos" >> $GITHUB_OUTPUT ;;
+            nirios) echo "dockerfile=nirios" >> $GITHUB_OUTPUT ;;
+            lingmo) echo "dockerfile=lingmo" >> $GITHUB_OUTPUT ;;
           esac
           case "${{ matrix.desktop }}" in
             gxdeos|nirios|lingmo) echo "platforms=linux/amd64" >> $GITHUB_OUTPUT ;;
@@ -106,7 +106,7 @@ jobs:
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == matrix.desktop || github.event_name != 'workflow_dispatch' }}
         with:
           context: .
-          file: Dockers/Ubuntu/Desktops/${{ steps.vars.outputs.dockerfile }}
+          file: dockers/ubuntu/desktops/${{ steps.vars.outputs.dockerfile }}
           platforms: ${{ steps.vars.outputs.platforms }}
           push: true
           tags: |

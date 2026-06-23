@@ -1,0 +1,14 @@
+ARG OS_VERSION=3.24.1
+ARG OS_SYSTEMS=alpine
+ARG OS_VERSHOW=3.24.1
+FROM pikachuim/${OS_SYSTEMS}:${OS_VERSHOW}-server
+ARG OS_VERSION
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="Alpine with X11 + VNC + XRDP"
+
+LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/x11gui.sh && /install/wayland.sh
+
+EXPOSE 4000/tcp 5900/tcp 3389/tcp
+CMD ["/bin/sh", "/run.sh"]

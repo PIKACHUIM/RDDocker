@@ -79,7 +79,7 @@ jobs:
       fail-fast: false
       matrix:
         version: ['43', '44']
-        desktop: [gnome3, xfce4l, plasma, deepin, lingmo, hyland]
+        desktop: [gnome3, xfce4l, plasma, deepin, nirios, hyland]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login
@@ -94,11 +94,11 @@ jobs:
             xfce4l) echo "dockerfile=xfce4l" >> $GITHUB_OUTPUT ;;
             plasma) echo "dockerfile=plasma" >> $GITHUB_OUTPUT ;;
             deepin) echo "dockerfile=deepin" >> $GITHUB_OUTPUT ;;
-            lingmo) echo "dockerfile=lingmo" >> $GITHUB_OUTPUT ;;
+            nirios) echo "dockerfile=nirios" >> $GITHUB_OUTPUT ;;
             hyland) echo "dockerfile=hyland" >> $GITHUB_OUTPUT ;;
           esac
           case "${{ matrix.desktop }}" in
-            lingmo) echo "platforms=linux/amd64" >> $GITHUB_OUTPUT ;;
+            nirios) echo "platforms=linux/amd64" >> $GITHUB_OUTPUT ;;
             *) echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT ;;
           esac
       - uses: docker/build-push-action@v5

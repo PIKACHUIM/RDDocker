@@ -13,7 +13,7 @@ case "$OS_ID" in
       > /etc/apt/sources.list.d/lingmo.list 2>/dev/null || true
     eval "$PKG_UPDATE" || true
     eval "$PKG_INSTALL lingmo-desktop pulseaudio 2>/dev/null || \
-      $PKG_INSTALL lingmo-core lingmo-workspace-base pulseaudio || true" ;;
+      $PKG_INSTALL lingmo-core lingmo-workspace-base pulseaudio" ;;
 esac
 
 cp "$INSTALL_DIR/configs/de-lingmo.sh" /usr/local/bin/de-lingmo.sh

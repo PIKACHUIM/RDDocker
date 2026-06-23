@@ -93,6 +93,10 @@ jobs:
             desktop: lingmo
           - version: '22.04'
             desktop: hyland
+          - version: '24.04'
+            desktop: deepin
+          - version: '26.04'
+            desktop: deepin
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login

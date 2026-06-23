@@ -13,26 +13,19 @@ case "$OS_ID" in
     echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
     eval "$PKG_UPDATE" || true
+    # gxde-daemon depends on translate-shell (removed from Debian); create a dummy package
+    mkdir -p /tmp/fake-trans/DEBIAN
+    printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
+      > /tmp/fake-trans/DEBIAN/control
+    dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
+    dpkg -i /tmp/fake-trans.deb
     eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" ;;
   ubuntu)
+    eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y ppa:ubuntudde-dev/stable 2>/dev/null || true
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL ubuntudde-dde pulseaudio" ;;
   arch|archos)
     eval "$PKG_UPDATE"
     pacman -S --noconfirm --overwrite '/usr/share/dbus-1/services/org.deepin.dde.Power1.service' deepin pulseaudio ;;
-  # fedora: deepin-desktop-environment retired from Fedora 43+ (FESCo, May 2026)
-  # fedora)
-  #   eval "$PKG_INSTALL deepin-desktop-environment pulseaudio" ;;
-  alpine)
-    echo "Deepin DE is not supported on Alpine Linux" >&2; exit 1 ;;
-esac
-
-cat >> /run.sh <<'EOF'
-echo "Starting Deepin Desktop..."
-export DISPLAY=:9
-export $(dbus-launch)
-nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
-bash /x11vnc.sh
-nohup startdde &
-EOF
+  # fedora: deep

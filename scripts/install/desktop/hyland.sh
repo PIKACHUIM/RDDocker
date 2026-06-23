@@ -3,25 +3,24 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 . "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
-  debian|ubuntu)
+  debian)
+    # hyprland is not in bookworm/trixie; use sid (unstable) overlay
+    echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
+    eval "$PKG_UPDATE"
+    apt-get install -y -t unstable --no-install-recommends hyprland wayvnc xwayland kitty waybar pulseaudio git
+    rm /etc/apt/sources.list.d/sid.list ;;
+  ubuntu)
+    eval "$PKG_INSTALL software-properties-common"
+    add-apt-repository -y universe
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" ;;
   fedora)
-    dnf copr enable -y solopasha/hyprland
-    eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" ;;
+    # Try official repo first (hyprland added to Fedora >=41), fall back to copr
+    eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" 2>/dev/null || {
+      dnf copr enable -y solopasha/hyprland
+      dnf install -y display-info 2>/dev/null || true
+      eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git"
+    } ;;
   alpine)
     apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-      hyprland wayvnc xwayland kitty waybar pulseaudio git ;;
-esac
-
-cat >> /run.sh <<'EOF'
-echo "Starting Hyprland..."
-export XDG_RUNTIME_DIR=/tmp/xdg-runtime
-mkdir -p "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
-export WLR_BACKENDS=headless
-export WLR_RENDERER=pixman
-export WLR_LIBINPUT_NO_DEVICES=1
-nohup Hyprland &
-sleep 3
-nohup wayvnc 0.0.0.0 5900 &
-EOF
+      hyprland wayvnc xwayland kitty waybar

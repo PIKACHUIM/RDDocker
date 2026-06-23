@@ -6,8 +6,8 @@ CONF_DIR="$INSTALL_DIR/conf"
 CONTAINER_CONF_DIR="$CONF_DIR/containers"
 BIN_DIR="/usr/local/bin"
 
-read -p "Container data directory [/opt/deskcli/data]: " DATA_INPUT
-DATA_DIR="${DATA_INPUT:-/opt/dockcli/data}"
+read -r -p "Container data directory [/opt/deskcli/data]: " DATA_INPUT </dev/tty 2>/dev/null || true
+DATA_DIR="${DATA_INPUT:-/opt/deskcli/data}"
 
 mkdir -p "$DATA_DIR" "$CONF_DIR" "$CONTAINER_CONF_DIR"
 
@@ -58,4 +58,4 @@ echo "deskcli installed successfully!"
 echo "Config: $CONF_DIR/config.yaml"
 echo "Data:   $DATA_DIR"
 echo "API port: $(grep port "$CONF_DIR/config.yaml" | awk '{print $2}')"
-echo "Token: $(grep token "$CONF_DIR/config.yaml" | awk '{print $2}')"
+echo "Token: $(grep token "$CONF_DIR/c

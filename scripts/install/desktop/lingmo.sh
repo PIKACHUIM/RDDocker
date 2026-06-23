@@ -22,8 +22,9 @@ chmod +x /usr/local/bin/de-lingmo.sh
 cat >> /run.sh <<'EOF'
 echo "Starting Lingmo Desktop..."
 export DISPLAY=:9
-export $(dbus-launch)
 nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
+sleep 1
+eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
 nohup /usr/local/bin/de-lingmo.sh &
 EOF

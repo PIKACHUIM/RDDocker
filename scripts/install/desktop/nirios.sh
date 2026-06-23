@@ -3,8 +3,15 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 . "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
-  debian|ubuntu)
-    [ "$OS_ID" = "ubuntu" ] && add-apt-repository -y universe 2>/dev/null || true
+  debian)
+    echo "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list
+    eval "$PKG_UPDATE"
+    apt-get install -y -t trixie --no-install-recommends niri foot waybar wofi xwayland weston pulseaudio \
+      wayland-protocols swaybg fonts-noto fonts-noto-cjk
+    rm /etc/apt/sources.list.d/trixie.list ;;
+  ubuntu)
+    eval "$PKG_INSTALL software-properties-common"
+    add-apt-repository -y universe
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk" ;;

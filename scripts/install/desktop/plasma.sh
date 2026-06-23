@@ -28,11 +28,12 @@ cp "$INSTALL_DIR/configs/sddm.conf" /etc/sddm.config 2>/dev/null || true
 cat >> /run.sh <<'EOF'
 echo "Starting KDE Plasma Desktop..."
 export DISPLAY=:9
-export $(dbus-launch)
 systemctl disable sddm 2>/dev/null || true
 service sddm stop 2>/dev/null; killall startplasma-x11 2>/dev/null || true
 killall plasma_session 2>/dev/null; killall kwin_x11 2>/dev/null || true
 nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
+sleep 1
+eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
 nohup startplasma-x11 &
 EOF

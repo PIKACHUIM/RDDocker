@@ -27,9 +27,10 @@ echo "LC_ALL=en_US.UTF-8" >> /etc/default/locale
 cat >> /run.sh <<'EOF'
 echo "Starting Xfce4 Desktop..."
 export DISPLAY=:9
-export $(dbus-launch)
 service lightdm stop 2>/dev/null; killall xfce4-session 2>/dev/null || true
 nohup Xvfb :9 -ac -screen 0 1600x900x24 &
+sleep 1
+eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
 nohup xfce4-session &
 EOF

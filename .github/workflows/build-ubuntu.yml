@@ -120,4 +120,15 @@ jobs:
         if: ${{ inputs.desktop == 'all' || inputs.desktop == '' || inputs.desktop == matrix.desktop || github.event_name != 'workflow_dispatch' }}
         with:
           context: .
-          file: dockers/ubuntu/desktops/${{ steps.vars
+          file: dockers/ubuntu/desktops/${{ steps.vars.outputs.dockerfile }}
+          platforms: ${{ steps.vars.outputs.platforms }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-${{ matrix.desktop }}
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=ubuntu
+            OS_VERSHOW=${{ matrix.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -9,9 +9,10 @@ case "$OS_ID" in
   ubuntu)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL software-properties-common"
-    add-apt-repository -y ppa:kubuntu-ppa/backports
+    add-apt-repository -y ppa:kubuntu-ppa/backports 2>/dev/null || true
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL pulseaudio kubuntu-desktop git cmake nano vim" ;;
+    eval "$PKG_INSTALL pulseaudio kubuntu-desktop git cmake nano vim" \
+      || eval "$PKG_INSTALL pulseaudio kde-plasma-desktop git cmake nano vim" ;;
   fedora)
     eval "$PKG_INSTALL pipewire-pulseaudio @kde-desktop-environment cmake git" ;;
   arch|archos)

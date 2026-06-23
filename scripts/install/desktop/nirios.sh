@@ -4,6 +4,7 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 case "$OS_ID" in
   debian|ubuntu)
+    [ "$OS_ID" = "ubuntu" ] && add-apt-repository -y universe 2>/dev/null || true
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk" ;;
@@ -11,8 +12,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
   arch|archos)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
-  alpine)
+    eval "$PKG_INSTALL niri foot waybar wofi xorg-xwayland weston pulseaudio" ;;
     echo "Niri is not available on Alpine Linux" >&2; exit 1 ;;
 esac
 

@@ -10,9 +10,9 @@ case "$OS_ID" in
       trixie) GXDE_CODENAME=lizhi ;;
       *)      GXDE_CODENAME=bixie ;;
     esac
-    echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/g/gxde-source/ /" \
+    echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
-    eval "$PKG_UPDATE"
+    eval "$PKG_UPDATE" || true
     eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop pulseaudio" ;;
   ubuntu)
     add-apt-repository -y ppa:ubuntudde-dev/stable 2>/dev/null || true
@@ -20,7 +20,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL ubuntudde-dde pulseaudio" ;;
   arch|archos)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL deepin pulseaudio" ;;
+    pacman -S --noconfirm --overwrite '/usr/share/dbus-1/services/org.deepin.dde.Power1.service' deepin pulseaudio ;;
   # fedora: deepin-desktop-environment retired from Fedora 43+ (FESCo, May 2026)
   # fedora)
   #   eval "$PKG_INSTALL deepin-desktop-environment pulseaudio" ;;

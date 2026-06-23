@@ -124,6 +124,7 @@ jobs:
             deepin) echo "dockerfile=deepin" >> $GITHUB_OUTPUT ;;
             nirios) echo "dockerfile=nirios" >> $GITHUB_OUTPUT ;;
             lingmo) echo "dockerfile=lingmo" >> $GITHUB_OUTPUT ;;
+            hyland) echo "dockerfile=hyland" >> $GITHUB_OUTPUT ;;
           esac
           case "${{ matrix.desktop }}" in
             nirios|lingmo) echo "platforms=linux/amd64" >> $GITHUB_OUTPUT ;;

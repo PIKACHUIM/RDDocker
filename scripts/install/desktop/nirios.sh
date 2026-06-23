@@ -4,11 +4,13 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 case "$OS_ID" in
   debian)
-    echo "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list
+    # niri not in trixie; use sid (unstable) with pinning
+    echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
+    printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
-    apt-get install -y -t trixie --no-install-recommends niri foot waybar wofi xwayland weston pulseaudio \
+    apt-get install -y -t unstable --no-install-recommends niri foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk
-    rm /etc/apt/sources.list.d/trixie.list ;;
+    rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y universe

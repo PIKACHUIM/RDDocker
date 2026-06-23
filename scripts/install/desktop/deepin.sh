@@ -12,14 +12,17 @@ case "$OS_ID" in
     esac
     echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
+    # Higher priority so GXDE packages override Debian dde-* packages (avoid conflicts)
+    printf 'Package: *\nPin: origin repo.gxde.top\nPin-Priority: 1001\n' \
+      > /etc/apt/preferences.d/99gxde
     eval "$PKG_UPDATE" || true
-    # gxde-daemon depends on translate-shell (removed from Debian); create a dummy package
     mkdir -p /tmp/fake-trans/DEBIAN
     printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
       > /tmp/fake-trans/DEBIAN/control
     dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
     dpkg -i /tmp/fake-trans.deb
-    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" ;;
+    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop"
+    rm /etc/apt/preferences.d/99gxde ;;
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y ppa:ubuntudde-dev/stable 2>/dev/null || true

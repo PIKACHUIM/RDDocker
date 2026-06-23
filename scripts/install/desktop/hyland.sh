@@ -4,21 +4,22 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 case "$OS_ID" in
   debian)
-    # hyprland is not in bookworm/trixie; use sid (unstable) overlay
+    # hyprland not in bookworm/trixie; use sid with pinning to avoid conflicts
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
+    printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
     apt-get install -y -t unstable --no-install-recommends hyprland wayvnc xwayland kitty waybar pulseaudio git
-    rm /etc/apt/sources.list.d/sid.list ;;
+    rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y universe
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" ;;
   fedora)
-    # Try official repo first (hyprland added to Fedora >=41), fall back to copr
+    # Try official repo first, fall back to copr with libdisplay-info dep
     eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" 2>/dev/null || {
+      dnf install -y libdisplay-info 2>/dev/null || true
       dnf copr enable -y solopasha/hyprland
-      dnf install -y display-info 2>/dev/null || true
       eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git"
     } ;;
   alpine)

@@ -2,34 +2,25 @@
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 . "$INSTALL_DIR/commons.sh"
 
-# Install niri binary from GitHub releases (not available in apt repos)
-install_niri_binary() {
-  ARCH_BIN="x86_64-unknown-linux-gnu"
-  [ "$(uname -m)" = "aarch64" ] && ARCH_BIN="aarch64-unknown-linux-gnu"
-  NIRI_VER=$(curl -fsSL "https://api.github.com/repos/YaLTeR/niri/releases/latest" \
-    | grep '"tag_name"' | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/')
-  curl -fsSL "https://github.com/YaLTeR/niri/releases/download/${NIRI_VER}/niri-${NIRI_VER}-${ARCH_BIN}.tar.gz" \
-    | tar xz -C /usr/local/bin/ niri
-}
-
 case "$OS_ID" in
   debian)
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
-    printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
+    echo "deb http://deb.debian.org/debian experimental main" >> /etc/apt/sources.list.d/sid.list
+    printf 'Package: *\nPin: release a=experimental\nPin-Priority: 1\nPackage: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL curl ca-certificates"
-    update-ca-certificates 2>/dev/null || true
-    install_niri_binary
+    apt-get install -y -t unstable --no-install-recommends niri 2>/dev/null || \
+      apt-get install -y -t experimental --no-install-recommends niri 2>/dev/null || \
+      echo "Warning: niri unavailable for Debian ${VERSION_CODENAME}" >&2
     apt-get install -y -t unstable --no-install-recommends foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
-    eval "$PKG_INSTALL software-properties-common curl ca-certificates"
-    update-ca-certificates 2>/dev/null || true
+    eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y universe
     eval "$PKG_UPDATE"
-    install_niri_binary
-    eval "$PKG_INSTALL foot waybar wofi xwayland weston pulseaudio \
+    eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio \
+      wayland-protocols swaybg fonts-noto fonts-noto-cjk" 2>/dev/null || \
+      eval "$PKG_INSTALL foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk" ;;
   fedora)
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;

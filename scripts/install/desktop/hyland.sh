@@ -4,7 +4,6 @@ INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 case "$OS_ID" in
   debian)
-    # hyprland not in bookworm/trixie; use sid with pinning to avoid conflicts
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
     printf 'Package: openssl openssl-provider-legacy libssl3 libssl-dev\nPin: release a=stable\nPin-Priority: 1001\nPackage: *\nPin: release a=unstable\nPin-Priority: 100\n' \
       > /etc/apt/preferences.d/99sid
@@ -14,16 +13,24 @@ case "$OS_ID" in
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y universe
+    add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME)-backports main universe" 2>/dev/null || true
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" ;;
+    eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" || \
+      echo "Warning: hyprland unavailable for Ubuntu ${VERSION_CODENAME}" >&2 ;;
   fedora)
-    # Enable copr first (provides aquamarine with correct libdisplay-info.so.2)
     dnf copr enable -y solopasha/hyprland
+    # Install libdisplay-info from copr (provides .so.2 needed by aquamarine)
+    dnf install -y --allowerasing libdisplay-info
     eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" ;;
   alpine)
     apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
       hyprland wayvnc xwayland kitty waybar pulseaudio git ;;
 esac
+
+mkdir -p /root/.config/hypr
+cat > /root/.config/hypr/hyprland.conf << 'CONF'
+monitor=,1920x1080,0x0,1
+CONF
 
 cat >> /run.sh << 'RUN_END'
 echo "Starting Hyprland..."

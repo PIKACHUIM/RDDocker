@@ -1,4 +1,4 @@
-name: Build Changed Docker Images
+name: Build Changed Images
 
 on:
   push:

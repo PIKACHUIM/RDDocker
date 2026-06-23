@@ -30,7 +30,8 @@ case "$OS_ID" in
 esac
 
 # xorg.configs (dummy driver for headless)
-cp "$INSTALL_DIR/configs/xorg.conf" /usr/share/X11/xorg.config.d/99-dummy.config
+mkdir -p /usr/share/X11/xorg.conf.d
+cp "$INSTALL_DIR/configs/xorg.conf" /usr/share/X11/xorg.conf.d/99-dummy.conf
 echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config 2>/dev/null || true
 
 # VNC password

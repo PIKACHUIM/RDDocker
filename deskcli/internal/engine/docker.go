@@ -68,7 +68,9 @@ func (d *DockerEngine) Run(image, name string, ports []string, env []string) err
 		args = append(args, "-e", e)
 	}
 	args = append(args, image)
-	return exec.Command(d.binary, args...).Run()
+	c := exec.Command(d.binary, args...)
+	c.Stdout, c.Stderr = os.Stdout, os.Stderr
+	return c.Run()
 }
 
 func (d *DockerEngine) SetPassword(name, password string) error {

@@ -190,7 +190,12 @@ func runDeskNew(_ *cobra.Command, args []string) error {
 
 	name := newName
 	if name == "" {
-		name = strings.ReplaceAll(strings.Split(image, ":")[0], "/", "-")
+		imgNoTag := strings.Split(image, ":")[0]
+		parts := strings.Split(imgNoTag, "/")
+		if len(parts) > 2 {
+			parts = parts[len(parts)-2:]
+		}
+		name = strings.Join(parts, "-")
 	}
 
 	db, err := store.Open(cfg.DataDir)

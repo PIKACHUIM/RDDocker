@@ -6,21 +6,16 @@ CONF_DIR="$INSTALL_DIR/conf"
 CONTAINER_CONF_DIR="$CONF_DIR/containers"
 BIN_DIR="/usr/local/bin"
 
-read -r -p "Container data directory [/opt/deskcli/data]: " DATA_INPUT </dev/tty 2>/dev/null || true
+read -r -p "Container data directory [/opt/deskcli/data]: " DATA_INPUT </dev/tty
 DATA_DIR="${DATA_INPUT:-/opt/deskcli/data}"
 
 mkdir -p "$DATA_DIR" "$CONF_DIR" "$CONTAINER_CONF_DIR"
 
 ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
-BINARY_URL="https://github.com/pikachuim/RDDocker/releases/latest/download/deskcli-linux-${ARCH}"
+BINARY_URL="https://github.com/PIKACHUIM/RDDocker/releases/download/v0.0.0-beta/deskcli-linux-${ARCH}"
 
-if command -v go &>/dev/null && [ -f "$(dirname "$0")/go.mod" ]; then
-    echo "Building from source..."
-    (cd "$(dirname "$0")" && go build -ldflags="-s -w" -o /tmp/dockcli .)
-else
-    echo "Downloading binary from $BINARY_URL ..."
-    curl -fsSL "$BINARY_URL" -o /tmp/dockcli
-fi
+echo "Downloading binary from $BINARY_URL ..."
+curl -fsSL "$BINARY_URL" -o /tmp/dockcli
 
 install -m755 /tmp/dockcli "$BIN_DIR/deskcli"
 

@@ -1,11 +1,11 @@
-name: Build Debian - nirios
+name: Build Fedora - nirios
 
 on:
   workflow_call:
   workflow_dispatch:
 
 env:
-  IMAGE_PREFIX: pikachuim/debian
+  IMAGE_PREFIX: pikachuim/fedora
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['bookworm', 'trixie']
+        version: ['43', '44']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login
@@ -21,18 +21,18 @@ jobs:
           username: ${{ secrets.DOCKER_PUBHUB_USER }}
           password: ${{ secrets.DOCKER_PUBHUB_PASS }}
           ghcr_token: ${{ secrets.GITHUB_TOKEN }}
-      - id: vers
-        run: |
-          case "${{ matrix.version }}" in
-            bookworm) echo "vershow=12" >> $GITHUB_OUTPUT ;;
-            trixie) echo "vershow=13" >> $GITHUB_OUTPUT ;;
-            *) echo "vershow=${{ matrix.version }}" >> $GITHUB_OUTPUT ;;
-          esac
       - uses: docker/build-push-action@v5
         with:
           context: .
-          file: dockers/debian/desktops/nirios
+          file: dockers/fedora/desktops/nirios
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.
+            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-nirios
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-nirios
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=fedora
+            OS_VERSHOW=${{ matrix.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

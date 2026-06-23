@@ -7,7 +7,7 @@ install_niri_binary() {
   ARCH_BIN="x86_64-unknown-linux-gnu"
   [ "$(uname -m)" = "aarch64" ] && ARCH_BIN="aarch64-unknown-linux-gnu"
   NIRI_VER=$(curl -fsSL "https://api.github.com/repos/YaLTeR/niri/releases/latest" \
-    | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
+    | grep '"tag_name"' | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/')
   curl -fsSL "https://github.com/YaLTeR/niri/releases/download/${NIRI_VER}/niri-${NIRI_VER}-${ARCH_BIN}.tar.gz" \
     | tar xz -C /usr/local/bin/ niri
 }

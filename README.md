@@ -70,13 +70,14 @@
 | **Hyland** | Hyperland 桌面环境 | 🚧 | 🚧 | 🚧 | 🚧 | ❌ |
 | **Nirios** | Niri Wayland 窗口管理 | 🚧 | 🚧 | 🚧 | ❌ | 🚧 |
 | **Deepin** | 深度 DDE 桌面         | ✅ | ⚠️ | ✅ | ❌ | ✅ |
-| **Lingmo** | Lingmo OS 桌面      | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **Lingmo** | Lingmo OS 桌面      | ⚠️ | ⚠️ | ❌ | ❌ | ❌ |
 
 备注：
 1. Ubuntu DDE（Deepin）仅支持 22.04，24.04 及 26.04 版本不支持
 2. Alpine 和 Arch Linux 分别覆盖主流桌面，相互不重叠，且均暂不支持 Lingmo DE
 3. HyperLand 和 Niri 属于实验性支持，使用 Wayland，暂不支持 RDP 方式连接到容器
 4. Ubuntu 26.04 使用 GNOME 50，不再支持 X11，使用 Wayland，VNC 和 RDP 组件有差异
+5. Lingmo DE 因为其镜像源不稳定，暂停构建
 
 ### 镜像速查
 

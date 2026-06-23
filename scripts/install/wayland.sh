@@ -6,7 +6,7 @@ case "$OS_ID" in
   debian|ubuntu)
     eval "$PKG_INSTALL weston wayland-protocols xwayland libwayland-dev" ;;
   fedora)
-    eval "$PKG_INSTALL weston wayland-protocols xwayland" ;;
+    eval "$PKG_INSTALL weston xorg-x11-server-Xwayland" ;;
   arch|archos)
     eval "$PKG_INSTALL weston wayland wayland-protocols xorg-xwayland" ;;
   alpine)

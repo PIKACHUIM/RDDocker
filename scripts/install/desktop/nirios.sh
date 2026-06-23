@@ -10,6 +10,7 @@ case "$OS_ID" in
   fedora)
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL niri foot waybar wofi xwayland weston pulseaudio" ;;
   alpine)
     echo "Niri is not available on Alpine Linux" >&2; exit 1 ;;

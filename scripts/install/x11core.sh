@@ -20,11 +20,13 @@ case "$OS_ID" in
       xorg-x11-server-Xvfb wget curl net-tools dbus xrdp x11vnc"
     ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL xorg-server xf86-video-dummy xorg-xauth \
       x11vnc dbus curl wget"
     pacman -S --noconfirm xrdp 2>/dev/null || true
     ;;
   alpine)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL xorg-server xf86-video-dummy xauth x11vnc xvfb \
       dbus dbus-x11 font-dejavu font-noto xrdp"
     ;;

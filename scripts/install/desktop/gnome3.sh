@@ -9,8 +9,10 @@ case "$OS_ID" in
   fedora)
     eval "$PKG_INSTALL pulseaudio @gnome-desktop cmake git" ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio gnome gnome-extra cmake git" ;;
   alpine)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio gnome gnome-apps-core cmake git" ;;
 esac
 

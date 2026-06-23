@@ -11,8 +11,10 @@ case "$OS_ID" in
   fedora)
     eval "$PKG_INSTALL pulseaudio @xfce-desktop xfce4-terminal git" ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio xfce4 xfce4-goodies git" ;;
   alpine)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio xfce4 xfce4-terminal \
       xfce4-notifyd xfce4-screenshooter xfce4-power-manager \
       xfce4-pulseaudio-plugin xfce4-clipman-plugin git" ;;

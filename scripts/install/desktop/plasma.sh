@@ -15,8 +15,10 @@ case "$OS_ID" in
   fedora)
     eval "$PKG_INSTALL pipewire-pulseaudio @kde-desktop-environment cmake git" ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio plasma kde-applications cmake git" ;;
   alpine)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio plasma-desktop kde-applications-base cmake git" ;;
 esac
 

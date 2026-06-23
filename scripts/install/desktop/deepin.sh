@@ -19,6 +19,7 @@ case "$OS_ID" in
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL ubuntudde-dde pulseaudio" ;;
   arch|archos)
+    eval "$PKG_UPDATE"
     eval "$PKG_INSTALL deepin pulseaudio" ;;
   # fedora: deepin-desktop-environment retired from Fedora 43+ (FESCo, May 2026)
   # fedora)

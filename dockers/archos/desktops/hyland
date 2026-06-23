@@ -1,0 +1,10 @@
+ARG OS_SYSTEMS=archos
+FROM pikachuim/${OS_SYSTEMS}:latest-x11gui
+ARG OS_SYSTEMS
+ARG OS_MESSAGE="ArchOS with Hyprland Desktop"
+LABEL System=${OS_SYSTEMS} Version=latest Description=${OS_MESSAGE}
+COPY --chmod=755 scripts/install/ /install/
+RUN /install/desktop/hyland.sh
+
+EXPOSE 4000/tcp 5900/tcp
+CMD ["/bin/sh", "/run.sh"]

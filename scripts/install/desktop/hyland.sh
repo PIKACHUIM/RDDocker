@@ -13,7 +13,6 @@ case "$OS_ID" in
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
     add-apt-repository -y universe
-    add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME)-backports main universe" 2>/dev/null || true
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" || \
       echo "Warning: hyprland unavailable for Ubuntu ${VERSION_CODENAME}" >&2 ;;

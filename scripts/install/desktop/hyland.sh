@@ -6,7 +6,8 @@ case "$OS_ID" in
   debian)
     # hyprland not in bookworm/trixie; use sid with pinning to avoid conflicts
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
-    printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
+    printf 'Package: openssl openssl-provider-legacy libssl3 libssl-dev\nPin: release a=stable\nPin-Priority: 1001\nPackage: *\nPin: release a=unstable\nPin-Priority: 100\n' \
+      > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
     apt-get install -y -t unstable --no-install-recommends hyprland wayvnc xwayland kitty waybar pulseaudio git
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;

@@ -19,9 +19,8 @@ case "$OS_ID" in
       echo "Warning: hyprland unavailable for Ubuntu ${VERSION_CODENAME}" >&2 ;;
   fedora)
     dnf copr enable -y solopasha/hyprland
-    # Install libdisplay-info from copr (provides .so.2 needed by aquamarine)
-    dnf install -y --allowerasing libdisplay-info
-    eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" ;;
+    # Use --allowerasing so copr's libdisplay-info (so.2) replaces base version (so.1)
+    dnf install -y --allowerasing hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git ;;
   alpine)
     apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
       hyprland wayvnc xwayland kitty waybar pulseaudio git ;;

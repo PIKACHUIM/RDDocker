@@ -13,7 +13,7 @@ case "$OS_ID" in
     echo "deb [trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
       > /etc/apt/sources.list.d/gxde.list
     eval "$PKG_UPDATE" || true
-    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop pulseaudio" ;;
+    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" ;;
   ubuntu)
     add-apt-repository -y ppa:ubuntudde-dev/stable 2>/dev/null || true
     eval "$PKG_UPDATE"

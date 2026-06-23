@@ -7,7 +7,8 @@ case "$OS_ID" in
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" ;;
   fedora)
-    eval "$PKG_INSTALL hyprland wayvnc xwayland kitty waybar pulseaudio git" ;;
+    dnf copr enable -y solopasha/hyprland
+    eval "$PKG_INSTALL hyprland wayvnc xorg-x11-server-Xwayland kitty waybar pulseaudio git" ;;
   alpine)
     apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
       hyprland wayvnc xwayland kitty waybar pulseaudio git ;;

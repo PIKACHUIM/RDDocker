@@ -13,6 +13,7 @@ case "$OS_ID" in
   arch|archos)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL niri foot waybar wofi xorg-xwayland weston pulseaudio" ;;
+  alpine)
     echo "Niri is not available on Alpine Linux" >&2; exit 1 ;;
 esac
 

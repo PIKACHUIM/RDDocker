@@ -25,8 +25,8 @@ jobs:
         run: |
           case "${{ matrix.version }}" in
             bookworm) echo "vershow=12" >> $GITHUB_OUTPUT ;;
-            trixie) echo "vershow=13" >> $GITHUB_OUTPUT ;;
-            *) echo "vershow=${{ matrix.version }}" >> $GITHUB_OUTPUT ;;
+            trixie)   echo "vershow=13" >> $GITHUB_OUTPUT ;;
+            *)        echo "vershow=${{ matrix.version }}" >> $GITHUB_OUTPUT ;;
           esac
       - uses: docker/build-push-action@v5
         with:
@@ -35,4 +35,13 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ env.
+            ${{ env.IMAGE_PREFIX }}:${{ steps.vers.outputs.vershow }}-nirios
+            ${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-nirios
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ steps.vers.outputs.vershow }}-nirios
+            ghcr.io/${{ env.IMAGE_PREFIX }}:${{ matrix.version }}-nirios
+          build-args: |
+            OS_VERSION=${{ matrix.version }}
+            OS_SYSTEMS=debian
+            OS_VERSHOW=${{ steps.vers.outputs.vershow }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

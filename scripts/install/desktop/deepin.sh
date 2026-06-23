@@ -8,8 +8,21 @@ case "$OS_ID" in
     eval "$PKG_INSTALL ca-certificates apt-transport-https curl"
     case "${VERSION_CODENAME:-}" in
       trixie)
-        # GXDE lizhi has broken cross-arch deps on trixie; use native Debian DDE packages
-        eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" ;;
+        # GXDE lizhi has broken cross-arch deps; use GXDE with graceful fallback
+        GXDE_CODENAME=lizhi
+        echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
+          > /etc/apt/sources.list.d/gxde.list
+        printf 'Package: *\nPin: origin repo.gxde.top\nPin-Priority: 1001\n' \
+          > /etc/apt/preferences.d/99gxde
+        eval "$PKG_UPDATE" || true
+        mkdir -p /tmp/fake-trans/DEBIAN
+        printf 'Package: translate-shell\nVersion: 0.9.9-1\nArchitecture: all\nMaintainer: dummy\nDescription: dummy\n' \
+          > /tmp/fake-trans/DEBIAN/control
+        dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
+        dpkg -i /tmp/fake-trans.deb
+        eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" || \
+          echo "Warning: DDE unavailable for Debian ${VERSION_CODENAME}, skipping desktop install" >&2
+        rm -f /etc/apt/sources.list.d/gxde.list /etc/apt/preferences.d/99gxde ;;
       *)
         GXDE_CODENAME=bixie
         echo "deb [arch=amd64,arm64 allow-insecure=yes trusted=yes] https://repo.gxde.top/gxde-os/${GXDE_CODENAME}/ /" \
@@ -33,9 +46,6 @@ case "$OS_ID" in
   arch|archos)
     eval "$PKG_UPDATE"
     pacman -S --noconfirm --overwrite '/usr/share/dbus-1/services/org.deepin.dde.Power1.service' deepin pulseaudio ;;
-  # fedora: deepin-desktop-environment retired from Fedora 43+ (FESCo, May 2026)
-  # fedora)
-  #   eval "$PKG_INSTALL deepin-desktop-environment pulseaudio" ;;
   alpine)
     echo "Deepin DE is not supported on Alpine Linux" >&2; exit 1 ;;
 esac

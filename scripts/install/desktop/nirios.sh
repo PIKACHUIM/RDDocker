@@ -2,12 +2,12 @@
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 . "$INSTALL_DIR/commons.sh"
 
-# Install niri binary from GitHub releases (not in Debian/Ubuntu apt repos)
+# Install niri binary from GitHub releases (not available in apt repos)
 install_niri_binary() {
   ARCH_BIN="x86_64-unknown-linux-gnu"
   [ "$(uname -m)" = "aarch64" ] && ARCH_BIN="aarch64-unknown-linux-gnu"
   NIRI_VER=$(curl -fsSL "https://api.github.com/repos/YaLTeR/niri/releases/latest" \
-    | grep -o '"tag_name":"[^"]*"' | cut -d'"' -f4)
+    | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
   curl -fsSL "https://github.com/YaLTeR/niri/releases/download/${NIRI_VER}/niri-${NIRI_VER}-${ARCH_BIN}.tar.gz" \
     | tar xz -C /usr/local/bin/ niri
 }
@@ -17,13 +17,15 @@ case "$OS_ID" in
     echo "deb http://deb.debian.org/debian unstable main" > /etc/apt/sources.list.d/sid.list
     printf 'Package: *\nPin: release a=unstable\nPin-Priority: 100\n' > /etc/apt/preferences.d/99sid
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL curl"
+    eval "$PKG_INSTALL curl ca-certificates"
+    update-ca-certificates 2>/dev/null || true
     install_niri_binary
     apt-get install -y -t unstable --no-install-recommends foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk
     rm /etc/apt/sources.list.d/sid.list /etc/apt/preferences.d/99sid ;;
   ubuntu)
-    eval "$PKG_INSTALL software-properties-common curl"
+    eval "$PKG_INSTALL software-properties-common curl ca-certificates"
+    update-ca-certificates 2>/dev/null || true
     add-apt-repository -y universe
     eval "$PKG_UPDATE"
     install_niri_binary

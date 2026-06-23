@@ -15,7 +15,7 @@ var confCmd = &cobra.Command{
 
 var confSetCmd = &cobra.Command{
 	Use:   "set <key> <value>",
-	Short: "Set a configs value (token|engine|port)",
+	Short: "Set a config value (token|engine|port|port_range)",
 	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Load()
@@ -34,6 +34,8 @@ var confSetCmd = &cobra.Command{
 				return fmt.Errorf("invalid port: %s", val)
 			}
 			cfg.Port = p
+		case "port_range":
+			cfg.PortRange = val
 		default:
 			return fmt.Errorf("unknown key: %s", key)
 		}
@@ -43,7 +45,7 @@ var confSetCmd = &cobra.Command{
 
 var confGetCmd = &cobra.Command{
 	Use:   "get <key>",
-	Short: "Get a configs value (token|engine|port)",
+	Short: "Get a config value (token|engine|port|port_range)",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, err := config.Load()
@@ -57,6 +59,8 @@ var confGetCmd = &cobra.Command{
 			fmt.Println(cfg.Engine)
 		case "port":
 			fmt.Println(cfg.Port)
+		case "port_range":
+			fmt.Println(cfg.PortRange)
 		default:
 			return fmt.Errorf("unknown key: %s", args[0])
 		}

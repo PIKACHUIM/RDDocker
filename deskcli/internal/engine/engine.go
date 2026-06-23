@@ -18,8 +18,10 @@ type Engine interface {
 	Remove(name string) error
 	Exec(name string, cmd []string, detach bool) error
 	Run(image, name string, ports []string, env []string) error
+	Pull(image string) error
 	SetPassword(name, password string) error
 	Info(name string) (*ContainerInfo, error)
+	GetIP(name string) (string, error)
 }
 
 func New(engineType string) (Engine, error) {

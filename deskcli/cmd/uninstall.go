@@ -18,7 +18,7 @@ var uninstallCmd = &cobra.Command{
 		_ = os.Remove("/etc/systemd/system/dockcli.service")
 		_ = systemctl("daemon-reload")
 		_ = os.Remove("/usr/local/bin/deskcli")
-		fmt.Print("Remove config and data? [y/N]: ")
+		fmt.Print("Remove config and data (/opt/deskcli)? [y/N]: ")
 		s, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 		if strings.TrimSpace(strings.ToLower(s)) == "y" {
 			_ = os.RemoveAll("/opt/deskcli")

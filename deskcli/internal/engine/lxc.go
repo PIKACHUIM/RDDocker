@@ -7,22 +7,7 @@ import (
 	"strings"
 )
 
-type LxcEngine struct {
-	isLxd bool
-}
-
-func (l *LxcEngine) cmd(args ...string) *exec.Cmd {
-	if l.isLxd {
-		return exec.Command("lxc", args...)
-	}
-	// native lxc uses prefixed commands: lxc-start, lxc-stop, etc.
-	if len(args) == 0 {
-		return exec.Command("lxc-ls")
-	}
-	sub := args[0]
-	rest := args[1:]
-	return exec.Command("lxc-"+sub, rest...)
-}
+type LxcEngine struct{ isLxd bool }
 
 func (l *LxcEngine) List() ([]ContainerInfo, error) {
 	var out []byte
@@ -38,7 +23,7 @@ func (l *LxcEngine) List() ([]ContainerInfo, error) {
 	var list []ContainerInfo
 	for i, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
 		if line == "" || (!l.isLxd && i == 0) {
-			continue // skip header for native lxc
+			continue
 		}
 		parts := strings.Fields(line)
 		if len(parts) < 1 {
@@ -59,6 +44,15 @@ func (l *LxcEngine) List() ([]ContainerInfo, error) {
 	return list, nil
 }
 
+func (l *LxcEngine) Pull(image string) error {
+	if l.isLxd {
+		c := exec.Command("lxc", "image", "copy", image, "local:")
+		c.Stdout, c.Stderr = os.Stdout, os.Stderr
+		return c.Run()
+	}
+	return fmt.Errorf("pull not supported for native lxc")
+}
+
 func (l *LxcEngine) Start(name string) error {
 	if l.isLxd {
 		return exec.Command("lxc", "start", name).Run()
@@ -74,9 +68,7 @@ func (l *LxcEngine) Stop(name string) error {
 }
 
 func (l *LxcEngine) Restart(name string) error {
-	if err := l.Stop(name); err != nil {
-		return err
-	}
+	_ = l.Stop(name)
 	return l.Start(name)
 }
 
@@ -90,16 +82,12 @@ func (l *LxcEngine) Remove(name string) error {
 func (l *LxcEngine) Exec(name string, cmd []string, detach bool) error {
 	var c *exec.Cmd
 	if l.isLxd {
-		args := append([]string{"exec", name, "--"}, cmd...)
-		c = exec.Command("lxc", args...)
+		c = exec.Command("lxc", append([]string{"exec", name, "--"}, cmd...)...)
 	} else {
-		args := append([]string{"-n", name, "--"}, cmd...)
-		c = exec.Command("lxc-attach", args...)
+		c = exec.Command("lxc-attach", append([]string{"-n", name, "--"}, cmd...)...)
 	}
 	if !detach {
-		c.Stdin = os.Stdin
-		c.Stdout = os.Stdout
-		c.Stderr = os.Stderr
+		c.Stdin, c.Stdout, c.Stderr = os.Stdin, os.Stdout, os.Stderr
 	}
 	return c.Run()
 }
@@ -131,8 +119,7 @@ func (l *LxcEngine) Info(name string) (*ContainerInfo, error) {
 	}
 	info := &ContainerInfo{Name: name}
 	for _, line := range strings.Split(string(out), "\n") {
-		lower := strings.ToLower(line)
-		if strings.Contains(lower, "status:") || strings.Contains(lower, "state:") {
+		if strings.Contains(strings.ToLower(line), "status:") || strings.Contains(strings.ToLower(line), "state:") {
 			parts := strings.SplitN(line, ":", 2)
 			if len(parts) == 2 {
 				info.Status = strings.TrimSpace(parts[1])
@@ -142,7 +129,17 @@ func (l *LxcEngine) Info(name string) (*ContainerInfo, error) {
 	return info, nil
 }
 
-// InstallSoftware installs software inside an lxc/lxd container
-func (l *LxcEngine) InstallSoftware(name, software string) error {
-	return l.Exec(name, []string{"apt-get", "install", "-y", software}, false)
+func (l *LxcEngine) GetIP(name string) (string, error) {
+	if l.isLxd {
+		out, err := exec.Command("lxc", "list", name, "--format", "csv", "-c", "4").Output()
+		if err != nil {
+			return "", err
+		}
+		return strings.TrimSpace(string(out)), nil
+	}
+	out, err := exec.Command("lxc-info", "-n", name, "-iH").Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(out)), nil
 }

@@ -7,9 +7,7 @@ import (
 	"strings"
 )
 
-type DockerEngine struct {
-	binary string
-}
+type DockerEngine struct{ binary string }
 
 func (d *DockerEngine) List() ([]ContainerInfo, error) {
 	out, err := exec.Command(d.binary, "ps", "-a", "--format", "{{.Names}}\t{{.Status}}\t{{.Image}}\t{{.Ports}}").Output()
@@ -37,21 +35,16 @@ func (d *DockerEngine) List() ([]ContainerInfo, error) {
 	return list, nil
 }
 
-func (d *DockerEngine) Start(name string) error {
-	return exec.Command(d.binary, "start", name).Run()
+func (d *DockerEngine) Pull(image string) error {
+	c := exec.Command(d.binary, "pull", image)
+	c.Stdout, c.Stderr = os.Stdout, os.Stderr
+	return c.Run()
 }
 
-func (d *DockerEngine) Stop(name string) error {
-	return exec.Command(d.binary, "stop", name).Run()
-}
-
-func (d *DockerEngine) Restart(name string) error {
-	return exec.Command(d.binary, "restart", name).Run()
-}
-
-func (d *DockerEngine) Remove(name string) error {
-	return exec.Command(d.binary, "rm", "-f", name).Run()
-}
+func (d *DockerEngine) Start(name string) error   { return exec.Command(d.binary, "start", name).Run() }
+func (d *DockerEngine) Stop(name string) error    { return exec.Command(d.binary, "stop", name).Run() }
+func (d *DockerEngine) Restart(name string) error { return exec.Command(d.binary, "restart", name).Run() }
+func (d *DockerEngine) Remove(name string) error  { return exec.Command(d.binary, "rm", "-f", name).Run() }
 
 func (d *DockerEngine) Exec(name string, cmd []string, detach bool) error {
 	args := []string{"exec"}
@@ -60,13 +53,10 @@ func (d *DockerEngine) Exec(name string, cmd []string, detach bool) error {
 	} else {
 		args = append(args, "-it")
 	}
-	args = append(args, name)
-	args = append(args, cmd...)
+	args = append(append(args, name), cmd...)
 	c := exec.Command(d.binary, args...)
 	if !detach {
-		c.Stdin = os.Stdin
-		c.Stdout = os.Stdout
-		c.Stderr = os.Stderr
+		c.Stdin, c.Stdout, c.Stderr = os.Stdin, os.Stdout, os.Stderr
 	}
 	return c.Run()
 }
@@ -84,13 +74,11 @@ func (d *DockerEngine) Run(image, name string, ports []string, env []string) err
 }
 
 func (d *DockerEngine) SetPassword(name, password string) error {
-	return exec.Command(d.binary, "exec", name, "bash", "-c",
-		fmt.Sprintf("echo 'root:%s' | chpasswd", password)).Run()
+	return exec.Command(d.binary, "exec", name, "bash", "-c", fmt.Sprintf("echo 'root:%s' | chpasswd", password)).Run()
 }
 
 func (d *DockerEngine) Info(name string) (*ContainerInfo, error) {
-	out, err := exec.Command(d.binary, "inspect", "--format",
-		"{{.Id}}\t{{.State.Status}}\t{{.Config.Image}}", name).Output()
+	out, err := exec.Command(d.binary, "inspect", "--format", "{{.Id}}\t{{.State.Status}}\t{{.Config.Image}}", name).Output()
 	if err != nil {
 		return nil, err
 	}
@@ -106,4 +94,12 @@ func (d *DockerEngine) Info(name string) (*ContainerInfo, error) {
 		info.Image = parts[2]
 	}
 	return info, nil
+}
+
+func (d *DockerEngine) GetIP(name string) (string, error) {
+	out, err := exec.Command(d.binary, "inspect", "-f", "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", name).Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(out)), nil
 }

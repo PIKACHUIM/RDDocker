@@ -16,8 +16,7 @@ var serverCmd = &cobra.Command{
 
 func systemctl(args ...string) error {
 	c := exec.Command("systemctl", args...)
-	c.Stdout = os.Stdout
-	c.Stderr = os.Stderr
+	c.Stdout, c.Stderr = os.Stdout, os.Stderr
 	return c.Run()
 }
 
@@ -38,9 +37,7 @@ func init() {
 		serverCmd.AddCommand(&cobra.Command{
 			Use:   sub.use,
 			Short: sub.short,
-			RunE: func(_ *cobra.Command, _ []string) error {
-				return systemctl(a...)
-			},
+			RunE:  func(_ *cobra.Command, _ []string) error { return systemctl(a...) },
 		})
 	}
 }

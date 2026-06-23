@@ -10,7 +10,7 @@ var detach bool
 
 var rootCmd = &cobra.Command{
 	Use:   "deskcli",
-	Short: "desktop container management tool",
+	Short: "Desktop container management tool",
 }
 
 func Execute() {
@@ -21,6 +21,9 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&detach, "detach", "d", false, "Run in background (detach)")
-	rootCmd.AddCommand(confCmd, listCmd, deskCmd, serveCmd, softCmd)
-	rootCmd.AddCommand(stopCmd, startCmd, restartCmd, rmCmd, execCmd)
+	rootCmd.AddCommand(
+		confCmd, listCmd, deskCmd, serveCmd, softCmd,
+		serverCmd, uninstallCmd, updateCmd,
+		stopCmd, startCmd, restartCmd, rmCmd, execCmd,
+	)
 }

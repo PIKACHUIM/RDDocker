@@ -20,7 +20,7 @@ func fail(c *gin.Context, code int, msg string) {
 	c.JSON(code, gin.H{"success": false, "data": nil, "message": msg})
 }
 
-func loadEngineFromCtx(c *gin.Context) (engine.Engine, *config.Config, bool) {
+func loadEngine(c *gin.Context) (engine.Engine, *config.Config, bool) {
 	cfg, err := config.Load()
 	if err != nil {
 		fail(c, 500, err.Error())
@@ -35,7 +35,7 @@ func loadEngineFromCtx(c *gin.Context) (engine.Engine, *config.Config, bool) {
 }
 
 func ListContainers(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -60,7 +60,7 @@ func CreateContainer(c *gin.Context) {
 		fail(c, 400, err.Error())
 		return
 	}
-	eng, cfg, ok2 := loadEngineFromCtx(c)
+	eng, cfg, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -75,7 +75,6 @@ func CreateContainer(c *gin.Context) {
 	for _, sw := range req.Softwares {
 		_ = eng.Exec(name, []string{"apt-get", "install", "-y", sw}, true)
 	}
-
 	var portMaps []config.PortMap
 	for _, p := range req.Ports {
 		parts := strings.SplitN(p, ":", 2)
@@ -85,17 +84,15 @@ func CreateContainer(c *gin.Context) {
 			portMaps = append(portMaps, config.PortMap{Ext: ext, Int: in})
 		}
 	}
-	cc := &config.ContainerConfig{Name: name, Image: req.Image, Engine: cfg.Engine, Ports: portMaps}
-	_ = config.SaveContainer(cc)
-
-	if ip := getContainerIP(cfg.Engine, name); ip != "" {
+	_ = config.SaveContainer(&config.ContainerConfig{Name: name, Image: req.Image, Engine: cfg.Engine, Ports: portMaps})
+	if ip, err := eng.GetIP(name); err == nil && ip != "" {
 		_ = forward.ApplyContainerRules(ip, portMaps)
 	}
 	ok(c, gin.H{"name": name})
 }
 
 func GetContainer(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -109,7 +106,7 @@ func GetContainer(c *gin.Context) {
 }
 
 func RemoveContainer(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -123,7 +120,7 @@ func RemoveContainer(c *gin.Context) {
 }
 
 func StartContainer(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -135,7 +132,7 @@ func StartContainer(c *gin.Context) {
 }
 
 func StopContainer(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -147,7 +144,7 @@ func StopContainer(c *gin.Context) {
 }
 
 func RestartContainer(c *gin.Context) {
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -169,7 +166,7 @@ func ExecContainer(c *gin.Context) {
 		fail(c, 400, err.Error())
 		return
 	}
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}
@@ -180,9 +177,7 @@ func ExecContainer(c *gin.Context) {
 	ok(c, nil)
 }
 
-type passwdReq struct {
-	Password string `json:"password"`
-}
+type passwdReq struct{ Password string `json:"password"` }
 
 func SetPassword(c *gin.Context) {
 	var req passwdReq
@@ -190,7 +185,7 @@ func SetPassword(c *gin.Context) {
 		fail(c, 400, err.Error())
 		return
 	}
-	eng, _, ok2 := loadEngineFromCtx(c)
+	eng, _, ok2 := loadEngine(c)
 	if !ok2 {
 		return
 	}

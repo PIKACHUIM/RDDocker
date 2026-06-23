@@ -4,21 +4,24 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
 const (
-	ConfigDir  = "/opt/deskcli/configs"
+	ConfigDir  = "/opt/deskcli/conf"
 	DataDir    = "/opt/deskcli/data"
-	MainConfig = "/opt/deskcli/configs/configs.yaml"
+	MainConfig = "/opt/deskcli/conf/config.yaml"
 )
 
 type Config struct {
-	Token   string `yaml:"token"`
-	Engine  string `yaml:"engine"`
-	Port    int    `yaml:"port"`
-	DataDir string `yaml:"data_dir"`
+	Token     string `yaml:"token"`
+	Engine    string `yaml:"engine"`
+	Port      int    `yaml:"port"`
+	DataDir   string `yaml:"data_dir"`
+	PortRange string `yaml:"port_range"`
 }
 
 type PortMap struct {
@@ -36,7 +39,7 @@ type ContainerConfig struct {
 func Load() (*Config, error) {
 	data, err := os.ReadFile(MainConfig)
 	if err != nil {
-		return &Config{Engine: "docker", Port: 8080}, nil
+		return &Config{Engine: "docker", Port: 8080, DataDir: DataDir, PortRange: "50000-60000"}, nil
 	}
 	var c Config
 	if err := yaml.Unmarshal(data, &c); err != nil {
@@ -47,6 +50,12 @@ func Load() (*Config, error) {
 	}
 	if c.Engine == "" {
 		c.Engine = "docker"
+	}
+	if c.DataDir == "" {
+		c.DataDir = DataDir
+	}
+	if c.PortRange == "" {
+		c.PortRange = "50000-60000"
 	}
 	return &c, nil
 }
@@ -99,8 +108,7 @@ func ListContainerConfigs() ([]*ContainerConfig, error) {
 			continue
 		}
 		name := e.Name()[:len(e.Name())-5]
-		cc, err := LoadContainer(name)
-		if err == nil {
+		if cc, err := LoadContainer(name); err == nil {
 			out = append(out, cc)
 		}
 	}
@@ -108,9 +116,37 @@ func ListContainerConfigs() ([]*ContainerConfig, error) {
 }
 
 func DeleteContainer(name string) error {
-	path := containerConfigPath(name)
-	if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("delete container configs: %w", err)
+	if err := os.Remove(containerConfigPath(name)); err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("delete container config: %w", err)
 	}
 	return nil
+}
+
+// AllocatePorts returns 4 external ports (for SSH=22, RDP=3389, NX=4000, VNC=5900)
+// from portRange, skipping any already used.
+func AllocatePorts(portRange string, usedPorts map[int]bool) ([4]int, error) {
+	parts := strings.SplitN(portRange, "-", 2)
+	if len(parts) != 2 {
+		return [4]int{}, fmt.Errorf("invalid port_range: %s", portRange)
+	}
+	start, _ := strconv.Atoi(strings.TrimSpace(parts[0]))
+	end, _ := strconv.Atoi(strings.TrimSpace(parts[1]))
+	var result [4]int
+	taken := make(map[int]bool)
+	for k, v := range usedPorts {
+		taken[k] = v
+	}
+	for i := 0; i < 4; i++ {
+		for p := start; p <= end; p++ {
+			if !taken[p] {
+				result[i] = p
+				taken[p] = true
+				break
+			}
+		}
+		if result[i] == 0 {
+			return result, fmt.Errorf("no available port in range %s", portRange)
+		}
+	}
+	return result, nil
 }

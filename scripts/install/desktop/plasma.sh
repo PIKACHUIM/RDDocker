@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
   debian)
@@ -20,7 +20,7 @@ case "$OS_ID" in
     eval "$PKG_INSTALL pulseaudio plasma-desktop kde-applications-base cmake git" ;;
 esac
 
-cp "$INSTALL_DIR/conf/sddm.conf" /etc/sddm.config 2>/dev/null || true
+cp "$INSTALL_DIR/configs/sddm.conf" /etc/sddm.config 2>/dev/null || true
 
 cat >> /run.sh <<'EOF'
 echo "Starting KDE Plasma Desktop..."

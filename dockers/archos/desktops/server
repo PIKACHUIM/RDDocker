@@ -4,7 +4,7 @@ ARG OS_SYSTEMS
 ARG OS_MESSAGE="ArchOS with OpenSSH Server"
 LABEL System=${OS_SYSTEMS} Version=latest Description=${OS_MESSAGE}
 COPY --chmod=755 scripts/install/ /install/
-RUN /install/mirrors.sh && /install/server.sh
+RUN /install/mirrors.sh && /install/servers.sh
 
 EXPOSE 22/tcp
 CMD ["/bin/sh", "/run.sh"]

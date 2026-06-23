@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d 2>/dev/null || true
 
@@ -30,7 +30,7 @@ case "$OS_ID" in
 esac
 
 # xorg.configs (dummy driver for headless)
-cp "$INSTALL_DIR/conf/xorg.conf" /usr/share/X11/xorg.config.d/99-dummy.config
+cp "$INSTALL_DIR/configs/xorg.conf" /usr/share/X11/xorg.config.d/99-dummy.config
 echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config 2>/dev/null || true
 
 # VNC password

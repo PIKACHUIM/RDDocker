@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
   debian|ubuntu)

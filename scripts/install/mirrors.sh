@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 # Use MIRROR env var if set; skip rewrite if empty (keeps official mirrors for CI)
 MIRROR="${MIRROR:-}"

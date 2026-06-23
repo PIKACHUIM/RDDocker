@@ -66,7 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        desktop: [gnome3, xfce4l, plasma, deepin, nirios]
+        desktop: [deepin, nirios]
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-login

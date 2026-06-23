@@ -191,7 +191,7 @@ docker buildx build \
 ```bash
 #!/bin/bash
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
   debian|ubuntu) eval "$PKG_INSTALL mydesktop-packages" ;;
@@ -269,13 +269,13 @@ RDDocker/
 │
 ├── scripts/
 │   ├── install/                # 安装脚本（各 Dockerfile 复用）
-│   │   ├── common.sh           #   OS 检测 + 包管理器变量
+│   │   ├── commons.sh           #   OS 检测 + 包管理器变量
 │   │   ├── mirrors.sh          #   镜像源配置（apt / dnf / pacman / apk）
-│   │   ├── server.sh           #   SSH 服务器 + 用户创建
-│   │   ├── x11gui.sh           #   X11 + NoMachine + VNC + XRDP（多架构）
+│   │   ├── servers.sh           #   SSH 服务器 + 用户创建
+│   │   ├── x11core.sh           #   X11 + NoMachine + VNC + XRDP（多架构）
 │   │   ├── wayland.sh          #   Wayland 组件
 │   │   ├── software.sh         #   可选软件（Firefox / Chrome / VSCode / QQ）
-│   │   ├── conf/               #   配置文件（xorg.conf / sshd / sddm.conf ...）
+│   │   ├── configs/               #   配置文件（xorg.conf / sshd / sddm.conf ...）
 │   │   └── Desktop/            #   桌面安装脚本
 │   │       ├── gnome3.sh
 │   │       ├── xfce4l.sh
@@ -310,7 +310,7 @@ RDDocker/
 
 ```
 [OS 基础镜像]  debian:bookworm / ubuntu:24.04 / alpine:3.23 ...
-      ↓  scripts/install/mirrors.sh + server.sh
+      ↓  scripts/install/mirrors.sh + servers.sh
   [Server 层]  SSH 服务 + 用户管理 + systemd
       ↓  scripts/install/x11core.sh + wayland.sh
   [X11GUI 层]  X11 服务 + NoMachine + VNC + XRDP + Wayland
@@ -320,7 +320,7 @@ RDDocker/
 
 容器启动后，`/run.sh` 按顺序启动 SSH → dbus → NoMachine → Xvfb → 桌面会话 → VNC，用户直接连接即可使用。
 
-所有安装逻辑集中在 `scripts/install/` 中，各脚本通过 `common.sh` 自动检测 OS 类型，选择正确的包管理器，**同一份脚本适配所有支持的发行版**，Dockerfile 本身只需5~10 行。
+所有安装逻辑集中在 `scripts/install/` 中，各脚本通过 `commons.sh` 自动检测 OS 类型，选择正确的包管理器，**同一份脚本适配所有支持的发行版**，Dockerfile 本身只需5~10 行。
 
 ---
 

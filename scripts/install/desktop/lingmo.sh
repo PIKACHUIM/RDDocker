@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
   debian|ubuntu)
@@ -16,7 +16,7 @@ case "$OS_ID" in
       $PKG_INSTALL lingmo-core lingmo-workspace-base pulseaudio" ;;
 esac
 
-cp "$INSTALL_DIR/conf/de-lingmo.sh" /usr/local/bin/de-lingmo.sh
+cp "$INSTALL_DIR/configs/de-lingmo.sh" /usr/local/bin/de-lingmo.sh
 chmod +x /usr/local/bin/de-lingmo.sh
 
 cat >> /run.sh <<'EOF'

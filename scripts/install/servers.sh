@@ -1,6 +1,6 @@
 #!/bin/sh
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
-. "$INSTALL_DIR/common.sh"
+. "$INSTALL_DIR/commons.sh"
 
 case "$OS_ID" in
   debian|ubuntu)
@@ -8,19 +8,19 @@ case "$OS_ID" in
     mkdir -p /var/run/sshd /root/.ssh /run/sshd
     echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
     rm -f /etc/pam.d/sshd
-    cp "$INSTALL_DIR/conf/sshd" /etc/pam.d/sshd
+    cp "$INSTALL_DIR/configs/sshd" /etc/pam.d/sshd
     ;;
   fedora)
     eval "$PKG_INSTALL openssh-server sudo vim nano wget curl git openssl"
     mkdir -p /var/run/sshd /root/.ssh /run/sshd
     rm -f /etc/pam.d/sshd
-    cp "$INSTALL_DIR/conf/sshd" /etc/pam.d/sshd
+    cp "$INSTALL_DIR/configs/sshd" /etc/pam.d/sshd
     ;;
   arch|archos)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL openssh sudo wget curl git openssl base-devel"
     mkdir -p /var/run/sshd /root/.ssh
-    cp "$INSTALL_DIR/conf/sshd" /etc/pam.d/sshd 2>/dev/null || true
+    cp "$INSTALL_DIR/configs/sshd" /etc/pam.d/sshd 2>/dev/null || true
     ssh-keygen -A
     ;;
   alpine)
@@ -68,7 +68,7 @@ case "$OS_ID" in
     rc-update add sshd default
     ;;
   *)
-    cp "$INSTALL_DIR/conf/run.service" /etc/systemd/system/run.service 2>/dev/null || true
+    cp "$INSTALL_DIR/configs/run.service" /etc/systemd/system/run.service 2>/dev/null || true
     systemctl enable run 2>/dev/null || true
     systemctl enable sshd 2>/dev/null || true
     ;;

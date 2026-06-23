@@ -8,7 +8,7 @@ ARG OS_MESSAGE="Alpine with X11 + VNC + XRDP"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
 COPY --chmod=755 scripts/install/ /install/
-RUN /install/x11gui.sh && /install/wayland.sh
+RUN /install/x11core.sh && /install/wayland.sh
 
 EXPOSE 4000/tcp 5900/tcp 3389/tcp
 CMD ["/bin/sh", "/run.sh"]

@@ -7,7 +7,7 @@ ARG OS_MESSAGE="Fedora with OpenSSH Server"
 
 LABEL System=${OS_SYSTEMS} Version=${OS_VERSION} Description=${OS_MESSAGE}
 COPY --chmod=755 scripts/install/ /install/
-RUN /install/mirrors.sh && /install/server.sh
+RUN /install/mirrors.sh && /install/servers.sh
 
 EXPOSE 22/tcp
 CMD ["/sbin/init"]

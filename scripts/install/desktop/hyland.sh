@@ -37,4 +37,9 @@ echo "Starting Hyprland..."
 export XDG_RUNTIME_DIR=/tmp/xdg-runtime
 mkdir -p "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
 export WLR_BACKENDS=headless
-export 
+export WLR_RENDERER=pixman
+export WLR_LIBINPUT_NO_DEVICES=1
+nohup Hyprland &
+sleep 3
+nohup wayvnc 0.0.0.0 5900 &
+RUN_END

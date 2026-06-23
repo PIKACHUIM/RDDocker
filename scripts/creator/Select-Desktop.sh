@@ -40,6 +40,18 @@ esac
 
 case "$OS_TYPE" in
     "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
+        echo "      [7] Desktop Nirios DE  [ √ SSH / √ GUI APPs / × NoMachine / √ VNC ]  "
+        ;;
+esac
+
+case "$OS_TYPE" in
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
+        echo "      [8] Desktop Hyland DE  [ √ SSH / √ GUI APPs / × NoMachine / √ VNC ]  "
+        ;;
+esac
+
+case "$OS_TYPE" in
+    "ubuntu"|"debian"|"archos"|"fedora"|"alpine")
         echo "      [0] X11 GUI Basic ENV  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;;
 esac
@@ -69,6 +81,12 @@ elif [ $GUI_ENV == 5 ]; then
 elif [ $GUI_ENV == 6 ]; then
   GUI_ENV=plasma
   DC_FILE=plasma
+elif [ $GUI_ENV == 7 ]; then
+  GUI_ENV=nirios
+  DC_FILE=nirios
+elif [ $GUI_ENV == 8 ]; then
+  GUI_ENV=hyland
+  DC_FILE=hyland
 elif [ $GUI_ENV == 0 ]; then
   GUI_ENV=x11gui
   DC_FILE=x11gui

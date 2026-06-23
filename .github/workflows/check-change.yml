@@ -23,16 +23,16 @@ jobs:
           filters: |
             ubuntu:
               - 'dockers/ubuntu/**'
-              - 'Scripts/**'
+              - 'scripts/**'
             debian:
               - 'dockers/debian/**'
-              - 'Scripts/**'
+              - 'scripts/**'
             fedora:
               - 'dockers/fedora/**'
-              - 'Scripts/**'
+              - 'scripts/**'
             alpine:
               - 'dockers/alpine/**'
-              - 'Scripts/**'
+              - 'scripts/**'
 
   build-ubuntu:
     needs: changes

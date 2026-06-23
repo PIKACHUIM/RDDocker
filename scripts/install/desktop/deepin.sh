@@ -28,4 +28,19 @@ case "$OS_ID" in
   arch|archos)
     eval "$PKG_UPDATE"
     pacman -S --noconfirm --overwrite '/usr/share/dbus-1/services/org.deepin.dde.Power1.service' deepin pulseaudio ;;
-  # fedora: deep
+  # fedora: deepin-desktop-environment retired from Fedora 43+ (FESCo, May 2026)
+  # fedora)
+  #   eval "$PKG_INSTALL deepin-desktop-environment pulseaudio" ;;
+  alpine)
+    echo "Deepin DE is not supported on Alpine Linux" >&2; exit 1 ;;
+esac
+
+cat >> /run.sh <<'EOF'
+echo "Starting Deepin Desktop..."
+export DISPLAY=:9
+nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
+sleep 1
+eval $(dbus-launch --sh-syntax)
+bash /x11vnc.sh
+nohup startdde &
+EOF

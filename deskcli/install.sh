@@ -58,4 +58,4 @@ echo "deskcli installed successfully!"
 echo "Config: $CONF_DIR/config.yaml"
 echo "Data:   $DATA_DIR"
 echo "API port: $(grep port "$CONF_DIR/config.yaml" | awk '{print $2}')"
-echo "Token: $(grep token "$CONF_DIR/c
+echo "Token: $(grep token "$CONF_DIR/config.yaml" | awk '{print $2}')"

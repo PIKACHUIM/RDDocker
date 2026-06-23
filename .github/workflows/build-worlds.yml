@@ -2,24 +2,64 @@ name: Build Desktop Images
 
 on:
   workflow_dispatch:
+    inputs:
+      use_cache:
+        description: 'Skip build if last successful run < 7 days (pull from ghcr.io)'
+        type: boolean
+        default: true
 
 jobs:
+  check-cache:
+    runs-on: ubuntu-latest
+    outputs:
+      skip_build: ${{ steps.check.outputs.skip_build }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ inputs.use_cache }}" != "true" ]; then
+            echo "skip_build=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          LAST_RUN=$(gh api /repos/${{ github.repository }}/actions/workflows/build-worlds.yml/runs \
+            --jq '[.workflow_runs[] | select(.conclusion == "success")] | .[0].created_at // empty')
+          if [ -z "$LAST_RUN" ]; then
+            echo "skip_build=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          LAST_TS=$(date -d "$LAST_RUN" +%s)
+          DIFF=$(( $(date +%s) - LAST_TS ))
+          echo "Last successful run: $LAST_RUN (${DIFF}s ago)"
+          [ $DIFF -lt 604800 ] && echo "skip_build=true" >> $GITHUB_OUTPUT \
+                                || echo "skip_build=false" >> $GITHUB_OUTPUT
+
   build-alpine:
+    needs: check-cache
+    if: needs.check-cache.outputs.skip_build != 'true'
     uses: ./.github/workflows/build-alpine.yml
     secrets: inherit
 
   build-debian:
+    needs: check-cache
+    if: needs.check-cache.outputs.skip_build != 'true'
     uses: ./.github/workflows/build-debian.yml
     secrets: inherit
 
   build-ubuntu:
+    needs: check-cache
+    if: needs.check-cache.outputs.skip_build != 'true'
     uses: ./.github/workflows/build-ubuntu.yml
     secrets: inherit
 
   build-fedora:
+    needs: check-cache
+    if: needs.check-cache.outputs.skip_build != 'true'
     uses: ./.github/workflows/build-fedora.yml
     secrets: inherit
 
   build-archos:
+    needs: check-cache
+    if: needs.check-cache.outputs.skip_build != 'true'
     uses: ./.github/workflows/build-archos.yml
     secrets: inherit

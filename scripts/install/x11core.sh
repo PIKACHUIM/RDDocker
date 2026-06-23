@@ -21,7 +21,8 @@ case "$OS_ID" in
     ;;
   arch|archos)
     eval "$PKG_INSTALL xorg-server xf86-video-dummy xorg-xauth \
-      xorg-xvfb xrdp x11vnc dbus curl wget"
+      x11vnc dbus curl wget"
+    pacman -S --noconfirm xrdp 2>/dev/null || true
     ;;
   alpine)
     eval "$PKG_INSTALL xorg-server xf86-video-dummy xauth x11vnc xvfb \

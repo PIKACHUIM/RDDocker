@@ -92,7 +92,7 @@ func (l *LxcEngine) Exec(name string, cmd []string, detach bool) error {
 	return c.Run()
 }
 
-func (l *LxcEngine) Run(image, name string, ports []string, env []string) error {
+func (l *LxcEngine) Run(image, name string, ports []string, env []string, devices []string) error {
 	if l.isLxd {
 		if err := exec.Command("lxc", "init", image, name).Run(); err != nil {
 			return err

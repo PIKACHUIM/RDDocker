@@ -68,9 +68,15 @@
 | **Xfce4L** | 轻量、低资源占用          | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Plasma** | 功能丰富的现代桌面         | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Hyland** | Hyperland 桌面环境 | ✅ | ✅ | ✅ | ✅ | ❌ |
-| **Deepin** | 深度 DDE 桌面         | ✅ | ✅ | ✅ | ❌ | ✅ |
+| **Deepin** | 深度 DDE 桌面         | ✅ | ❌ | ✅ | ❌ | ✅ |
 | **Nirios** | Niri Wayland 窗口管理 | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Lingmo** | Lingmo OS 桌面      | ✅ | ✅ | ❌ | ❌ | ❌ |
+
+备注：
+1. Ubuntu DDE只支持<=22版本，本项不再支持Ubuntu 22，因此不支持Deepin桌面 
+2. Alpine和Arch Liunx分别覆盖主流桌面，相互不重叠，且均暂不支持Lingmo DE
+3. HyperLand和Niri DE属于实验性支持，使用Wayland，使用的VNC/RDP组件有差异
+4. Ubuntu从26版本使用GNOME50，不再支持X11，使用Wayland，VNC/RDP组件有差异
 
 ### 远程访问协议
 

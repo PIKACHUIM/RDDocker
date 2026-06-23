@@ -17,7 +17,7 @@ type Engine interface {
 	Restart(name string) error
 	Remove(name string) error
 	Exec(name string, cmd []string, detach bool) error
-	Run(image, name string, ports []string, env []string) error
+	Run(image, name string, ports []string, env []string, devices []string) error
 	Pull(image string) error
 	SetPassword(name, password string) error
 	Info(name string) (*ContainerInfo, error)

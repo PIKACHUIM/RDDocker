@@ -35,5 +35,5 @@ nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
 sleep 1
 eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
-nohup startplasma-x11 &
+nohup DISPLAY=:9 plasma_session &
 EOF

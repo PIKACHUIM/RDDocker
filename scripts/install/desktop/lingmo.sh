@@ -26,5 +26,5 @@ nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
 sleep 1
 eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
-nohup /usr/local/bin/de-lingmo.sh &
+DISPLAY=:9 nohup /usr/local/bin/de-lingmo.sh &
 EOF

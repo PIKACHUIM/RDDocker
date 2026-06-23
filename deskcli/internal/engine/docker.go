@@ -59,13 +59,16 @@ func (d *DockerEngine) Exec(name string, cmd []string, detach bool) error {
 	return c.Run()
 }
 
-func (d *DockerEngine) Run(image, name string, ports []string, env []string) error {
+func (d *DockerEngine) Run(image, name string, ports []string, env []string, devices []string) error {
 	args := []string{"run", "-d", "--name", name, "--privileged", "--shm-size=1024m"}
 	for _, p := range ports {
 		args = append(args, "-p", p)
 	}
 	for _, e := range env {
 		args = append(args, "-e", e)
+	}
+	for _, dev := range devices {
+		args = append(args, "--device", dev)
 	}
 	args = append(args, image)
 	c := exec.Command(d.binary, args...)

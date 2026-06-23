@@ -32,5 +32,5 @@ nohup Xvfb :9 -ac -screen 0 1600x900x24 &
 sleep 1
 eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
-nohup xfce4-session &
+DISPLAY=:9 nohup xfce4-session &
 EOF

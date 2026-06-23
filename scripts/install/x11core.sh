@@ -5,14 +5,23 @@ INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
 echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d 2>/dev/null || true
 
 # install X11 base packages
+_ubver="${VERSION_ID%%.*}"
+_is_ubuntu26=false
+[ "$OS_ID" = "ubuntu" ] && [ "$_ubver" -ge 26 ] 2>/dev/null && _is_ubuntu26=true
+
 case "$OS_ID" in
   debian|ubuntu)
     eval "$PKG_UPDATE"
-    eval "$PKG_INSTALL xserver-xorg-core xauth xorg wget gnupg2 \
-      xserver-xorg-video-dummy curl net-tools \
-      xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable \
-      dbus-user-session dbus-x11 xinit xvfb xrdp x11vnc"
-    eval "$PKG_INSTALL neofetch 2>/dev/null || true"
+    if [ "$_is_ubuntu26" = true ]; then
+      # Ubuntu 26+: X11 stack replaced by Wayland; only install base net/auth tools
+      eval "$PKG_INSTALL xauth wget curl net-tools dbus-user-session libgl1-mesa-dri mesa-utils"
+    else
+      eval "$PKG_INSTALL xserver-xorg-core xauth xorg wget gnupg2 \
+        xserver-xorg-video-dummy curl net-tools \
+        xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable \
+        dbus-user-session dbus-x11 xinit xvfb xrdp x11vnc"
+      eval "$PKG_INSTALL neofetch 2>/dev/null || true"
+    fi
     ;;
   fedora)
     eval "$PKG_UPDATE"
@@ -32,23 +41,25 @@ case "$OS_ID" in
     ;;
 esac
 
-# xorg.configs (dummy driver for headless)
-mkdir -p /usr/share/X11/xorg.conf.d
-cp "$INSTALL_DIR/configs/xorg.conf" /usr/share/X11/xorg.conf.d/99-dummy.conf
-echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config 2>/dev/null || true
+if [ "$_is_ubuntu26" = false ]; then
+  # xorg.configs (dummy driver for headless)
+  mkdir -p /usr/share/X11/xorg.conf.d
+  cp "$INSTALL_DIR/configs/xorg.conf" /usr/share/X11/xorg.conf.d/99-dummy.conf
+  echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config 2>/dev/null || true
 
-# VNC password
-mkdir -p /etc/x11vnc
-x11vnc -storepasswd 12345678 /etc/x11vnc.pass 2>/dev/null || echo "12345678" > /etc/x11vnc.pass
+  # VNC password
+  mkdir -p /etc/x11vnc
+  x11vnc -storepasswd 12345678 /etc/x11vnc.pass 2>/dev/null || echo "12345678" > /etc/x11vnc.pass
 
-# Write x11vnc startup helper
-cat > /x11vnc.sh <<'EOF'
+  # Write x11vnc startup helper
+  cat > /x11vnc.sh <<'EOF'
 #!/bin/sh
 export DISPLAY=:9
 nohup x11vnc -forever -noxdamage -repeat -rfbauth /etc/x11vnc.pass \
   -rfbport 5900 -shared -create -display :9 &
 EOF
-chmod +x /x11vnc.sh
+  chmod +x /x11vnc.sh
+fi
 
 # NoMachine (deb/rpm only - not Alpine/Arch)
 case "$OS_ID" in
@@ -88,7 +99,6 @@ fi
 
 # Append NX + dbus startup to /run.sh
 cat >> /run.sh <<'EOF'
-export DISPLAY=:0
 /etc/init.d/dbus start 2>/dev/null || dbus-daemon --system &
 [ -f /etc/NX/nxserver ] && /etc/NX/nxserver --startup
 EOF

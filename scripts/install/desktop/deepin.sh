@@ -21,8 +21,10 @@ case "$OS_ID" in
       > /tmp/fake-trans/DEBIAN/control
     dpkg-deb --build /tmp/fake-trans /tmp/fake-trans.deb
     dpkg -i /tmp/fake-trans.deb
-    eval "$PKG_INSTALL dde-session-ui dde-launcher dde-dock dde-control-center dde-desktop" || \
+    eval "$PKG_INSTALL gxde-session-ui dde-launcher dde-dock gxde-control-center dde-desktop" || \
       echo "Warning: DDE unavailable for Debian ${VERSION_CODENAME}" >&2
+    eval "$PKG_INSTALL gxde-desktop --install-recommends" || \
+          echo "Warning: DDE unavailable for Debian ${VERSION_CODENAME}" >&2
     rm -f /etc/apt/sources.list.d/gxde.list /etc/apt/preferences.d/99gxde ;;
   ubuntu)
     eval "$PKG_INSTALL software-properties-common"
@@ -44,5 +46,5 @@ nohup Xvfb :9 -ac -screen 0 1920x1080x24 &
 sleep 1
 eval $(dbus-launch --sh-syntax)
 bash /x11vnc.sh
-nohup startdde &
+DISPLAY=:9 nohup startdde &
 RUN_END

@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -101,6 +102,7 @@ var (
 	newName      string
 	newPorts     []string
 	newSoftwares []string
+	newDevices   []string
 )
 
 var deskNewCmd = &cobra.Command{
@@ -198,6 +200,27 @@ func runDeskNew(_ *cobra.Command, args []string) error {
 		name = strings.Join(parts, "-")
 	}
 
+	// Auto-add /dev/dri for GPU-dependent desktops
+	devices := newDevices
+	imgLower := strings.ToLower(image)
+	if (strings.Contains(imgLower, "hyland") || strings.Contains(imgLower, "nirios")) {
+		if _, err := os.Stat("/dev/dri"); err == nil {
+			hasDRI := false
+			for _, d := range devices {
+				if strings.Contains(d, "/dev/dri") {
+					hasDRI = true
+					break
+				}
+			}
+			if !hasDRI {
+				fmt.Println("Auto-detected GPU desktop: adding --device /dev/dri:/dev/dri")
+				devices = append(devices, "/dev/dri:/dev/dri")
+			}
+		} else {
+			fmt.Println("Warning: image requires /dev/dri but it is not available. Run: modprobe vkms")
+		}
+	}
+
 	db, err := store.Open(cfg.DataDir)
 	if err != nil {
 		return err
@@ -245,7 +268,7 @@ func runDeskNew(_ *cobra.Command, args []string) error {
 		}
 	}
 
-	if err := eng.Run(image, name, ports, nil); err != nil {
+	if err := eng.Run(image, name, ports, nil, devices); err != nil {
 		return err
 	}
 
@@ -300,6 +323,7 @@ func init() {
 	deskNewCmd.Flags().StringVar(&newName, "name", "", "Container name")
 	deskNewCmd.Flags().StringArrayVar(&newPorts, "port", nil, "Port mapping ext:int (repeatable, auto if omitted)")
 	deskNewCmd.Flags().StringArrayVar(&newSoftwares, "add-soft", nil, "Software to preinstall (repeatable)")
+	deskNewCmd.Flags().StringArrayVar(&newDevices, "device", nil, "Device to pass through, e.g. /dev/dri:/dev/dri (repeatable)")
 
 	deskCmd.AddCommand(
 		&cobra.Command{Use: "list", Short: "List containers", RunE: runList},

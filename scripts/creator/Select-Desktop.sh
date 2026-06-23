@@ -27,7 +27,7 @@ case "$OS_TYPE" in
 esac
 
 case "$OS_TYPE" in
-    "ubuntu"|"debian")
+    "debian")
         echo "      [5] Desktop Deepin DE  [ √ SSH / √ GUI APPs / √ NoMachine / √ VNC ]  "
         ;;
 esac

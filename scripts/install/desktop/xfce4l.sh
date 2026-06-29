@@ -9,7 +9,7 @@ case "$OS_ID" in
       adwaita-qt papirus-icon-theme moka-icon-theme xfwm4 qt5ct git"
     systemctl disable lightdm 2>/dev/null || true ;;
   fedora)
-    eval "$PKG_INSTALL pulseaudio @xfce-desktop xfce4-terminal git" ;;
+    eval "$PKG_INSTALL @xfce-desktop xfce4-terminal git" ;;
   arch|archos)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL pulseaudio xfce4 xfce4-goodies git" ;;

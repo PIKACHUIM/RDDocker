@@ -23,7 +23,7 @@ case "$OS_ID" in
       eval "$PKG_INSTALL foot waybar wofi xwayland weston pulseaudio \
       wayland-protocols swaybg fonts-noto fonts-noto-cjk" ;;
   fedora)
-    eval "$PKG_INSTALL niri foot waybar wofi xorg-x11-server-Xwayland weston pulseaudio" ;;
+    eval "$PKG_INSTALL niri foot waybar wofi xorg-x11-server-Xwayland weston" ;;
   arch|archos)
     eval "$PKG_UPDATE"
     eval "$PKG_INSTALL niri foot waybar wofi xorg-xwayland weston pulseaudio" ;;
